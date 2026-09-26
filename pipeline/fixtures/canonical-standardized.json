@@ -1,0 +1,342 @@
+{
+  "synthetic": true,
+  "description": "Output of deterministic standardization layer; pass eligible records only to classifier.",
+  "records": [
+    {
+      "schema_version": "1.0",
+      "id": "sf-case-1001",
+      "synthetic": true,
+      "source": {
+        "type": "salesforce_case",
+        "native_id": "CASE-1001",
+        "url": "https://crm.example/cases/1001",
+        "occurred_at": "2026-09-21T14:00:00Z"
+      },
+      "evidence": {
+        "text": "Clinic says three users' nightly uploads stall at 92% after 4.2.1. Data appears on the device but not the app.",
+        "speaker_provenance": "employee paraphrase of clinic call; customer identity unverified in this source",
+        "text_kind": "staff_note_or_message"
+      },
+      "context": {
+        "reported_customer": "Pine Sleep Labs",
+        "account_id_hint": "acct-pine",
+        "account_match": "unverified",
+        "product_hint": "SomniLink CPAP app",
+        "version": "4.2.1",
+        "version_evidence": "explicit"
+      },
+      "intake": {
+        "eligible_for_classification": true,
+        "exclusion_reason": null
+      }
+    },
+    {
+      "schema_version": "1.0",
+      "id": "zd-2001-c1",
+      "synthetic": true,
+      "source": {
+        "type": "zendesk_comment",
+        "native_id": "ticket-2001/comment-1",
+        "url": "https://support.example/tickets/2001",
+        "occurred_at": "2026-09-21T15:18:00Z"
+      },
+      "evidence": {
+        "text": "My last two nights show 'syncing' forever at 92%. I'm using app 4.2.1 on Android.",
+        "speaker_provenance": "customer",
+        "text_kind": "customer_quote"
+      },
+      "context": {
+        "reported_customer": "Pine Sleep Labs",
+        "account_id_hint": "acct-pine",
+        "account_match": "confirmed",
+        "product_hint": "SomniLink CPAP app",
+        "version": "4.2.1",
+        "version_evidence": "explicit"
+      },
+      "intake": {
+        "eligible_for_classification": true,
+        "exclusion_reason": null
+      }
+    },
+    {
+      "schema_version": "1.0",
+      "id": "slack-3001",
+      "synthetic": true,
+      "source": {
+        "type": "slack_feedback_channel",
+        "native_id": "CFEEDBACK:1790071200.001",
+        "url": "https://workspace.example/slack/CFEEDBACK/3001",
+        "occurred_at": "2026-09-22T10:00:00Z"
+      },
+      "evidence": {
+        "text": "#customer-feedback Account acct-pine: clinic repeated that uploads stick at 92%. Source call: call-55. Version not confirmed on call.",
+        "speaker_provenance": "employee recap",
+        "text_kind": "staff_note_or_message"
+      },
+      "context": {
+        "reported_customer": "Pine Sleep Labs",
+        "account_id_hint": "acct-pine",
+        "account_match": "confirmed",
+        "product_hint": "SomniLink CPAP app",
+        "version": null,
+        "version_evidence": "unknown"
+      },
+      "intake": {
+        "eligible_for_classification": true,
+        "exclusion_reason": null
+      }
+    },
+    {
+      "schema_version": "1.0",
+      "id": "granola-4001-s1",
+      "synthetic": true,
+      "source": {
+        "type": "granola_transcript",
+        "native_id": "note-4001/segment-1",
+        "url": "https://notes.example/note-4001",
+        "occurred_at": "2026-09-22T10:12:00Z"
+      },
+      "evidence": {
+        "text": "After the latest update, the upload never finishes, and I can't see the night in my dashboard.",
+        "speaker_provenance": "Customer A, confirmed in synthetic fixture",
+        "text_kind": "transcript_or_chat"
+      },
+      "context": {
+        "reported_customer": "Pine Sleep Labs",
+        "account_id_hint": "acct-pine",
+        "account_match": "confirmed",
+        "product_hint": "SomniLink CPAP app",
+        "version": null,
+        "version_evidence": "unknown"
+      },
+      "intake": {
+        "eligible_for_classification": true,
+        "exclusion_reason": null
+      }
+    },
+    {
+      "schema_version": "1.0",
+      "id": "email-5001",
+      "synthetic": true,
+      "source": {
+        "type": "feedback_mail",
+        "native_id": "<demo-5001@feedback.example>",
+        "url": "https://mail.example/message/5001",
+        "occurred_at": "2026-09-22T11:00:00Z"
+      },
+      "evidence": {
+        "text": "Forwarding my recap of call-55: the clinic said uploads sometimes stall at 92%. Please link this to CASE-1001.",
+        "speaker_provenance": "employee recap, not direct customer quotation",
+        "text_kind": "staff_note_or_message"
+      },
+      "context": {
+        "reported_customer": "Pine Sleep Labs",
+        "account_id_hint": "acct-pine",
+        "account_match": "confirmed",
+        "product_hint": "SomniLink CPAP app",
+        "version": null,
+        "version_evidence": "unknown"
+      },
+      "intake": {
+        "eligible_for_classification": true,
+        "exclusion_reason": null
+      }
+    },
+    {
+      "schema_version": "1.0",
+      "id": "zoom-6001-t12",
+      "synthetic": true,
+      "source": {
+        "type": "zoom_transcript",
+        "native_id": "meeting-6001/transcript/00:12:31",
+        "url": "https://zoom.example/recording/6001",
+        "occurred_at": "2026-09-23T16:12:31Z"
+      },
+      "evidence": {
+        "text": "The dashboard was blank yesterday morning even though my machine showed a full night.",
+        "speaker_provenance": "Speaker 2; identity requires meeting roster check",
+        "text_kind": "transcript_or_chat"
+      },
+      "context": {
+        "reported_customer": "Cedar Sleep Center",
+        "account_id_hint": "acct-cedar",
+        "account_match": "unverified",
+        "product_hint": "SomniLink CPAP app",
+        "version": null,
+        "version_evidence": "unknown"
+      },
+      "intake": {
+        "eligible_for_classification": true,
+        "exclusion_reason": null
+      }
+    },
+    {
+      "schema_version": "1.0",
+      "id": "zoom-6001-chat4",
+      "synthetic": true,
+      "source": {
+        "type": "zoom_chat",
+        "native_id": "meeting-6001/chat-4",
+        "url": "https://zoom.example/recording/6001",
+        "occurred_at": "2026-09-23T16:13:10Z"
+      },
+      "evidence": {
+        "text": "Can you send the dashboard screenshot after the call?",
+        "speaker_provenance": "unverified participant",
+        "text_kind": "transcript_or_chat"
+      },
+      "context": {
+        "reported_customer": null,
+        "account_id_hint": null,
+        "account_match": "unverified",
+        "product_hint": "SomniLink CPAP app",
+        "version": null,
+        "version_evidence": "unknown"
+      },
+      "intake": {
+        "eligible_for_classification": false,
+        "exclusion_reason": "logistical_request_no_feedback"
+      }
+    },
+    {
+      "schema_version": "1.0",
+      "id": "zd-2002-c1",
+      "synthetic": true,
+      "source": {
+        "type": "zendesk_comment",
+        "native_id": "ticket-2002/comment-1",
+        "url": "https://support.example/tickets/2002",
+        "occurred_at": "2026-09-24T13:00:00Z"
+      },
+      "evidence": {
+        "text": "Could you let me reorder the dashboard cards? I want usage first.",
+        "speaker_provenance": "customer",
+        "text_kind": "customer_quote"
+      },
+      "context": {
+        "reported_customer": "Maple Sleep Clinic",
+        "account_id_hint": "acct-maple",
+        "account_match": "confirmed",
+        "product_hint": "SomniLink CPAP app",
+        "version": "4.2.0",
+        "version_evidence": "explicit"
+      },
+      "intake": {
+        "eligible_for_classification": true,
+        "exclusion_reason": null
+      }
+    },
+    {
+      "schema_version": "1.0",
+      "id": "sf-case-1002",
+      "synthetic": true,
+      "source": {
+        "type": "salesforce_case",
+        "native_id": "CASE-1002",
+        "url": "https://crm.example/cases/1002",
+        "occurred_at": "2026-09-24T14:00:00Z"
+      },
+      "evidence": {
+        "text": "Maple wants a way to pin the nightly usage card to the top.",
+        "speaker_provenance": "employee recap",
+        "text_kind": "staff_note_or_message"
+      },
+      "context": {
+        "reported_customer": "Maple Sleep Clinic",
+        "account_id_hint": "acct-maple",
+        "account_match": "confirmed",
+        "product_hint": "SomniLink CPAP app",
+        "version": null,
+        "version_evidence": "unknown"
+      },
+      "intake": {
+        "eligible_for_classification": true,
+        "exclusion_reason": null
+      }
+    },
+    {
+      "schema_version": "1.0",
+      "id": "email-5002",
+      "synthetic": true,
+      "source": {
+        "type": "feedback_mail",
+        "native_id": "<demo-5002@feedback.example>",
+        "url": "https://mail.example/message/5002",
+        "occurred_at": "2026-09-24T17:00:00Z"
+      },
+      "evidence": {
+        "text": "Call recap: Maple asked for a larger font on the settings screen. I don't know which Maple account this was.",
+        "speaker_provenance": "employee recap",
+        "text_kind": "staff_note_or_message"
+      },
+      "context": {
+        "reported_customer": "Maple (ambiguous)",
+        "account_id_hint": null,
+        "account_match": "unverified",
+        "product_hint": "SomniLink CPAP app",
+        "version": null,
+        "version_evidence": "unknown"
+      },
+      "intake": {
+        "eligible_for_classification": true,
+        "exclusion_reason": null
+      }
+    },
+    {
+      "schema_version": "1.0",
+      "id": "slack-3002",
+      "synthetic": true,
+      "source": {
+        "type": "slack_feedback_channel",
+        "native_id": "CFEEDBACK:1790337600.002",
+        "url": "https://workspace.example/slack/CFEEDBACK/3002",
+        "occurred_at": "2026-09-25T12:00:00Z"
+      },
+      "evidence": {
+        "text": "I think users will ask for dark mode next quarter; no customer has asked me yet.",
+        "speaker_provenance": "internal speculation",
+        "text_kind": "staff_note_or_message"
+      },
+      "context": {
+        "reported_customer": null,
+        "account_id_hint": null,
+        "account_match": "none",
+        "product_hint": "SomniLink CPAP app",
+        "version": null,
+        "version_evidence": "unknown"
+      },
+      "intake": {
+        "eligible_for_classification": false,
+        "exclusion_reason": "internal_speculation_no_customer_report"
+      }
+    },
+    {
+      "schema_version": "1.0",
+      "id": "zd-2003-c1",
+      "synthetic": true,
+      "source": {
+        "type": "zendesk_comment",
+        "native_id": "ticket-2003/comment-1",
+        "url": "https://support.example/tickets/2003",
+        "occurred_at": "2026-09-25T13:00:00Z"
+      },
+      "evidence": {
+        "text": "The app told me treatment was complete, but the device alarm was still sounding. I don't know which version I'm on.",
+        "speaker_provenance": "customer",
+        "text_kind": "customer_quote"
+      },
+      "context": {
+        "reported_customer": "Cedar Sleep Center",
+        "account_id_hint": "acct-cedar",
+        "account_match": "confirmed",
+        "product_hint": "SomniLink CPAP app",
+        "version": null,
+        "version_evidence": "unknown"
+      },
+      "intake": {
+        "eligible_for_classification": true,
+        "exclusion_reason": null
+      }
+    }
+  ]
+}

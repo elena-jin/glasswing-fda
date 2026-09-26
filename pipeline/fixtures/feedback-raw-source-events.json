@@ -1,0 +1,185 @@
+{
+  "synthetic": true,
+  "description": "Invented provider-shaped source envelopes; no live provider exports.",
+  "events": [
+    {
+      "fixture_id": "sf-case-1001",
+      "synthetic": true,
+      "source": "salesforce_case",
+      "payload": {
+        "Id": "CASE-1001",
+        "CaseNumber": "CASE-1001",
+        "Subject": "Customer feedback received",
+        "Description": "Clinic says three users' nightly uploads stall at 92% after 4.2.1. Data appears on the device but not the app.",
+        "CreatedDate": "2026-09-21T14:00:00Z",
+        "AccountId": "acct-pine",
+        "ContactId": null,
+        "Product__c": "SomniLink CPAP app",
+        "AppVersion__c": "4.2.1",
+        "EnteredBy": "Maya, account manager"
+      }
+    },
+    {
+      "fixture_id": "zd-2001-c1",
+      "synthetic": true,
+      "source": "zendesk_comment",
+      "payload": {
+        "ticket_id": "ticket-2001",
+        "comment_id": "comment-1",
+        "body": "My last two nights show 'syncing' forever at 92%. I'm using app 4.2.1 on Android.",
+        "created_at": "2026-09-21T15:18:00Z",
+        "author_role": "end_user",
+        "organization_external_id": "acct-pine",
+        "product_custom_field": "SomniLink CPAP app",
+        "version_custom_field": "4.2.1"
+      }
+    },
+    {
+      "fixture_id": "slack-3001",
+      "synthetic": true,
+      "source": "slack_feedback_channel",
+      "payload": {
+        "channel": "CFEEDBACK",
+        "ts": "1790071200.001",
+        "user": "U_DEMO_REP",
+        "text": "#customer-feedback Account acct-pine: clinic repeated that uploads stick at 92%. Source call: call-55. Version not confirmed on call.",
+        "event_ts": "2026-09-22T10:00:00Z",
+        "thread_ts": null,
+        "account_hint": "acct-pine"
+      }
+    },
+    {
+      "fixture_id": "granola-4001-s1",
+      "synthetic": true,
+      "source": "granola_transcript",
+      "payload": {
+        "note_id": "note-4001",
+        "segment_id": "segment-1",
+        "start_time": "2026-09-22T10:12:00Z",
+        "speaker_label": "Customer A, confirmed in synthetic fixture",
+        "transcript_text": "After the latest update, the upload never finishes, and I can't see the night in my dashboard.",
+        "note_title": "Synthetic customer call",
+        "account_hint": "acct-pine"
+      }
+    },
+    {
+      "fixture_id": "email-5001",
+      "synthetic": true,
+      "source": "feedback_mail",
+      "payload": {
+        "Message-ID": "<demo-5001@feedback.example>",
+        "From": "rep@feedback.example",
+        "To": "feedback@yourdomain.example",
+        "Date": "2026-09-22T11:00:00Z",
+        "Subject": "Call feedback",
+        "Body": "Forwarding my recap of call-55: the clinic said uploads sometimes stall at 92%. Please link this to CASE-1001.",
+        "account_hint": "acct-pine",
+        "reported_customer": "Pine Sleep Labs"
+      }
+    },
+    {
+      "fixture_id": "zoom-6001-t12",
+      "synthetic": true,
+      "source": "zoom_transcript",
+      "payload": {
+        "meeting_uuid": "meeting-6001",
+        "fragment_id": "transcript/00:12:31",
+        "event_time": "2026-09-23T16:12:31Z",
+        "speaker_label": "Speaker 2; identity requires meeting roster check",
+        "content": "The dashboard was blank yesterday morning even though my machine showed a full night.",
+        "content_kind": "transcript",
+        "account_hint": "acct-cedar"
+      }
+    },
+    {
+      "fixture_id": "zoom-6001-chat4",
+      "synthetic": true,
+      "source": "zoom_chat",
+      "payload": {
+        "meeting_uuid": "meeting-6001",
+        "fragment_id": "chat-4",
+        "event_time": "2026-09-23T16:13:10Z",
+        "speaker_label": "unverified participant",
+        "content": "Can you send the dashboard screenshot after the call?",
+        "content_kind": "chat",
+        "account_hint": null
+      }
+    },
+    {
+      "fixture_id": "zd-2002-c1",
+      "synthetic": true,
+      "source": "zendesk_comment",
+      "payload": {
+        "ticket_id": "ticket-2002",
+        "comment_id": "comment-1",
+        "body": "Could you let me reorder the dashboard cards? I want usage first.",
+        "created_at": "2026-09-24T13:00:00Z",
+        "author_role": "end_user",
+        "organization_external_id": "acct-maple",
+        "product_custom_field": "SomniLink CPAP app",
+        "version_custom_field": "4.2.0"
+      }
+    },
+    {
+      "fixture_id": "sf-case-1002",
+      "synthetic": true,
+      "source": "salesforce_case",
+      "payload": {
+        "Id": "CASE-1002",
+        "CaseNumber": "CASE-1002",
+        "Subject": "Customer feedback received",
+        "Description": "Maple wants a way to pin the nightly usage card to the top.",
+        "CreatedDate": "2026-09-24T14:00:00Z",
+        "AccountId": "acct-maple",
+        "ContactId": null,
+        "Product__c": "SomniLink CPAP app",
+        "AppVersion__c": null,
+        "EnteredBy": "Sales rep"
+      }
+    },
+    {
+      "fixture_id": "email-5002",
+      "synthetic": true,
+      "source": "feedback_mail",
+      "payload": {
+        "Message-ID": "<demo-5002@feedback.example>",
+        "From": "rep@feedback.example",
+        "To": "feedback@yourdomain.example",
+        "Date": "2026-09-24T17:00:00Z",
+        "Subject": "Call feedback",
+        "Body": "Call recap: Maple asked for a larger font on the settings screen. I don't know which Maple account this was.",
+        "account_hint": null,
+        "reported_customer": "Maple (ambiguous)"
+      }
+    },
+    {
+      "fixture_id": "slack-3002",
+      "synthetic": true,
+      "source": "slack_feedback_channel",
+      "payload": {
+        "channel": "CFEEDBACK",
+        "ts": "1790337600.002",
+        "user": "U_DEMO_REP",
+        "text": "I think users will ask for dark mode next quarter; no customer has asked me yet.",
+        "event_ts": "2026-09-25T12:00:00Z",
+        "thread_ts": null,
+        "account_hint": null
+      }
+    },
+    {
+      "fixture_id": "zd-2003-c1",
+      "synthetic": true,
+      "source": "zendesk_comment",
+      "payload": {
+        "ticket_id": "ticket-2003",
+        "comment_id": "comment-1",
+        "body": "The app told me treatment was complete, but the device alarm was still sounding. I don't know which version I'm on.",
+        "created_at": "2026-09-25T13:00:00Z",
+        "author_role": "end_user",
+        "organization_external_id": "acct-cedar",
+        "product_custom_field": "SomniLink CPAP app",
+        "version_custom_field": null
+      }
+    }
+  ]
+}
