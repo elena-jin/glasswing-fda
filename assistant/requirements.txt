@@ -1,0 +1,6 @@
+# Core assistant logic uses only the Python standard library.
+# These are needed only for the HTTP API and evals.
+fastapi>=0.110
+uvicorn>=0.29
+pydantic>=2
+braintrust>=0.0.150   # only for `python -m assistant_backend.evals.braintrust_eval`
