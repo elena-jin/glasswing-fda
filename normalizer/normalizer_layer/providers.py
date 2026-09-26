@@ -150,7 +150,12 @@ class AnthropicProvider(ModelProvider):
 
 class OpenAICompatibleProvider(ModelProvider):
     name = "openai-compatible"
-    DEFAULT_MODEL = os.getenv("OPENAI_MODEL", "deepseek-v4.1-flash")
+    # Default runtime model is DeepSeek (OpenCode's key), per project direction.
+    DEFAULT_MODEL = (
+        os.getenv("DEEPSEEK_MODEL")
+        or os.getenv("OPENAI_MODEL")
+        or "/deployments/506a9a37/deepseek-ai/DeepSeek-V4.1-Flash"
+    )
     DEFAULT_URL = os.getenv("OPENAI_BASE_URL") or os.getenv("SCIFORIUM_BASE_URL") or "https://api.sciforium.com/v1"
 
     def __init__(self, model: Optional[str] = None, api_key: Optional[str] = None,
