@@ -1,0 +1,16 @@
+{
+  "name": "test-flight-console",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Test Flight — a console for turning device and companion-app feedback into traceable Quality and Product workflows.",
+  "keywords": ["quality", "product", "feedback", "qms", "vercel"],
+  "license": "UNLICENSED",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "dev": "vercel dev",
+    "start": "vercel dev",
+    "deploy": "vercel --prod"
+  }
+}
