@@ -1,0 +1,2271 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Test Flight — Quality &amp; Product Console</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Red+Hat+Display:wght@400;500;600;700&family=Red+Hat+Mono:wght@400;500&family=Red+Hat+Text:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* ==========================================================================
+   PatternFly tokens — pasted verbatim from the design system contract.
+   ========================================================================== */
+:root {
+  --bg:           #ffffff;
+  --surface:      #ffffff;
+  --surface-warm: #f2f2f2;
+  --surface-alt:  #e0e0e0;
+
+  --fg:    #151515;
+  --fg-2:  #4d4d4d;
+  --muted: #8c8c8c;
+  --meta:  #6a6e73;
+
+  --border:      #c7c7c7;
+  --border-soft: #e0e0e0;
+
+  --accent:        #0066cc;
+  --accent-on:     #ffffff;
+  --accent-hover:  #004d99;
+  --accent-active: #003366;
+  --accent-subtle: #e0f0ff;
+
+  --link:        #0066cc;
+  --link-hover:  #004d99;
+  --link-visited:#3d2785;
+
+  --danger:        #b1380b;
+  --danger-bg:     #ffe3d9;
+  --warning:       #ffcc17;
+  --warning-text:  #96640f;
+  --warning-bg:    #fff4cc;
+  --success:       #3d7317;
+  --success-bg:    #e9f7df;
+  --info:          #5e40be;
+  --info-bg:       #ece6ff;
+
+  --font-heading: "Red Hat Display", Helvetica, Arial, sans-serif;
+  --font-body:    "Red Hat Text", Helvetica, Arial, sans-serif;
+  --font-mono:    "Red Hat Mono", "Courier New", Courier, monospace;
+
+  --size-xs: 0.75rem;
+  --size-sm: 0.875rem;
+  --size-md: 1rem;
+  --size-lg: 1.125rem;
+  --size-xl: 1.25rem;
+  --size-2xl: 1.5rem;
+  --size-3xl: 1.75rem;
+  --size-4xl: 2.25rem;
+  --leading-heading: 1.3;
+  --leading-body: 1.5;
+
+  --space-xs: 0.25rem;
+  --space-sm: 0.5rem;
+  --space-md: 1rem;
+  --space-lg: 1.5rem;
+  --space-xl: 2rem;
+  --space-2xl: 3rem;
+  --space-3xl: 4rem;
+  --space-4xl: 5rem;
+
+  --radius-xs: 4px;
+  --radius-sm: 4px;
+  --radius-md: 6px;
+  --radius-lg: 16px;
+  --radius-xl: 24px;
+  --radius-pill: 999px;
+
+  --elev-flat:   none;
+  --elev-raised: 0 1px 2px rgba(0, 0, 0, 0.08);
+  --elev-overlay: 0 4px 12px rgba(0, 0, 0, 0.16);
+
+  --pf-t--global--color--brand--default: #0066cc;
+  --pf-t--global--color--brand--hover:   #004d99;
+  --pf-t--global--color--brand--clicked: #003366;
+
+  --pf-t--global--color--status--danger--default:  #b1380b;
+  --pf-t--global--color--status--warning--default: #ffcc17;
+  --pf-t--global--color--status--success--default: #3d7317;
+  --pf-t--global--color--status--info--default:    #5e40be;
+
+  --pf-t--global--background--color--100: #ffffff;
+  --pf-t--global--background--color--200: #f2f2f2;
+  --pf-t--global--background--color--300: #e0e0e0;
+
+  --pf-t--global--text--color--regular: #151515;
+  --pf-t--global--text--color--subtle:  #4d4d4d;
+  --pf-t--global--text--color--inverse: #ffffff;
+
+  --pf-t--global--border--color--100: #c7c7c7;
+  --pf-t--global--border--radius--100: 4px;
+  --pf-t--global--border--radius--200: 6px;
+  --pf-t--global--border--radius--300: 16px;
+  --pf-t--global--border--radius--500: 999px;
+
+  --pf-t--global--font--family--heading: var(--font-heading);
+  --pf-t--global--font--family--body:    var(--font-body);
+  --pf-t--global--font--family--mono:    var(--font-mono);
+}
+
+/* ==========================================================================
+   App extensions — aliases + liquid-glass surfaces, all derived from tokens.
+   ========================================================================== */
+:root {
+  --font-display: var(--font-heading);
+
+  --fg-soft:     color-mix(in oklch, var(--fg) 6%, transparent);
+  --fg-soft-2:   color-mix(in oklch, var(--fg) 10%, transparent);
+  --accent-soft: color-mix(in oklch, var(--accent) 12%, transparent);
+
+  --glass:        color-mix(in oklch, var(--surface) 68%, transparent);
+  --glass-strong: color-mix(in oklch, var(--surface) 84%, transparent);
+  --glass-line:   color-mix(in oklch, var(--border) 55%, transparent);
+  --glass-hi:     color-mix(in oklch, var(--surface) 92%, transparent);
+
+  --sidebar-fg:   var(--accent-on);
+  --sidebar-line: color-mix(in oklch, var(--accent-on) 14%, transparent);
+  --sidebar-hover:color-mix(in oklch, var(--accent-on) 9%, transparent);
+  --sidebar-active:color-mix(in oklch, var(--accent-on) 14%, transparent);
+
+  --shadow-sm: 0 1px 2px color-mix(in oklch, var(--fg) 8%, transparent);
+  --shadow-md: 0 10px 30px -12px color-mix(in oklch, var(--fg) 22%, transparent);
+  --shadow-lg: 0 30px 60px -20px color-mix(in oklch, var(--fg) 30%, transparent);
+  --shadow-glow: 0 18px 40px -18px color-mix(in oklch, var(--accent) 60%, transparent);
+
+  --container: 1440px;
+  --gutter: clamp(16px, 2.4vw, 32px);
+
+  --ease: cubic-bezier(.22,.61,.36,1);
+  --ease-spring: cubic-bezier(.34,1.56,.64,1);
+  --radius: var(--radius-lg);
+
+  /* connector brand marks — real values kept in the token block */
+  --brand-salesforce: #00A1E0;
+  --brand-zendesk:    #03363D;
+  --brand-slack:      #4A154B;
+  --brand-zoom:       #0B5CFF;
+  --brand-jira:       #0052CC;
+  --brand-google:     #4285F4;
+  --brand-gmail:      #EA4335;
+  --brand-intercom:   #1F8DED;
+  --brand-apple:      #4d4d4d;
+}
+
+/* ---------- reset & base ---------- */
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--font-body);
+  font-size: var(--size-md);
+  line-height: var(--leading-body);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  overflow-x: hidden;
+}
+img, svg { display: block; max-width: 100%; }
+a { color: inherit; text-decoration: none; }
+button { font: inherit; cursor: pointer; border: none; background: none; color: inherit; }
+input, textarea { font: inherit; }
+p { margin: 0; text-wrap: pretty; }
+h1, h2, h3, h4 { font-family: var(--font-display); margin: 0; text-wrap: balance; line-height: var(--leading-heading); }
+h1 { font-size: clamp(1.6rem, 2.4vw, 2.1rem); letter-spacing: -.02em; font-weight: 600; }
+h2 { font-size: var(--size-xl); letter-spacing: -.015em; font-weight: 600; }
+h3 { font-size: var(--size-md); font-weight: 600; letter-spacing: -.01em; }
+::selection { background: var(--accent-subtle); color: var(--accent-active); }
+
+.mono { font-family: var(--font-mono); }
+.num { font-family: var(--font-mono); font-variant-numeric: tabular-nums; }
+.meta { font-family: var(--font-mono); font-size: var(--size-xs); color: var(--meta); }
+.eyebrow {
+  font-family: var(--font-mono); font-size: 11px; letter-spacing: .1em;
+  text-transform: uppercase; color: var(--meta); margin: 0;
+}
+.sub { color: var(--fg-2); font-size: var(--size-sm); }
+.muted { color: var(--muted); }
+.stack { display: flex; flex-direction: column; }
+.row { display: flex; align-items: center; gap: var(--space-sm); }
+.row-between { display: flex; align-items: center; justify-content: space-between; gap: var(--space-md); }
+.wrap { flex-wrap: wrap; }
+.grow { flex: 1; }
+.hide { display: none !important; }
+
+/* ---------- background mesh (liquid glass base) ---------- */
+.mesh { position: fixed; inset: 0; z-index: 0; overflow: hidden; pointer-events: none; }
+.mesh::after { content: ""; position: absolute; inset: 0; background: color-mix(in oklch, var(--bg) 55%, transparent); }
+.blob { position: absolute; border-radius: 50%; filter: blur(70px); opacity: .55; will-change: transform; }
+.blob.b1 { width: 46vw; height: 46vw; left: -8vw; top: -12vw; background: var(--accent-subtle); animation: drift1 26s var(--ease) infinite; }
+.blob.b2 { width: 38vw; height: 38vw; right: -6vw; top: 6vw; background: var(--info-bg); animation: drift2 32s var(--ease) infinite; }
+.blob.b3 { width: 42vw; height: 42vw; left: 22vw; bottom: -18vw; background: var(--success-bg); animation: drift3 38s var(--ease) infinite; }
+.blob.b4 { width: 26vw; height: 26vw; right: 14vw; bottom: -8vw; background: var(--warning-bg); animation: drift1 30s var(--ease) infinite reverse; }
+@keyframes drift1 { 0%,100% { transform: translate(0,0) scale(1); } 50% { transform: translate(6vw,4vw) scale(1.12); } }
+@keyframes drift2 { 0%,100% { transform: translate(0,0) scale(1); } 50% { transform: translate(-5vw,6vw) scale(1.08); } }
+@keyframes drift3 { 0%,100% { transform: translate(0,0) scale(1); } 50% { transform: translate(4vw,-5vw) scale(1.14); } }
+
+/* ---------- glass surface ---------- */
+.glass {
+  background: var(--glass);
+  -webkit-backdrop-filter: blur(22px) saturate(1.5);
+  backdrop-filter: blur(22px) saturate(1.5);
+  border: 1px solid var(--glass-line);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+  position: relative;
+}
+.glass::before {
+  content: ""; position: absolute; inset: 0; border-radius: inherit; pointer-events: none;
+  background: linear-gradient(180deg, color-mix(in oklch, var(--surface) 70%, transparent), transparent 42%);
+  opacity: .7;
+}
+.card { background: var(--glass-strong); border: 1px solid var(--border-soft); border-radius: var(--radius-lg); padding: var(--space-lg); }
+
+/* ---------- app frame ---------- */
+.app { position: relative; z-index: 1; display: grid; grid-template-columns: 264px 1fr; min-height: 100vh; }
+
+/* ---------- sidebar ---------- */
+.sidebar {
+  position: sticky; top: 0; height: 100vh;
+  display: flex; flex-direction: column; gap: var(--space-sm);
+  padding: var(--space-lg) var(--space-md);
+  background: color-mix(in oklch, var(--fg) 90%, transparent);
+  -webkit-backdrop-filter: blur(26px) saturate(1.4);
+  backdrop-filter: blur(26px) saturate(1.4);
+  border-right: 1px solid color-mix(in oklch, var(--fg) 40%, transparent);
+  color: var(--sidebar-fg);
+  z-index: 40;
+}
+.brand { display: flex; align-items: center; gap: 10px; padding: 4px 8px var(--space-md); }
+.brand-mark {
+  width: 38px; height: 38px; border-radius: 11px; flex: none;
+  display: grid; place-items: center; color: var(--accent-on);
+  background: linear-gradient(150deg, var(--accent), var(--accent-active));
+  box-shadow: var(--shadow-glow), inset 0 1px 0 color-mix(in oklch, var(--accent-on) 35%, transparent);
+}
+.brand-mark svg { width: 20px; height: 20px; }
+.brand-name { font-family: var(--font-display); font-weight: 600; font-size: 17px; letter-spacing: -.01em; }
+.brand-sub { font-size: 11px; color: color-mix(in oklch, var(--sidebar-fg) 58%, transparent); }
+.cycle {
+  display: flex; align-items: center; gap: 8px; margin: 0 4px var(--space-sm);
+  padding: 9px 12px; border-radius: var(--radius-pill);
+  background: var(--sidebar-hover); border: 1px solid var(--sidebar-line);
+  font-size: 11px; letter-spacing: .04em;
+}
+.cycle .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--success); box-shadow: 0 0 0 3px color-mix(in oklch, var(--success) 30%, transparent); animation: pulse 2.4s var(--ease) infinite; }
+.cycle .iso { margin-left: auto; font-family: var(--font-mono); color: color-mix(in oklch, var(--sidebar-fg) 60%, transparent); }
+@keyframes pulse { 0%,100% { box-shadow: 0 0 0 3px color-mix(in oklch, var(--success) 30%, transparent); } 50% { box-shadow: 0 0 0 6px color-mix(in oklch, var(--success) 8%, transparent); } }
+
+.nav { display: flex; flex-direction: column; gap: 3px; margin-top: var(--space-xs); }
+.nav-label { font-family: var(--font-mono); font-size: 10px; letter-spacing: .12em; text-transform: uppercase; color: color-mix(in oklch, var(--sidebar-fg) 48%, transparent); padding: 12px 12px 6px; }
+.nav-item {
+  position: relative; display: flex; align-items: center; gap: 12px;
+  padding: 10px 12px; border-radius: var(--radius-md);
+  color: color-mix(in oklch, var(--sidebar-fg) 78%, transparent);
+  font-size: 14px; font-weight: 500; text-align: left; width: 100%;
+  transition: background .18s var(--ease), color .18s var(--ease), transform .18s var(--ease);
+}
+.nav-item svg { width: 18px; height: 18px; flex: none; opacity: .9; }
+.nav-item:hover { background: var(--sidebar-hover); color: var(--sidebar-fg); transform: translateX(2px); }
+.nav-item .count { margin-left: auto; font-family: var(--font-mono); font-size: 11px; padding: 1px 7px; border-radius: var(--radius-pill); background: var(--sidebar-hover); }
+.nav-item.active { background: var(--sidebar-active); color: var(--sidebar-fg); }
+.nav-item.active::before {
+  content: ""; position: absolute; left: -8px; top: 50%; transform: translateY(-50%);
+  width: 3px; height: 20px; border-radius: 3px; background: var(--accent);
+  box-shadow: 0 0 14px 2px color-mix(in oklch, var(--accent) 70%, transparent);
+}
+.nav-item.active svg { opacity: 1; }
+
+.sidebar-foot { margin-top: auto; display: flex; flex-direction: column; gap: var(--space-sm); padding-top: var(--space-md); }
+.data-btn {
+  display: flex; align-items: center; gap: 10px; width: 100%; text-align: left;
+  padding: 10px 12px; border-radius: var(--radius-md); border: 1px solid var(--sidebar-line);
+  background: var(--sidebar-hover); color: var(--sidebar-fg); font-size: 13px;
+  transition: background .18s var(--ease), border-color .18s var(--ease);
+}
+.data-btn:hover { background: var(--sidebar-active); }
+.data-btn .pulse-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--success); flex: none; }
+.data-btn .pulse-dot.warn { background: var(--warning); }
+.data-btn small { display: block; font-size: 10px; color: color-mix(in oklch, var(--sidebar-fg) 55%, transparent); font-family: var(--font-mono); }
+.user { display: flex; align-items: center; gap: 10px; padding: 6px 8px; }
+.avatar {
+  width: 34px; height: 34px; border-radius: 50%; flex: none; display: grid; place-items: center;
+  font-family: var(--font-display); font-weight: 600; font-size: 13px; color: var(--accent-on);
+  background: linear-gradient(150deg, var(--info), var(--accent-active));
+}
+.user-name { font-size: 13px; font-weight: 500; }
+.user-role { font-size: 11px; color: color-mix(in oklch, var(--sidebar-fg) 55%, transparent); }
+
+/* ---------- main + topbar ---------- */
+.main { min-width: 0; display: flex; flex-direction: column; }
+.topbar {
+  position: sticky; top: 0; z-index: 30;
+  display: flex; align-items: center; gap: var(--space-md);
+  padding: 12px var(--gutter);
+  background: var(--glass);
+  -webkit-backdrop-filter: blur(22px) saturate(1.5);
+  backdrop-filter: blur(22px) saturate(1.5);
+  border-bottom: 1px solid var(--glass-line);
+}
+.search {
+  flex: 1; max-width: 460px; display: flex; align-items: center; gap: 10px;
+  padding: 9px 14px; border-radius: var(--radius-pill);
+  background: color-mix(in oklch, var(--surface) 60%, transparent);
+  border: 1px solid var(--border-soft);
+  transition: border-color .18s var(--ease), box-shadow .18s var(--ease), background .18s var(--ease);
+}
+.search:focus-within { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); background: var(--glass-hi); }
+.search svg { width: 16px; height: 16px; color: var(--muted); flex: none; }
+.search input { flex: 1; border: none; background: none; outline: none; color: var(--fg); font-size: 13.5px; }
+.search input::placeholder { color: var(--muted); }
+.top-chip {
+  display: flex; align-items: center; gap: 10px; padding: 7px 14px; border-radius: var(--radius-pill);
+  background: color-mix(in oklch, var(--surface) 60%, transparent); border: 1px solid var(--border-soft);
+  font-size: 12.5px; white-space: nowrap;
+}
+.top-chip .bar { width: 64px; height: 5px; border-radius: 3px; background: var(--surface-alt); overflow: hidden; }
+.top-chip .bar i { display: block; height: 100%; width: 72%; border-radius: 3px; background: var(--accent); }
+.top-chip .ic { width: 15px; height: 15px; color: var(--accent); }
+.icon-btn {
+  width: 38px; height: 38px; border-radius: var(--radius-md); display: grid; place-items: center;
+  color: var(--fg-2); border: 1px solid transparent; transition: background .18s var(--ease), color .18s var(--ease);
+}
+.icon-btn:hover { background: var(--fg-soft); color: var(--fg); }
+.icon-btn svg { width: 18px; height: 18px; }
+.menu-btn { display: none; }
+
+/* ---------- views ---------- */
+.views { padding: var(--space-xl) var(--gutter) var(--space-3xl); flex: 1; }
+.view { display: none; }
+.view.active { display: block; }
+.view.active .rise { animation: rise .5s var(--ease) both; animation-delay: calc(var(--i, 0) * 55ms); }
+@keyframes rise { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+.page-head { display: flex; align-items: flex-end; justify-content: space-between; gap: var(--space-lg); margin-bottom: var(--space-xl); flex-wrap: wrap; }
+.page-head h1 { margin-bottom: 4px; }
+.page-head .sub { max-width: 68ch; }
+
+/* ---------- buttons ---------- */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  padding: 10px 18px; border-radius: var(--radius-pill);
+  font-size: 13.5px; font-weight: 500; letter-spacing: -.005em; white-space: nowrap;
+  border: 1px solid transparent; position: relative; overflow: hidden;
+  transition: background .18s var(--ease), color .18s var(--ease), border-color .18s var(--ease), transform .12s var(--ease), box-shadow .18s var(--ease);
+}
+.btn svg { width: 16px; height: 16px; }
+.btn:active { transform: translateY(1px) scale(.99); }
+.btn-primary { background: var(--accent); color: var(--accent-on); box-shadow: var(--shadow-glow); }
+.btn-primary:hover { background: var(--accent-hover); }
+.btn-primary:active { background: var(--accent-active); }
+.btn-secondary { background: color-mix(in oklch, var(--surface) 70%, transparent); color: var(--fg); border-color: var(--border); -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); }
+.btn-secondary:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-subtle); }
+.btn-ghost { background: transparent; color: var(--fg-2); }
+.btn-ghost:hover { background: var(--fg-soft); color: var(--fg); }
+.btn-danger { background: var(--danger); color: var(--accent-on); }
+.btn-danger:hover { background: color-mix(in oklch, var(--danger) 86%, black); }
+.btn-success { background: var(--success); color: var(--accent-on); }
+.btn-success:hover { background: color-mix(in oklch, var(--success) 86%, black); }
+.btn-sm { padding: 7px 13px; font-size: 12.5px; }
+.btn[disabled] { opacity: .45; cursor: not-allowed; }
+.btn .ripple { position: absolute; border-radius: 50%; transform: scale(0); background: color-mix(in oklch, var(--accent-on) 55%, transparent); animation: ripple .6s var(--ease) forwards; pointer-events: none; }
+@keyframes ripple { to { transform: scale(3.2); opacity: 0; } }
+.btn:focus-visible, .nav-item:focus-visible, .icon-btn:focus-visible, .tab:focus-visible, .filter-pill:focus-visible, .swipe-card:focus-visible {
+  outline: 2px solid var(--accent); outline-offset: 2px;
+}
+
+/* ---------- labels ---------- */
+.label {
+  display: inline-flex; align-items: center; gap: 5px; padding: 3px 10px; border-radius: var(--radius-pill);
+  font-size: 11.5px; font-weight: 500; line-height: 1.6; white-space: nowrap; border: 1px solid transparent;
+}
+.label svg { width: 12px; height: 12px; }
+.label-danger  { background: var(--danger-bg);  color: var(--danger);  border-color: color-mix(in oklch, var(--danger) 25%, transparent); }
+.label-warning { background: var(--warning-bg); color: var(--warning-text); border-color: color-mix(in oklch, var(--warning-text) 25%, transparent); }
+.label-success { background: var(--success-bg); color: var(--success); border-color: color-mix(in oklch, var(--success) 25%, transparent); }
+.label-info    { background: var(--info-bg);    color: var(--info);    border-color: color-mix(in oklch, var(--info) 25%, transparent); }
+.label-neutral { background: var(--surface-warm); color: var(--fg-2); border-color: var(--border-soft); }
+.label-accent  { background: var(--accent-subtle); color: var(--accent-active); border-color: color-mix(in oklch, var(--accent) 25%, transparent); }
+.label-outline { background: transparent; color: var(--fg-2); border-color: var(--border); }
+.label .dot { width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+
+/* ---------- kpi ---------- */
+.kpi-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--space-md); }
+.kpi { padding: var(--space-lg); display: flex; flex-direction: column; gap: 6px; min-height: 132px; }
+.kpi .k-top { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.kpi .k-ic { width: 34px; height: 34px; border-radius: 10px; display: grid; place-items: center; background: var(--accent-subtle); color: var(--accent); }
+.kpi .k-ic svg { width: 17px; height: 17px; }
+.kpi .k-ic.d { background: var(--danger-bg); color: var(--danger); }
+.kpi .k-ic.w { background: var(--warning-bg); color: var(--warning-text); }
+.kpi .k-ic.s { background: var(--success-bg); color: var(--success); }
+.kpi .k-num { font-family: var(--font-display); font-size: clamp(28px, 3.4vw, 40px); font-weight: 600; letter-spacing: -.03em; line-height: 1; }
+.kpi .k-num .unit { font-size: .5em; color: var(--muted); margin-left: 2px; }
+.kpi .k-label { font-size: 13px; font-weight: 500; }
+.kpi .k-sub { font-size: 11.5px; color: var(--meta); font-family: var(--font-mono); }
+.trend { font-family: var(--font-mono); font-size: 11px; padding: 2px 7px; border-radius: var(--radius-pill); }
+.trend.up { color: var(--success); background: var(--success-bg); }
+.trend.down { color: var(--danger); background: var(--danger-bg); }
+
+/* ---------- layout grids ---------- */
+.grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--space-md); }
+.grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-md); }
+.grid-2-1 { display: grid; grid-template-columns: 1.7fr 1fr; gap: var(--space-md); align-items: start; }
+.grid-1-2 { display: grid; grid-template-columns: 1fr 1.7fr; gap: var(--space-md); align-items: start; }
+.section-gap { margin-top: var(--space-md); }
+
+/* ---------- panel ---------- */
+.panel { padding: var(--space-lg); }
+.panel-head { display: flex; align-items: center; justify-content: space-between; gap: var(--space-md); margin-bottom: var(--space-md); }
+.panel-head h3 { font-size: 15px; }
+.panel-head .sub { font-size: 12px; }
+
+/* ---------- charts ---------- */
+.chart-wrap { position: relative; }
+.chart-legend { display: flex; gap: var(--space-md); flex-wrap: wrap; margin-top: var(--space-sm); }
+.legend-item { display: flex; align-items: center; gap: 7px; font-size: 12px; color: var(--fg-2); }
+.legend-item .sw { width: 10px; height: 10px; border-radius: 3px; }
+.chart-tip {
+  position: absolute; pointer-events: none; opacity: 0; transform: translate(-50%, -120%);
+  background: var(--fg); color: var(--accent-on); padding: 6px 10px; border-radius: 8px;
+  font-size: 11px; font-family: var(--font-mono); white-space: nowrap; transition: opacity .15s var(--ease); z-index: 5;
+}
+.chart-tip.on { opacity: 1; }
+.bar { transition: opacity .15s var(--ease); }
+.bar:hover { opacity: .78; }
+.axis { font-family: var(--font-mono); font-size: 10px; fill: var(--meta); }
+.donut-center { position: absolute; inset: 0; display: grid; place-content: center; text-align: center; }
+.donut-center .dc-num { font-family: var(--font-display); font-size: 26px; font-weight: 600; letter-spacing: -.02em; }
+.donut-center .dc-label { font-size: 11px; color: var(--meta); font-family: var(--font-mono); }
+
+/* ---------- stream / list ---------- */
+.stream { display: flex; flex-direction: column; }
+.stream-row {
+  display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: var(--space-md);
+  padding: 13px 10px; border-top: 1px solid var(--border-soft); border-radius: 10px;
+  transition: background .16s var(--ease); cursor: pointer;
+}
+.stream-row:hover { background: var(--fg-soft); }
+.stream-row:first-child { border-top: none; }
+.stream-title { font-size: 13.5px; font-weight: 500; }
+.stream-meta { font-size: 11.5px; color: var(--meta); font-family: var(--font-mono); }
+.src-badge { width: 34px; height: 34px; border-radius: 10px; display: grid; place-items: center; background: var(--surface-warm); border: 1px solid var(--border-soft); flex: none; }
+.src-badge svg { width: 17px; height: 17px; }
+
+/* ---------- idea cards ---------- */
+.idea-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-md); }
+.idea-card { padding: var(--space-lg); cursor: pointer; display: flex; flex-direction: column; gap: 12px; text-align: left; width: 100%; transition: transform .22s var(--ease), box-shadow .22s var(--ease), border-color .22s var(--ease); }
+.idea-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); border-color: var(--accent); }
+.idea-card .i-top { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.idea-card h3 { font-size: 15.5px; line-height: 1.35; }
+.idea-card .i-quote { font-size: 12.5px; color: var(--fg-2); border-left: 2px solid var(--border); padding-left: 10px; }
+.idea-card .i-foot { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.mini-logos { display: flex; }
+.mini-logos .src-badge { width: 24px; height: 24px; border-radius: 7px; margin-left: -6px; }
+.mini-logos .src-badge:first-child { margin-left: 0; }
+.spark { margin-left: auto; }
+.owner-chip { display: inline-flex; align-items: center; gap: 6px; font-size: 11.5px; color: var(--fg-2); }
+.unverified { font-family: var(--font-mono); font-size: 10px; color: var(--warning-text); background: var(--warning-bg); padding: 1px 6px; border-radius: var(--radius-pill); }
+
+/* ---------- toolbar / filters ---------- */
+.toolbar { display: flex; align-items: center; gap: var(--space-sm); flex-wrap: wrap; padding: var(--space-md); margin-bottom: var(--space-md); }
+.filter-pill {
+  display: inline-flex; align-items: center; gap: 7px; padding: 7px 13px; border-radius: var(--radius-pill);
+  background: color-mix(in oklch, var(--surface) 65%, transparent); border: 1px solid var(--border-soft);
+  font-size: 12.5px; color: var(--fg-2); transition: all .16s var(--ease);
+}
+.filter-pill:hover { border-color: var(--accent); color: var(--accent); }
+.filter-pill.on { background: var(--accent); border-color: var(--accent); color: var(--accent-on); }
+.filter-pill .n { font-family: var(--font-mono); font-size: 10.5px; opacity: .85; }
+.seg { display: inline-flex; padding: 3px; border-radius: var(--radius-pill); background: var(--fg-soft); gap: 2px; }
+.seg button { padding: 6px 14px; border-radius: var(--radius-pill); font-size: 12.5px; color: var(--fg-2); transition: all .18s var(--ease); }
+.seg button.on { background: var(--surface); color: var(--fg); box-shadow: var(--shadow-sm); }
+
+/* ---------- detail view ---------- */
+.detail-hero { padding: var(--space-xl); margin-bottom: var(--space-md); }
+.detail-hero .back { display: inline-flex; align-items: center; gap: 6px; font-size: 12.5px; color: var(--fg-2); margin-bottom: var(--space-md); }
+.detail-hero .back:hover { color: var(--accent); }
+.detail-hero h1 { font-size: clamp(1.4rem, 2.2vw, 1.9rem); margin-bottom: 10px; }
+.detail-meta { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.evidence-quote { padding: 14px 16px; border-radius: var(--radius-md); background: var(--surface-warm); border: 1px solid var(--border-soft); font-size: 13px; color: var(--fg); position: relative; }
+.evidence-quote .whisper { display: block; margin-top: 8px; font-family: var(--font-mono); font-size: 11px; color: var(--meta); }
+.rationale { border-left: 3px solid var(--accent); background: var(--accent-subtle); padding: 12px 14px; border-radius: 0 10px 10px 0; font-size: 12.5px; color: var(--accent-active); }
+.jira-card { border: 1px solid var(--border); border-radius: var(--radius-lg); overflow: hidden; }
+.jira-head { display: flex; align-items: center; gap: 10px; padding: 12px 16px; background: var(--surface-warm); border-bottom: 1px solid var(--border-soft); }
+.jira-body { padding: 16px; display: flex; flex-direction: column; gap: 12px; }
+.kv { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; font-size: 12.5px; }
+.kv .k { color: var(--meta); font-family: var(--font-mono); font-size: 11px; }
+.kv .v { text-align: right; }
+.progress { height: 6px; border-radius: 3px; background: var(--surface-alt); overflow: hidden; }
+.progress i { display: block; height: 100%; border-radius: 3px; background: var(--accent); }
+.roadmap-track { display: flex; align-items: center; gap: 0; margin: 8px 0; }
+.roadmap-track .seg-item { flex: 1; text-align: center; font-size: 10px; font-family: var(--font-mono); color: var(--meta); padding: 6px 0; border-top: 3px solid var(--border); }
+.roadmap-track .seg-item.done { border-top-color: var(--success); color: var(--success); }
+.roadmap-track .seg-item.now { border-top-color: var(--accent); color: var(--accent-active); font-weight: 500; }
+
+/* ---------- tabs ---------- */
+.tabs { display: flex; gap: 4px; border-bottom: 1px solid var(--border-soft); margin-bottom: var(--space-lg); overflow-x: auto; }
+.tab { padding: 11px 16px; font-size: 13.5px; color: var(--fg-2); border-bottom: 2px solid transparent; white-space: nowrap; transition: color .16s var(--ease), border-color .16s var(--ease); }
+.tab:hover { color: var(--fg); }
+.tab.on { color: var(--accent); border-bottom-color: var(--accent); }
+.tab .n { font-family: var(--font-mono); font-size: 11px; opacity: .8; margin-left: 5px; }
+
+/* ---------- swipe deck ---------- */
+.review-layout { display: grid; grid-template-columns: 1.25fr 1fr; gap: var(--space-lg); align-items: start; }
+.deck { position: relative; height: 460px; perspective: 1200px; }
+.deck::before, .deck::after {
+  content: ""; position: absolute; top: 6%; bottom: 6%; width: 64px; border-radius: 40px;
+  pointer-events: none; z-index: 0; filter: blur(20px); opacity: .55;
+}
+.deck::before { left: -4px; background: color-mix(in oklch, var(--danger) 34%, transparent); }
+.deck::after { right: -4px; background: color-mix(in oklch, var(--success) 34%, transparent); }
+.swipe-card {
+  position: absolute; inset: 0; padding: var(--space-xl); cursor: grab;
+  background: var(--glass-hi); -webkit-backdrop-filter: blur(24px) saturate(1.5); backdrop-filter: blur(24px) saturate(1.5);
+  border: 1px solid var(--glass-line); border-radius: var(--radius-xl); box-shadow: var(--shadow-lg);
+  display: flex; flex-direction: column; gap: 14px; touch-action: none; user-select: none;
+  will-change: transform; transform-origin: center bottom; z-index: 1;
+}
+.swipe-card:active { cursor: grabbing; }
+.swipe-card .sw-flag {
+  position: absolute; top: 22px; padding: 8px 18px; border-radius: var(--radius-pill);
+  font-family: var(--font-display); font-weight: 700; font-size: 16px; letter-spacing: .04em; opacity: 0;
+  border: 2px solid transparent; box-shadow: var(--shadow-md); z-index: 3; pointer-events: none;
+}
+.swipe-card .sw-flag.approve { right: 22px; color: var(--accent-on); background: var(--success); border-color: var(--success); transform: rotate(10deg); }
+.swipe-card .sw-flag.deny { left: 22px; color: var(--accent-on); background: var(--danger); border-color: var(--danger); transform: rotate(-10deg); }
+.swipe-card .sw-edge { position: absolute; inset: 0; border-radius: inherit; pointer-events: none; opacity: 0; transition: opacity .12s linear; z-index: 2; }
+.swipe-card .sw-edge.approve { background: linear-gradient(90deg, transparent 52%, color-mix(in oklch, var(--success) 32%, transparent)); border: 2px solid var(--success); }
+.swipe-card .sw-edge.deny { background: linear-gradient(270deg, transparent 52%, color-mix(in oklch, var(--danger) 32%, transparent)); border: 2px solid var(--danger); }
+.swipe-card .q-text { font-family: var(--font-display); font-size: 18px; line-height: 1.4; letter-spacing: -.01em; }
+
+/* action rail — persistent colour coding, not hover-only */
+.deck-actions { display: flex; align-items: center; justify-content: center; gap: var(--space-lg); margin-top: var(--space-lg); }
+.deck-btn {
+  position: relative; width: 60px; height: 60px; border-radius: 50%; display: grid; place-items: center;
+  border: 1.5px solid var(--border); background: var(--glass-hi); color: var(--fg-2); box-shadow: var(--shadow-md);
+  transition: transform .18s var(--ease-spring), background .18s var(--ease), color .18s var(--ease), border-color .18s var(--ease), box-shadow .18s var(--ease);
+}
+.deck-btn svg { width: 24px; height: 24px; }
+.deck-btn .deck-key {
+  position: absolute; bottom: -10px; left: 50%; transform: translateX(-50%);
+  font-family: var(--font-mono); font-size: 10px; line-height: 1; padding: 3px 6px; border-radius: 6px;
+  background: var(--surface); border: 1px solid var(--border); color: var(--meta); box-shadow: var(--shadow-sm);
+}
+.deck-btn.deny { color: var(--danger); background: var(--danger-bg); border-color: color-mix(in oklch, var(--danger) 45%, var(--border)); }
+.deck-btn.approve { color: var(--success); background: var(--success-bg); border-color: color-mix(in oklch, var(--success) 45%, var(--border)); }
+.deck-btn.deny::before, .deck-btn.approve::before {
+  content: ""; position: absolute; inset: -4px; border-radius: 50%; border: 2px solid currentColor;
+  opacity: .26; animation: deckPulse 2.6s var(--ease) infinite; pointer-events: none;
+}
+.deck-btn.approve::before { animation-delay: .6s; }
+@keyframes deckPulse { 0%,100% { transform: scale(1); opacity: .26; } 55% { transform: scale(1.16); opacity: 0; } }
+.deck-btn:hover { transform: translateY(-3px) scale(1.09); box-shadow: var(--shadow-lg); }
+.deck-btn:active { transform: scale(.94); }
+.deck-btn.deny:hover { background: var(--danger); color: var(--accent-on); border-color: var(--danger); }
+.deck-btn.approve:hover { background: var(--success); color: var(--accent-on); border-color: var(--success); }
+.deck-btn.skip:hover { background: var(--fg); color: var(--accent-on); border-color: var(--fg); }
+.deck-btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+.deck-btn:disabled { opacity: .45; cursor: not-allowed; transform: none; box-shadow: var(--shadow-sm); }
+.deck-btn:disabled::before { animation: none; opacity: 0; }
+.deck-hint { text-align: center; font-size: 12px; color: var(--meta); margin-top: 18px; font-family: var(--font-mono); }
+.deck-hint kbd { font-family: var(--font-mono); font-size: 11px; padding: 2px 6px; border-radius: 5px; background: var(--surface-warm); border: 1px solid var(--border); color: var(--fg-2); }
+.deck-empty { position: absolute; inset: 0; display: grid; place-content: center; text-align: center; gap: 12px; border-radius: var(--radius-xl); border: 1px dashed var(--border); z-index: 2; }
+.decision-log { display: flex; flex-direction: column; gap: 8px; max-height: 260px; overflow-y: auto; }
+.decision-row { display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-radius: 10px; background: var(--glass-hi); border: 1px solid var(--border-soft); font-size: 12.5px; animation: rise .35s var(--ease) both; }
+
+/* ---------- roadmap ---------- */
+.lane { display: flex; flex-direction: column; gap: var(--space-sm); }
+.lane-head { display: flex; align-items: center; gap: 10px; padding-bottom: 10px; border-bottom: 2px solid var(--border); }
+.lane-head .sw { width: 8px; height: 8px; border-radius: 50%; }
+.lane-card { width: 100%; text-align: left; padding: 14px; border-radius: var(--radius-md); background: var(--glass-hi); border: 1px solid var(--border-soft); display: flex; flex-direction: column; gap: 8px; transition: transform .18s var(--ease), border-color .18s var(--ease); cursor: pointer; }
+.lane-card:hover { transform: translateY(-2px); border-color: var(--accent); }
+.lane-card:disabled { cursor: default; opacity: .7; }
+.lane-card:disabled:hover { transform: none; border-color: var(--border-soft); }
+.commit-list { display: flex; flex-direction: column; }
+.commit-row { display: flex; align-items: center; gap: 14px; width: 100%; text-align: left; padding: 12px 6px; border-bottom: 1px solid var(--border-soft); transition: background .16s var(--ease); border-radius: 8px; }
+.commit-row:hover { background: var(--glass-hi); }
+.commit-row:last-child { border-bottom: none; }
+.commit-row .cr-title { font-size: 13.5px; font-weight: 500; }
+.commit-row .si-meta { font-family: var(--font-mono); font-size: 10.5px; color: var(--meta); }
+.commit-row .cr-demand { display: flex; align-items: center; gap: 10px; width: 190px; flex: none; }
+.commit-row .cr-demand .progress { flex: 1; }
+.commit-row .cr-demand .num { font-size: 12px; color: var(--fg-2); min-width: 28px; text-align: right; }
+.matrix { position: relative; height: 320px; border: 1px solid var(--border-soft); border-radius: var(--radius-lg); background: var(--glass-hi); }
+.matrix .axis-x, .matrix .axis-y { position: absolute; font-size: 10.5px; font-family: var(--font-mono); color: var(--meta); }
+.matrix .axis-y { left: 12px; bottom: 10px; }
+.matrix .axis-x { right: 12px; bottom: 10px; }
+.matrix .grid-line { position: absolute; background: var(--border-soft); }
+.matrix .pt { position: absolute; transform: translate(-50%, -50%); border-radius: 50%; display: grid; place-items: center; font-family: var(--font-mono); font-size: 10px; color: var(--accent-on); box-shadow: var(--shadow-md); transition: transform .18s var(--ease); }
+.matrix .pt:hover { transform: translate(-50%, -50%) scale(1.25); }
+
+/* ---------- integration cards ---------- */
+.int-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-md); }
+.int-card { padding: var(--space-lg); display: flex; flex-direction: column; gap: 12px; }
+.int-card .ic-top { display: flex; align-items: center; gap: 12px; }
+.logo-tile { width: 42px; height: 42px; border-radius: 12px; display: grid; place-items: center; background: var(--surface-warm); border: 1px solid var(--border-soft); flex: none; }
+.logo-tile svg { width: 22px; height: 22px; }
+.logo-mono { font-family: var(--font-display); font-weight: 700; font-size: 14px; color: var(--fg-2); letter-spacing: -.02em; }
+.int-card .ic-name { font-weight: 600; font-size: 14px; }
+.int-card .ic-desc { font-size: 12px; color: var(--fg-2); }
+.int-card .ic-foot { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-top: auto; padding-top: 12px; border-top: 1px solid var(--border-soft); }
+
+/* ---------- switch ---------- */
+.switch { position: relative; width: 40px; height: 22px; border-radius: var(--radius-pill); background: var(--surface-alt); transition: background .2s var(--ease); flex: none; }
+.switch::after { content: ""; position: absolute; top: 2px; left: 2px; width: 18px; height: 18px; border-radius: 50%; background: var(--surface); box-shadow: var(--shadow-sm); transition: transform .22s var(--ease), background .2s var(--ease); }
+.switch.on { background: var(--accent); }
+.switch.on::after { transform: translateX(18px); }
+
+/* ---------- drawer ---------- */
+.scrim { position: fixed; inset: 0; background: color-mix(in oklch, var(--fg) 42%, transparent); -webkit-backdrop-filter: blur(2px); backdrop-filter: blur(2px); opacity: 0; pointer-events: none; transition: opacity .25s var(--ease); z-index: 60; }
+.scrim.on { opacity: 1; pointer-events: auto; }
+.drawer {
+  position: fixed; top: 0; right: 0; height: 100vh; width: min(440px, 92vw); z-index: 70;
+  display: flex; flex-direction: column;
+  background: var(--glass-strong); -webkit-backdrop-filter: blur(30px) saturate(1.6); backdrop-filter: blur(30px) saturate(1.6);
+  border-left: 1px solid var(--glass-line); box-shadow: var(--shadow-lg);
+  transform: translateX(104%); transition: transform .38s var(--ease);
+}
+.drawer.on { transform: none; }
+.drawer-head { display: flex; align-items: center; justify-content: space-between; gap: var(--space-md); padding: var(--space-lg); border-bottom: 1px solid var(--border-soft); }
+.drawer-body { padding: var(--space-lg); overflow-y: auto; flex: 1; display: flex; flex-direction: column; gap: var(--space-lg); }
+.drawer-body h4 { font-family: var(--font-display); font-size: 13px; font-weight: 600; margin-bottom: 10px; }
+.src-stat-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+.src-stat { padding: 12px 14px; border-radius: var(--radius-md); background: var(--surface-warm); border: 1px solid var(--border-soft); }
+.src-stat .n { font-family: var(--font-display); font-size: 22px; font-weight: 600; letter-spacing: -.02em; line-height: 1.1; }
+.src-stat .l { font-size: 10.5px; color: var(--meta); font-family: var(--font-mono); text-transform: uppercase; letter-spacing: .04em; margin-top: 3px; }
+.src-feed-row { display: flex; align-items: flex-start; gap: 10px; padding: 11px 12px; border-radius: 10px; background: var(--glass-hi); border: 1px solid var(--border-soft); font-size: 12.5px; animation: rise .3s var(--ease) both; }
+.src-feed-row .sr-t { flex: 1; line-height: 1.45; }
+.src-feed-row .sr-w { font-family: var(--font-mono); font-size: 10.5px; color: var(--meta); white-space: nowrap; padding-top: 2px; }
+.src-idea-row { display: flex; align-items: center; gap: 12px; width: 100%; text-align: left; padding: 12px; border-radius: 10px; background: var(--glass-hi); border: 1px solid var(--border-soft); transition: transform .18s var(--ease), border-color .18s var(--ease); }
+.src-idea-row:hover { transform: translateY(-2px); border-color: var(--accent); }
+.src-idea-row .si-title { font-size: 13px; font-weight: 500; }
+.src-idea-row .si-meta { font-family: var(--font-mono); font-size: 10.5px; color: var(--meta); }
+.src-link { color: var(--link); text-decoration: underline; text-underline-offset: 2px; text-decoration-color: color-mix(in oklch, var(--link) 40%, transparent); text-align: left; }
+.src-link:hover { color: var(--accent-hover); text-decoration-color: var(--accent-hover); }
+.src-link:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 2px; }
+.src-badge[data-source] { cursor: pointer; transition: border-color .16s var(--ease), transform .16s var(--ease); }
+.src-badge[data-source]:hover, .src-badge[data-source]:focus-visible { border-color: var(--accent); transform: translateY(-1px); }
+.src-badge[data-source]:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.src-row { cursor: pointer; }
+.bar[data-source] { cursor: pointer; }
+
+/* ---------- chat ---------- */
+.chat-thread { flex: 1; overflow-y: auto; padding: var(--space-lg); display: flex; flex-direction: column; gap: 14px; }
+.msg { max-width: 88%; padding: 11px 14px; border-radius: 14px; font-size: 13px; line-height: 1.5; animation: rise .35s var(--ease) both; }
+.msg.bot { align-self: flex-start; background: var(--surface-warm); border: 1px solid var(--border-soft); border-bottom-left-radius: 4px; }
+.msg.me { align-self: flex-end; background: var(--accent); color: var(--accent-on); border-bottom-right-radius: 4px; }
+.msg .cites { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
+.chat-input { display: flex; gap: 8px; padding: var(--space-md) var(--space-lg) var(--space-lg); border-top: 1px solid var(--border-soft); }
+.chat-input input { flex: 1; padding: 11px 14px; border-radius: var(--radius-pill); border: 1px solid var(--border); background: var(--surface); outline: none; }
+.chat-input input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); }
+.prompt-chips { display: flex; flex-wrap: wrap; gap: 8px; padding: 0 var(--space-lg); }
+.prompt-chip { font-size: 12px; padding: 7px 12px; border-radius: var(--radius-pill); border: 1px solid var(--border); color: var(--fg-2); transition: all .16s var(--ease); }
+.prompt-chip:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-subtle); }
+.typing { display: inline-flex; gap: 4px; align-items: center; }
+.typing i { width: 6px; height: 6px; border-radius: 50%; background: var(--muted); animation: blink 1.2s infinite; }
+.typing i:nth-child(2) { animation-delay: .2s; }
+.typing i:nth-child(3) { animation-delay: .4s; }
+@keyframes blink { 0%,60%,100% { opacity: .3; transform: translateY(0); } 30% { opacity: 1; transform: translateY(-2px); } }
+
+/* ---------- assistant (full width) ---------- */
+.assistant-shell { display: flex; flex-direction: column; height: clamp(520px, calc(100vh - 210px), 900px); overflow: hidden; }
+.assistant-head { display: flex; align-items: center; justify-content: space-between; gap: 14px; padding: 13px var(--space-lg); border-bottom: 1px solid var(--border-soft); background: var(--surface-warm); transition: background .35s var(--ease); flex-wrap: wrap; }
+.ah-left { display: flex; align-items: center; gap: 11px; min-width: 0; }
+.ah-title { font-weight: 600; font-size: 14px; font-family: var(--font-heading); }
+.ah-scope { display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--fg); margin-top: 3px; min-width: 0; }
+.ah-scope b { font-weight: 600; }
+.ah-scope .sc-sub { color: var(--fg-2); }
+.ah-right { display: flex; align-items: center; gap: 12px; margin-left: auto; }
+.scope-pulse { position: relative; width: 7px; height: 7px; border-radius: 50%; background: var(--accent); flex: none; transition: background .35s var(--ease); }
+.scope-pulse::after { content: ""; position: absolute; inset: -5px; border-radius: 50%; border: 1px solid var(--accent); opacity: .5; animation: scopePulse 2.4s var(--ease) infinite; }
+.assistant-head.quality .scope-pulse { background: var(--info); }
+.assistant-head.quality .scope-pulse::after { border-color: var(--info); }
+@keyframes scopePulse { 0% { transform: scale(.55); opacity: .7; } 70% { transform: scale(1.6); opacity: 0; } 100% { opacity: 0; } }
+.scope-toggle { position: relative; display: inline-flex; align-items: center; padding: 3px; border-radius: var(--radius-pill); background: var(--surface-alt); border: 1px solid var(--border); cursor: pointer; flex: none; }
+
+.scope-toggle:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+.scope-thumb { position: absolute; top: 3px; left: 3px; width: calc(50% - 3px); height: calc(100% - 6px); border-radius: var(--radius-pill); background: var(--accent); box-shadow: var(--shadow-sm); transition: transform .36s var(--ease-spring), background .36s var(--ease), box-shadow .36s var(--ease); }
+.scope-toggle.on .scope-thumb { transform: translateX(100%); background: var(--info); box-shadow: 0 0 0 1px var(--info), 0 4px 16px -2px var(--info); }
+.scope-opt { position: relative; z-index: 1; display: inline-flex; align-items: center; gap: 6px; padding: 5px 13px; font-size: 11.5px; font-weight: 500; color: var(--fg-2); white-space: nowrap; transition: color .3s var(--ease); }
+.scope-opt svg { width: 13px; height: 13px; }
+.scope-opt.on { color: var(--accent-on); }
+
+/* ---------- modal ---------- */
+.modal { position: fixed; inset: 0; z-index: 80; display: grid; place-items: center; padding: var(--space-md); opacity: 0; pointer-events: none; transition: opacity .25s var(--ease); }
+.modal.on { opacity: 1; pointer-events: auto; }
+.modal-card {
+  width: min(620px, 96vw); max-height: 90vh; overflow-y: auto;
+  background: var(--glass-hi); -webkit-backdrop-filter: blur(34px) saturate(1.6); backdrop-filter: blur(34px) saturate(1.6);
+  border: 1px solid var(--glass-line); border-radius: var(--radius-xl); box-shadow: var(--shadow-lg);
+  transform: translateY(16px) scale(.98); transition: transform .3s var(--ease-spring);
+}
+.modal.on .modal-card { transform: none; }
+.modal-head { display: flex; align-items: center; gap: 12px; padding: var(--space-lg); border-bottom: 1px solid var(--border-soft); }
+.modal-body { padding: var(--space-lg); display: flex; flex-direction: column; gap: var(--space-md); }
+.modal-foot { display: flex; justify-content: flex-end; gap: 10px; padding: var(--space-lg); border-top: 1px solid var(--border-soft); }
+.field { display: flex; flex-direction: column; gap: 6px; }
+.field label { font-size: 12px; color: var(--meta); font-family: var(--font-mono); }
+.field input, .field select, .field textarea { padding: 9px 12px; border-radius: var(--radius-sm); border: 1px solid var(--border); background: var(--surface); color: var(--fg); outline: none; font-size: 13px; }
+.field input:focus, .field select:focus, .field textarea:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); }
+.map-row { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 10px; font-size: 12.5px; }
+.map-row .arrow { color: var(--muted); }
+
+/* ---------- toast ---------- */
+.toasts { position: fixed; bottom: var(--space-lg); right: var(--space-lg); z-index: 90; display: flex; flex-direction: column; gap: 10px; align-items: flex-end; }
+.toast { display: flex; align-items: center; gap: 10px; padding: 12px 16px; border-radius: var(--radius-md); background: var(--fg); color: var(--accent-on); font-size: 13px; box-shadow: var(--shadow-lg); animation: rise .3s var(--ease) both; }
+.toast svg { width: 16px; height: 16px; }
+.toast.success { background: var(--success); }
+.toast.danger { background: var(--danger); }
+
+/* ---------- skeleton / empty ---------- */
+.empty { text-align: center; padding: var(--space-2xl); color: var(--meta); }
+
+/* ---------- team / pods ---------- */
+.pod-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--space-md); }
+.pod-card { padding: var(--space-lg); display: flex; flex-direction: column; gap: var(--space-md); }
+.pod-head { display: flex; align-items: center; gap: 12px; }
+.pod-monogram { width: 38px; height: 38px; border-radius: 11px; display: grid; place-items: center; font-family: var(--font-mono); font-size: 12.5px; font-weight: 600; color: var(--accent-active); background: var(--accent-subtle); border: 1px solid color-mix(in oklch, var(--accent) 22%, transparent); flex: none; }
+.pod-name { font-size: 15px; font-weight: 600; font-family: var(--font-heading); }
+.pod-role { font-size: 12px; color: var(--meta); }
+.pod-people { display: flex; flex-direction: column; gap: 7px; }
+.pod-person { display: flex; align-items: center; gap: 9px; font-size: 12.5px; }
+.pod-person .grow { color: var(--fg); }
+.pod-person .ava { width: 24px; height: 24px; border-radius: 50%; display: grid; place-items: center; font-size: 10px; font-weight: 600; background: var(--surface-alt); color: var(--fg-2); flex: none; }
+.pod-person .role { margin-left: auto; color: var(--meta); font-family: var(--font-mono); font-size: 10px; text-transform: uppercase; letter-spacing: .04em; }
+.pod-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+.pod-stat { padding: 10px 12px; border-radius: 10px; background: var(--surface-warm); border: 1px solid var(--border-soft); }
+.pod-stat .n { font-family: var(--font-mono); font-size: 18px; font-weight: 600; }
+.pod-stat .l { font-size: 10px; color: var(--meta); text-transform: uppercase; letter-spacing: .04em; margin-top: 2px; }
+.pod-ideas { border-top: 1px solid var(--border-soft); padding-top: var(--space-md); display: flex; flex-direction: column; gap: 8px; }
+.pod-ideas-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+.pod-idea { display: flex; align-items: center; gap: 10px; width: 100%; text-align: left; padding: 10px 11px; border-radius: 10px; background: var(--glass-hi); border: 1px solid var(--border-soft); cursor: pointer; transition: transform .18s var(--ease), border-color .18s var(--ease); }
+.pod-idea:hover { transform: translateX(2px); border-color: var(--accent); }
+.pod-idea:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.pod-idea .grow { min-width: 0; }
+.pod-idea .pi-title { font-size: 13px; font-weight: 500; }
+.pod-idea .pi-meta { font-family: var(--font-mono); font-size: 10.5px; color: var(--meta); }
+.pod-empty { font-size: 12px; color: var(--meta); line-height: 1.5; padding: 2px 0; }
+.pod-jump { font: inherit; cursor: pointer; transition: border-color .16s var(--ease), background .16s var(--ease), color .16s var(--ease); }
+.pod-jump:hover { border-color: var(--accent); background: var(--accent-subtle); color: var(--accent-active); }
+.pod-jump:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+/* ---------- responsive ---------- */
+@media (max-width: 1200px) {
+  .kpi-grid { grid-template-columns: repeat(2, 1fr); }
+  .idea-grid, .int-grid { grid-template-columns: repeat(2, 1fr); }
+  .review-layout { grid-template-columns: 1fr; }
+  .deck { height: 420px; }
+}
+@media (max-width: 1080px) {
+  .app { grid-template-columns: 1fr; }
+  .pod-grid { grid-template-columns: 1fr; }
+  .sidebar {
+    position: fixed; left: 0; top: 0; width: 280px; transform: translateX(-104%);
+    transition: transform .34s var(--ease); height: 100vh;
+  }
+  .sidebar.open { transform: none; }
+  .menu-btn { display: grid; }
+  .grid-2, .grid-3, .grid-2-1, .grid-1-2 { grid-template-columns: 1fr; }
+  .search { max-width: none; }
+}
+@media (max-width: 720px) {
+  .kpi-grid, .idea-grid, .int-grid { grid-template-columns: 1fr; }
+  .top-chip.optional { display: none; }
+  .deck { height: 480px; }
+  .page-head { align-items: flex-start; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: .001ms !important; animation-iteration-count: 1 !important; transition-duration: .001ms !important; }
+}
+</style>
+</head>
+<body>
+
+<div class="mesh" aria-hidden="true">
+  <span class="blob b1"></span><span class="blob b2"></span><span class="blob b3"></span><span class="blob b4"></span>
+</div>
+
+<div class="app">
+  <!-- ================= SIDEBAR ================= -->
+  <aside class="sidebar" id="sidebar" data-od-id="sidebar">
+    <div class="brand">
+      <span class="brand-mark" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5m0 0L6 9m6-4 6 4"/><path d="M5 19h14"/></svg>
+      </span>
+      <div>
+        <div class="brand-name">Test Flight</div>
+        <div class="brand-sub">Quality &amp; Product Console</div>
+      </div>
+    </div>
+
+    <div class="cycle">
+      <span class="dot" aria-hidden="true"></span>
+      <span>CYCLE W14 · ACTIVE</span>
+      <span class="iso">ISO 13485</span>
+    </div>
+
+    <nav class="nav" aria-label="Primary">
+      <span class="nav-label">Workspace</span>
+      <button class="nav-item active" data-view="overview" data-od-id="nav-overview">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 13h6V4H4zM14 20h6v-9h-6zM4 20h6v-3H4zM14 7h6V4h-6z"/></svg>
+        Overview
+      </button>
+      <button class="nav-item" data-view="ideas" data-od-id="nav-ideas">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-4 10.5c.6.6 1 1.4 1 2.2h6c0-.8.4-1.6 1-2.2A6 6 0 0 0 12 3Z"/></svg>
+        Ideas
+        <span class="count">18</span>
+      </button>
+      <button class="nav-item" data-view="quality" data-od-id="nav-quality">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 5 6v6c0 4.2 2.9 7.5 7 9 4.1-1.5 7-4.8 7-9V6l-7-3Z"/><path d="m9 12 2 2 4-4"/></svg>
+        Quality
+        <span class="count">24</span>
+      </button>
+      <button class="nav-item" data-view="roadmap" data-od-id="nav-roadmap">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h16M4 12h10M4 18h13"/><circle cx="18" cy="12" r="2"/></svg>
+        Roadmap
+      </button>
+      <button class="nav-item" data-view="team" data-od-id="nav-team">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3"/><path d="M3 20a6 6 0 0 1 12 0"/><path d="M16 5.5a3 3 0 0 1 0 5.9M17 14.5a6 6 0 0 1 4 5.5"/></svg>
+        Team
+        <span class="count">6</span>
+      </button>
+      <button class="nav-item" data-view="integrations" data-od-id="nav-integrations">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M10 4v4M14 4v4M7 8h10v4a5 5 0 0 1-10 0V8ZM12 17v3"/></svg>
+        Integrations
+        <span class="count">3</span>
+      </button>
+      <button class="nav-item" data-view="assistant" data-od-id="nav-assistant">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v2m6.4.6-1.4 1.4M21 12h-2M5 12H3m2.6-5.4L7 8"/><rect x="5" y="10" width="14" height="10" rx="3"/><path d="M9 15h.01M15 15h.01"/></svg>
+        Assistant
+      </button>
+    </nav>
+
+    <div class="sidebar-foot">
+      <button class="data-btn" id="dataBtn" data-od-id="data-status-button">
+        <span class="pulse-dot" id="dataDot" aria-hidden="true"></span>
+        <span class="grow">
+          Data status
+          <small id="dataSyncLabel">Synced 4m ago · 7 sources</small>
+        </span>
+        <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m9 6 6 6-6 6"/></svg>
+      </button>
+      <div class="user">
+        <span class="avatar" aria-hidden="true">DM</span>
+        <div>
+          <div class="user-name">Dana Meyer</div>
+          <div class="user-role">VP Quality · Reviewer</div>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ================= MAIN ================= -->
+  <div class="main">
+    <header class="topbar" data-od-id="topbar">
+      <button class="icon-btn menu-btn" id="menuBtn" aria-label="Open navigation">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+      </button>
+      <label class="search" for="globalSearch">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3-3"/></svg>
+        <input id="globalSearch" type="search" placeholder="Search ideas, report IDs, Jira keys, customers…" autocomplete="off" />
+      </label>
+      <span class="top-chip optional" title="Records ingested and normalized this cycle">
+        <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-3-6.7L21 8"/><path d="M21 3v5h-5"/></svg>
+        Daily sync <span class="bar"><i id="syncBar"></i></span> <span class="num" id="syncPct">72%</span>
+      </span>
+      <span class="top-chip optional" title="Sprint freeze window">
+        <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+        Sprint freeze <span class="mono" style="font-size:11px">Sun 12:00</span>
+      </span>
+      <button class="icon-btn" id="assistantBtn" aria-label="Open assistant" data-od-id="assistant-button">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v2m6.4.6-1.4 1.4M21 12h-2M5 12H3m2.6-5.4L7 8"/><rect x="5" y="10" width="14" height="10" rx="3"/><path d="M9 15h.01M15 15h.01"/></svg>
+      </button>
+      <span class="avatar" aria-hidden="true">DM</span>
+    </header>
+
+    <div class="views" id="views">
+
+      <!-- ========== OVERVIEW ========== -->
+      <section class="view active" id="view-overview" data-od-id="view-overview">
+        <div class="page-head">
+          <div>
+            <p class="eyebrow" style="margin-bottom:6px">Cycle W14 · Continuous triage · FDA 21 CFR 803 / MDR post-market surveillance</p>
+            <h1>Good morning, Dana</h1>
+            <p class="sub" id="overviewGreeting">1,658 reports normalized across 7 sources. 24 items are waiting on a human quality decision.</p>
+          </div>
+          <div class="row">
+            <button class="btn btn-secondary" data-goto="roadmap">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h16M4 12h10M4 18h13"/></svg>
+              Build plan
+            </button>
+            <button class="btn btn-primary" data-goto="quality" data-od-id="cta-review-queue">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m9 12 2 2 4-4"/><path d="M12 3 5 6v6c0 4.2 2.9 7.5 7 9 4.1-1.5 7-4.8 7-9V6l-7-3Z"/></svg>
+              Review 24 pending
+            </button>
+          </div>
+        </div>
+
+        <div class="kpi-grid">
+          <div class="glass kpi rise" style="--i:0" data-od-id="kpi-feedback">
+            <div class="k-top"><span class="k-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H8l-4 4V5a2 2 0 0 1 2-2h13a2 2 0 0 1 2 2Z"/></svg></span><span class="trend up">+12%</span></div>
+            <div class="k-num num"><span data-count="1658">0</span></div>
+            <div class="k-label">Feedback in cycle</div>
+            <div class="k-sub">1,302 train · 356 held-out eval</div>
+          </div>
+          <div class="glass kpi rise" style="--i:1" data-od-id="kpi-pending">
+            <div class="k-top"><span class="k-ic w"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 8v4l3 2"/></svg></span><span class="trend down">5 MDR</span></div>
+            <div class="k-num num"><span data-count="24">0</span></div>
+            <div class="k-label">Awaiting quality decision</div>
+            <div class="k-sub">median wait 42m · SLA 60m</div>
+          </div>
+          <div class="glass kpi rise" style="--i:2" data-od-id="kpi-ideas">
+            <div class="k-top"><span class="k-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-4 10.5c.6.6 1 1.4 1 2.2h6c0-.8.4-1.6 1-2.2A6 6 0 0 0 12 3Z"/></svg></span><span class="trend up">+3</span></div>
+            <div class="k-num num"><span data-count="18">0</span></div>
+            <div class="k-label">Ideas mapped to Jira</div>
+            <div class="k-sub">across 6 pods · 2 unverified owners</div>
+          </div>
+          <div class="glass kpi rise" style="--i:3" data-od-id="kpi-excluded">
+            <div class="k-top"><span class="k-ic s"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M4 12h16M4 17h10"/></svg></span></div>
+            <div class="k-num num"><span data-count="248">0</span></div>
+            <div class="k-label">Excluded at intake gate</div>
+            <div class="k-sub">15% of raw volume · logged unchanged</div>
+          </div>
+        </div>
+
+        <div class="grid-2-1 section-gap">
+          <div class="glass panel rise" style="--i:1" data-od-id="chart-intake">
+            <div class="panel-head">
+              <div>
+                <h3>Intake volume by source</h3>
+                <p class="sub">Raw reports normalized this cycle, schema v1.1</p>
+              </div>
+              <span class="label label-neutral"><span class="dot"></span>1,658 total</span>
+            </div>
+            <div class="chart-wrap" id="chartSources"></div>
+            <div class="chart-legend" id="legendSources"></div>
+          </div>
+
+          <div class="glass panel rise" style="--i:2" data-od-id="chart-split">
+            <div class="panel-head"><div><h3>Classifier routing</h3><p class="sub">Eligible records only</p></div></div>
+            <div class="chart-wrap" id="chartSplit">
+              <div class="donut-center"><div class="dc-num num">1,410</div><div class="dc-label">ELIGIBLE</div></div>
+            </div>
+            <div class="chart-legend" id="legendSplit"></div>
+          </div>
+        </div>
+
+        <div class="glass panel rise" style="--i:1" data-od-id="chart-trend">
+          <div class="panel-head">
+            <div>
+              <h3>Quality vs. product volume</h3>
+              <p class="sub">12-week intake trend — complaint candidates against product feedback</p>
+            </div>
+            <div class="seg" role="tablist" aria-label="Trend range">
+              <button class="on" data-range="12">12w</button>
+              <button data-range="6">6w</button>
+            </div>
+          </div>
+          <div class="chart-wrap" id="chartTrend"></div>
+          <div class="chart-legend">
+            <span class="legend-item"><span class="sw" style="background:var(--danger)"></span>Complaint candidates</span>
+            <span class="legend-item"><span class="sw" style="background:var(--accent)"></span>Product feedback</span>
+          </div>
+        </div>
+
+        <div class="grid-1-2 section-gap">
+          <div class="glass panel rise" style="--i:1" data-od-id="data-freshness">
+            <div class="panel-head"><div><h3>Data freshness</h3></div></div>
+            <div class="stack" id="freshnessList"></div>
+            <button class="btn btn-secondary btn-sm" id="openDataFromOverview" style="margin-top:16px;width:100%">Open data status</button>
+          </div>
+
+          <div class="glass panel rise" style="--i:2" data-od-id="triage-stream">
+            <div class="panel-head">
+              <div><h3>Live triage stream</h3><p class="sub">Sorted by risk &amp; uncertainty · auto-refresh 15s</p></div>
+              <span class="label label-success"><span class="dot"></span>Recall-first policy active</span>
+            </div>
+            <div class="stream" id="triageStream"></div>
+          </div>
+        </div>
+      </section><!-- ========== IDEAS ========== -->
+      <section class="view" id="view-ideas" data-od-id="view-ideas">
+        <div class="page-head">
+          <div>
+            <p class="eyebrow" style="margin-bottom:6px">Product path · theme + sentiment → cross-source idea</p>
+            <h1>Ideas</h1>
+            <p class="sub">Each idea is a cluster of feedback from one or more sources, owned by a pod and linked to a Jira ticket as evidence.</p>
+          </div>
+          <div class="row">
+            <button class="btn btn-secondary" data-goto="quality">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 5 6v6c0 4.2 2.9 7.5 7 9 4.1-1.5 7-4.8 7-9V6l-7-3Z"/></svg>
+              Quality queue
+            </button>
+          </div>
+        </div>
+
+        <div class="glass toolbar" data-od-id="ideas-toolbar">
+          <div class="seg" id="ideasSeg" role="group" aria-label="Sort">
+            <button class="on" data-sort="demand">Top demand</button>
+            <button data-sort="recent">Newest</button>
+            <button data-sort="priority">Priority</button>
+          </div>
+          <span style="width:1px;height:24px;background:var(--border-soft)"></span>
+          <div class="seg" id="ideasDate" role="group" aria-label="Date range">
+            <button class="on" data-age="0">Any time</button>
+            <button data-age="7">Last 7 days</button>
+            <button data-age="30">Last 30 days</button>
+            <button data-age="90">Last 90 days</button>
+          </div>
+          <span style="width:1px;height:24px;background:var(--border-soft)"></span>
+          <button class="filter-pill on" data-filter="pod" data-value="">All pods <span class="n">7</span></button>
+          <button class="filter-pill" data-filter="pod" data-value="Mobile Platform">Mobile Platform <span class="n">3</span></button>
+          <button class="filter-pill" data-filter="pod" data-value="Algorithms &amp; Safety">Algorithms &amp; Safety <span class="n">1</span></button>
+          <button class="filter-pill" data-filter="pod" data-value="Clinical Workflows">Clinical Workflows <span class="n">1</span></button>
+          <button class="filter-pill" data-filter="pod" data-value="Hardware">Hardware <span class="n">1</span></button>
+          <button class="filter-pill" data-filter="pod" data-value="Design System">Design System <span class="n">1</span></button>
+        </div>
+
+        <div class="idea-grid" id="ideaGrid"></div>
+        <div class="empty hide" id="ideaEmpty">No ideas match the current filters.</div>
+      </section>
+
+      <!-- ========== IDEA DETAIL ========== -->
+      <section class="view" id="view-idea" data-od-id="view-idea">
+        <div class="glass detail-hero">
+          <button class="back" data-goto="ideas">
+            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 6-6 6 6 6"/></svg>
+            Back to ideas
+          </button>
+          <div class="row-between" style="align-items:flex-start">
+            <div style="max-width:70ch">
+              <p class="eyebrow" id="detailEyebrow" style="margin-bottom:8px">IDEA · POD</p>
+              <h1 id="detailTitle">Idea title</h1>
+              <div class="detail-meta" id="detailMeta"></div>
+            </div>
+            <div class="row" id="detailActions">
+              <button class="btn btn-secondary" data-od-id="detail-open-jira">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6M21 3l-9 9M10 5H5a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5"/></svg>
+                Open in Jira
+              </button>
+              <button class="btn btn-primary" id="detailAssignBtn">Assign owner</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="grid-2-1">
+          <div class="stack" style="gap:var(--space-md)">
+            <div class="glass panel" data-od-id="detail-evidence">
+              <div class="panel-head">
+                <div><h3>Evidence</h3><p class="sub">Original words shown beside the model rationale — never hidden.</p></div>
+                <span class="label label-neutral" id="detailEvidenceCount">0 reports</span>
+              </div>
+              <div class="stack" id="detailEvidenceList" style="gap:12px"></div>
+            </div>
+
+            <div class="glass panel" data-od-id="detail-why">
+              <div class="panel-head"><div><h3>Why this cluster</h3></div></div>
+              <div class="rationale" id="detailWhy"></div>
+            </div>
+          </div>
+
+          <div class="stack" style="gap:var(--space-md)">
+            <div class="jira-card" data-od-id="detail-jira-card">
+              <div class="jira-head">
+                <span class="src-badge" id="detailJiraLogo" aria-hidden="true"></span>
+                <div class="grow">
+                  <div class="meta" id="detailJiraKey">—</div>
+                  <div style="font-weight:600;font-size:13.5px" id="detailJiraTitle">—</div>
+                </div>
+                <span class="label" id="detailJiraStatus">—</span>
+              </div>
+              <div class="jira-body">
+                <div class="kv"><span class="k">ASSIGNEE</span><span class="v" id="detailJiraAssignee">—</span></div>
+                <div class="kv"><span class="k">SPRINT</span><span class="v" id="detailJiraSprint">—</span></div>
+                <div class="kv"><span class="k">STORY POINTS</span><span class="v num" id="detailJiraPoints">—</span></div>
+                <div class="kv"><span class="k">LAST UPDATED</span><span class="v" id="detailJiraUpdated">—</span></div>
+                <a class="btn btn-secondary btn-sm" href="#" onclick="return false" style="width:100%">View ticket</a>
+              </div>
+            </div>
+
+            <div class="glass panel" data-od-id="detail-roadmap">
+              <div class="panel-head"><div><h3>Roadmap position</h3></div><span class="label label-accent" id="detailRoadmapStage">—</span></div>
+              <div class="roadmap-track" id="detailRoadmapTrack"></div>
+              <p class="sub" id="detailRoadmapNote" style="font-size:12px"></p>
+            </div>
+
+            <div class="glass panel" data-od-id="detail-demand">
+              <div class="panel-head"><div><h3>Demand vs. effort</h3></div></div>
+              <div class="kv"><span class="k">DEMAND</span><span class="v num" id="detailDemand">—</span></div>
+              <div class="progress" style="margin:6px 0 14px"><i id="detailDemandBar"></i></div>
+              <div class="kv"><span class="k">ESTIMATED EFFORT</span><span class="v num" id="detailEffort">—</span></div>
+              <div class="progress" style="margin-top:6px"><i id="detailEffortBar" style="background:var(--warning)"></i></div>
+            </div>
+
+            <div class="glass panel" data-od-id="detail-context">
+              <div class="panel-head"><div><h3>Owner &amp; CRM context</h3></div></div>
+              <div class="stack" id="detailContext" style="gap:10px"></div>
+            </div>
+          </div>
+        </div>
+      </section><!-- ========== QUALITY ========== -->
+      <section class="view" id="view-quality" data-od-id="view-quality">
+        <div class="page-head">
+          <div>
+            <p class="eyebrow" style="margin-bottom:6px">Quality path · complaint candidate → human decision + logged rationale</p>
+            <h1>Quality review</h1>
+            <p class="sub">Classifier output is a candidate, not a determination. Approve to route toward QMS, deny to return to product triage. Uncertainty always goes to a human.</p>
+          </div>
+          <div class="row">
+            <span class="label label-warning"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 2 20h20L12 3Z"/><path d="M12 10v4M12 17h.01"/></svg>5 potential MDR</span>
+            <span class="label label-danger"><span class="dot"></span>No auto-MDR</span>
+          </div>
+        </div>
+
+        <div class="tabs" id="qualityTabs" role="tablist">
+          <button class="tab on" data-qtab="pending">Pending review <span class="n" id="qtabPending">6</span></button>
+          <button class="tab" data-qtab="complaint">Complaint candidates <span class="n">624</span></button>
+          <button class="tab" data-qtab="mdr">Potential MDR <span class="n">5</span></button>
+          <button class="tab" data-qtab="excluded">Excluded <span class="n">248</span></button>
+          <button class="tab" data-qtab="approved">Approved log <span class="n" id="qtabApproved">0</span></button>
+        </div>
+
+        <div class="glass toolbar hide" id="qualityDateBar">
+          <span class="meta">Date range</span>
+          <div class="seg" id="qualityDate" role="group" aria-label="Date range">
+            <button class="on" data-age="0">Any time</button>
+            <button data-age="7">Last 7 days</button>
+            <button data-age="30">Last 30 days</button>
+            <button data-age="90">Last 90 days</button>
+          </div>
+          <span class="meta" id="qualityAgeNote" style="margin-left:auto"></span>
+        </div>
+
+        <div id="qualityDeckTab">
+          <div class="review-layout">
+            <div>
+              <div class="deck" id="qualityDeck" data-od-id="swipe-deck" tabindex="0" aria-label="Compliance review deck — press right to approve, left to deny"></div>
+              <div class="deck-actions">
+                <button class="deck-btn deny" id="denyBtn" aria-label="Deny — route to product feedback" data-od-id="deck-deny">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6l12 12M18 6 6 18"/></svg>
+                  <span class="deck-key" aria-hidden="true">←</span>
+                </button>
+                <button class="deck-btn skip" id="skipBtn" aria-label="Follow up later">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14m0 0 6-6m-6 6-6-6"/></svg>
+                  <span class="deck-key" aria-hidden="true">↓</span>
+                </button>
+                <button class="deck-btn approve" id="approveBtn" aria-label="Approve — send to QMS" data-od-id="deck-approve">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L19 7"/></svg>
+                  <span class="deck-key" aria-hidden="true">→</span>
+                </button>
+              </div>
+              <p class="deck-hint">Drag the card, tap the buttons, or press <kbd>←</kbd> to deny / <kbd>→</kbd> to approve · <span id="deckCount">6 remaining</span></p>
+            </div>
+
+            <div class="stack" style="gap:var(--space-md)">
+              <div class="glass panel" id="qualityDetail" data-od-id="classifier-rationale">
+                <div class="panel-head"><div><h3>Classifier rationale</h3><p class="sub">Why the model flagged this</p></div></div>
+                <div class="empty">Advance the deck to inspect an item.</div>
+              </div>
+              <div class="glass panel" data-od-id="qms-queue">
+                <div class="panel-head">
+                  <div><h3>Approved → QMS</h3><p class="sub">Human-reviewed packet, export mock only</p></div>
+                  <span class="label label-info" id="qmsCount">0 queued</span>
+                </div>
+                <div class="stack" id="qmsQueue" style="gap:8px"></div>
+                <button class="btn btn-primary btn-sm" id="pushQmsBtn" style="margin-top:14px;width:100%" disabled>
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5m0 0-6 6m6-6 6 6"/></svg>
+                  Push to Veeva Vault Quality
+                </button>
+                <p class="meta" style="margin-top:8px">A tested, authorized tenant is required for a live write.</p>
+              </div>
+              <div class="glass panel" data-od-id="decision-log">
+                <div class="panel-head"><div><h3>Decision log</h3></div><button class="btn btn-ghost btn-sm" id="resetDeckBtn">Reset</button></div>
+                <div class="decision-log" id="decisionLog"><div class="empty" style="padding:24px 0">No decisions yet this session.</div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div id="qualityTableTab" class="hide">
+          <div class="glass panel" data-od-id="quality-table-panel">
+            <div class="panel-head">
+              <div><h3 id="qualityTableTitle">Complaint candidates</h3><p class="sub">Human-reviewed decisions feed the approval log, not the model result.</p></div>
+              <div class="row">
+                <span class="label label-neutral" id="qualityTableCount">0 rows</span>
+                <button class="btn btn-secondary btn-sm" id="exportCsvBtn">Export CSV</button>
+              </div>
+            </div>
+            <div style="overflow-x:auto">
+              <table class="ds-table" id="qualityTable">
+                <thead>
+                  <tr>
+                    <th>Record</th><th>Classification</th><th>Evidence</th><th>Source</th><th>MDR</th><th>Reviewer</th><th>Updated</th>
+                  </tr>
+                </thead>
+                <tbody id="qualityTableBody"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </section><!-- ========== ROADMAP ========== -->
+      <section class="view" id="view-roadmap" data-od-id="view-roadmap">
+        <div class="page-head">
+          <div>
+            <p class="eyebrow" style="margin-bottom:6px">Product path · Jira roadmap evidence → leadership view</p>
+            <h1>Roadmap</h1>
+            <p class="sub">What customers are telling us now, mapped to what we are building. Each cluster shows its demand against the lane it sits in.</p>
+          </div>
+          <div class="row">
+            <span class="label label-success"><span class="dot"></span>6 shipped this cycle</span>
+            <button class="btn btn-secondary" data-goto="ideas">Browse ideas</button>
+          </div>
+        </div>
+
+        <div class="glass panel rise" style="--i:0" data-od-id="roadmap-commitment">
+          <div class="panel-head">
+            <div><h3>Recent feedback vs. committed work</h3><p class="sub">Each row is a live customer cluster. The bar is demand; the tag is where it sits in the build plan.</p></div>
+            <span class="label label-accent" id="roadmapCoverage">—</span>
+          </div>
+          <div class="commit-list" id="demandCommit"></div>
+          <div style="margin-top:var(--space-md)">
+            <div class="row-between"><span class="meta" id="coverageLabel">—</span><span class="meta num" id="coveragePct">—</span></div>
+            <div class="progress" style="margin-top:6px;height:8px"><i id="coverageBar" style="background:var(--accent);width:0%"></i></div>
+          </div>
+        </div>
+
+        <div class="glass panel rise" style="--i:1;margin-top:var(--space-md)" data-od-id="roadmap-lanes">
+          <div class="panel-head"><div><h3>Committed work</h3><p class="sub">Now / Next / Later — click a card to open its idea, Jira evidence and evidence quotes.</p></div></div>
+          <div class="grid-3" id="roadmapLanes"></div>
+        </div>
+
+        <div class="grid-2-1 section-gap">
+          <div class="glass panel rise" style="--i:1" data-od-id="roadmap-matrix">
+            <div class="panel-head">
+              <div><h3>Demand vs. effort</h3><p class="sub">Bubble size = number of reports in cluster. Placement guides build sequencing.</p></div>
+            </div>
+            <div class="matrix" id="demandMatrix"></div>
+          </div>
+          <div class="glass panel rise" style="--i:2" data-od-id="roadmap-shipped">
+            <div class="panel-head"><div><h3>Shipped this cycle</h3></div><span class="label label-neutral">W14</span></div>
+            <div class="stream" id="shippedList"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ========== TEAM / PODS ========== -->
+      <section class="view" id="view-team" data-od-id="view-team">
+        <div class="page-head">
+          <div>
+            <p class="eyebrow" style="margin-bottom:6px">Ownership · every idea maps to exactly one pod</p>
+            <h1>Team &amp; pods</h1>
+            <p class="sub">Each idea is a cluster of feedback owned by one pod. Pod leaders and PMs see the feedback that maps to their area, and every cluster stays traceable to its Jira ticket.</p>
+          </div>
+          <div class="row">
+            <span class="label label-neutral"><span class="dot"></span>6 pods · 2 unverified leads</span>
+            <button class="btn btn-secondary" data-goto="ideas">Browse ideas</button>
+          </div>
+        </div>
+
+        <div class="glass panel rise" style="--i:0;margin-bottom:var(--space-md)" data-od-id="pod-coverage">
+          <div class="panel-head">
+            <div><h3>Ownership coverage</h3><p class="sub">Pods that already have a named, verified lead vs. still proposed.</p></div>
+            <span class="label label-accent" id="podCoverageTag">—</span>
+          </div>
+          <div class="row-between"><span class="meta" id="podCoverageLabel">—</span><span class="meta num" id="podCoveragePct">—</span></div>
+          <div class="progress" style="margin-top:6px;height:8px"><i id="podCoverageBar" style="background:var(--accent);width:0%"></i></div>
+        </div>
+
+        <div class="pod-grid" id="podGrid"></div>
+      </section>
+
+      <!-- ========== INTEGRATIONS ========== -->
+      <section class="view" id="view-integrations" data-od-id="view-integrations">
+        <div class="page-head">
+          <div>
+            <p class="eyebrow" style="margin-bottom:6px">API layer · push quality data where compliance teams already work</p>
+            <h1>Integrations</h1>
+            <p class="sub">Route human-approved complaint packets into your QMS, and pull feedback and transcripts from every source. All writes are gated behind a human review.</p>
+          </div>
+          <div class="row">
+            <span class="label label-success"><span class="dot"></span>7 sources streaming</span>
+            <button class="btn btn-primary" id="addIntegrationBtn">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>
+              Add integration
+            </button>
+          </div>
+        </div>
+
+        <div class="glass panel" style="margin-bottom:var(--space-md)" data-od-id="integration-banner">
+          <div class="row" style="gap:14px;align-items:flex-start">
+            <span class="k-ic" style="width:38px;height:38px;border-radius:11px;display:grid;place-items:center;background:var(--info-bg);color:var(--info);flex:none">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 8h.01M11 12h1v4h1"/></svg>
+            </span>
+            <div>
+              <h3 style="margin-bottom:4px">QMS export is a mock, on purpose</h3>
+              <p class="sub">Approved packs are queued and mapped, then exported to a sandbox object. No live regulated write happens without a tested, authorized tenant — the exact boundary the brief calls out.</p>
+            </div>
+          </div>
+        </div>
+
+        <h2 style="margin:var(--space-lg) 0 var(--space-md)">QMS destinations</h2>
+        <div class="int-grid" id="qmsGrid"></div>
+
+        <h2 style="margin:var(--space-xl) 0 var(--space-md)">Feedback sources</h2>
+        <div class="int-grid" id="sourceGrid"></div>
+
+        <h2 style="margin:var(--space-xl) 0 var(--space-md)">Work destinations</h2>
+        <div class="int-grid" id="destGrid"></div>
+      </section>
+
+      <!-- ========== ASSISTANT ========== -->
+      <section class="view" id="view-assistant" data-od-id="view-assistant">
+        <div class="page-head">
+          <div>
+            <p class="eyebrow" style="margin-bottom:6px">Grounded on schema v1.1 records · cites report IDs</p>
+            <h1>Assistant</h1>
+            <p class="sub">Ask across feedback, classifier output, ideas and roadmap evidence. Every answer links back to the exact records it used.</p>
+          </div>
+        </div>
+
+        <div class="glass assistant-shell" data-od-id="assistant-chat">
+          <div class="assistant-head" id="scopeBar" data-od-id="assistant-scope">
+            <div class="ah-left">
+              <span class="brand-mark" style="width:32px;height:32px;border-radius:9px"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="5" y="10" width="14" height="10" rx="3"/><path d="M12 6v4M9 15h.01M15 15h.01"/></svg></span>
+              <div style="min-width:0">
+                <div class="ah-title">Flight Assistant</div>
+                <div class="ah-scope" id="scopeLabel">
+                  <span class="scope-pulse" aria-hidden="true"></span>
+                  <span><b>Product feedback</b> only <span class="sc-sub">· quality &amp; compliance excluded</span></span>
+                </div>
+              </div>
+            </div>
+            <div class="ah-right">
+              <span class="label label-success"><span class="dot"></span>Online</span>
+              <div class="scope-toggle" id="scopeToggle" role="switch" aria-checked="false" tabindex="0" aria-label="Include quality and compliance data in answers" data-od-id="assistant-scope-toggle">
+                <span class="scope-thumb" aria-hidden="true"></span>
+                <span class="scope-opt on" data-opt="product">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16M4 12h10M4 19h7"/></svg>
+                  Product
+                </span>
+                <span class="scope-opt" data-opt="quality">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 3v5c0 4.4-3 8.3-7 10-4-1.7-7-5.6-7-10V6l7-3Z"/><path d="M9 12l2 2 4-4"/></svg>
+                  + Quality
+                </span>
+              </div>
+            </div>
+          </div>
+          <div class="chat-thread" id="chatThread"></div>
+          <div class="prompt-chips" id="promptChips" style="padding-bottom:12px">
+            <button class="prompt-chip">Which ideas have no confirmed owner?</button>
+            <button class="prompt-chip">Summarise the false-alarm cluster</button>
+            <button class="prompt-chip">MDR candidates with patient harm</button>
+          </div>
+          <form class="chat-input" id="chatForm">
+            <input id="chatInput" type="text" placeholder="Ask about feedback, ideas, quality or roadmap…" autocomplete="off" />
+            <button class="btn btn-primary" type="submit" aria-label="Send">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2 11 13M22 2l-7 20-4-9-9-4 20-7Z"/></svg>
+            </button>
+          </form>
+        </div>
+      </section>
+
+    </div><!-- /views -->
+  </div><!-- /main -->
+</div><!-- /app -->
+
+<!-- ================= DATA STATUS DRAWER ================= -->
+<div class="scrim" id="dataScrim"></div>
+<aside class="drawer" id="dataDrawer" aria-label="Data status" data-od-id="data-drawer">
+  <div class="drawer-head">
+    <div><h2 style="font-size:17px">Data status</h2><p class="meta" id="drawerSyncTime">—</p></div>
+    <button class="icon-btn" id="closeData" aria-label="Close">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6l12 12M18 6 6 18"/></svg>
+    </button>
+  </div>
+  <div class="drawer-body">
+    <div class="card" style="background:var(--surface-warm)" data-od-id="pipeline-stages">
+      <div class="row-between" style="margin-bottom:12px"><strong style="font-size:13px">Pipeline</strong><span class="label label-success"><span class="dot"></span>Healthy</span></div>
+      <div class="stack" id="pipelineStages" style="gap:10px"></div>
+    </div>
+
+    <div data-od-id="connector-health">
+      <h4>Connectors</h4>
+      <div class="stack" id="connectorList" style="gap:8px"></div>
+    </div>
+
+    <div data-od-id="tech-stack">
+      <h4>Tech stack</h4>
+      <div class="row wrap" id="techStack" style="gap:8px"></div>
+    </div>
+
+    <button class="btn btn-primary" id="runSyncBtn" style="width:100%">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-3-6.7L21 8"/><path d="M21 3v5h-5"/></svg>
+      Run sync now
+    </button>
+  </div>
+</aside>
+
+<!-- ================= SOURCE DETAIL DRAWER ================= -->
+<div class="scrim" id="sourceScrim"></div>
+<aside class="drawer" id="sourceDrawer" aria-label="Source detail" data-od-id="source-drawer">
+  <div class="drawer-head">
+    <div class="row" style="gap:12px;align-items:center">
+      <span class="logo-tile" id="sourceLogo"></span>
+      <div><h2 style="font-size:17px" id="sourceName">Source</h2><p class="meta" id="sourceKind">—</p></div>
+    </div>
+    <button class="icon-btn" id="closeSource" aria-label="Close source detail">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6l12 12M18 6 6 18"/></svg>
+    </button>
+  </div>
+  <div class="drawer-body">
+    <div class="src-stat-grid" id="sourceStats"></div>
+    <div>
+      <h4>Feedback from this source</h4>
+      <div class="stack" id="sourceFeed" style="gap:8px"></div>
+    </div>
+    <div>
+      <h4>Ideas built on this source</h4>
+      <div class="stack" id="sourceIdeas" style="gap:8px"></div>
+    </div>
+    <p class="meta">Records are a synthetic demo slice. Each keeps its original quote, native ID and source link in the schema v1.1 store.</p>
+  </div>
+</aside>
+
+<!-- ================= INTEGRATION MODAL ================= -->
+<div class="modal" id="intModal" role="dialog" aria-modal="true" aria-labelledby="intModalTitle">
+  <div class="modal-card">
+    <div class="modal-head">
+      <span class="logo-tile" id="modalLogo"><span class="logo-mono">+</span></span>
+      <div class="grow"><h2 id="intModalTitle" style="font-size:16px">Configure integration</h2><p class="meta">Push quality data to your system of record</p></div>
+      <button class="icon-btn" id="closeModal" aria-label="Close">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6l12 12M18 6 6 18"/></svg>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div class="grid-2" style="gap:12px">
+        <div class="field"><label for="mName">INTEGRATION</label><input id="mName" value="Veeva Vault Quality" /></div>
+        <div class="field"><label for="mEnv">ENVIRONMENT</label><select id="mEnv"><option>Sandbox</option><option>Validation</option><option disabled>Production (locked)</option></select></div>
+      </div>
+      <div class="field"><label for="mUrl">API BASE URL</label><input id="mUrl" value="https://sandbox.veevavault.com/api/v24.1" /></div>
+      <div class="field"><label for="mKey">API KEY / OAUTH CLIENT</label><input id="mKey" type="password" value="••••••••••••••••••••" /></div>
+      <div class="field"><label>FIELD MAPPING</label>
+        <div class="stack" style="gap:8px">
+          <div class="map-row"><input value="classification" readonly><span class="arrow">→</span><input value="Complaint_Type__c" readonly></div>
+          <div class="map-row"><input value="evidence.text" readonly><span class="arrow">→</span><input value="Description__c" readonly></div>
+          <div class="map-row"><input value="potential_mdr" readonly><span class="arrow">→</span><input value="MDR_Flag__c" readonly></div>
+          <div class="map-row"><input value="reviewer.decision" readonly><span class="arrow">→</span><input value="Disposition__c" readonly></div>
+        </div>
+      </div>
+      <label class="row" style="gap:10px;font-size:13px;cursor:pointer"><span class="switch on" id="modalToggle"></span> Require human approval before any write (recommended)</label>
+    </div>
+    <div class="modal-foot">
+      <button class="btn btn-secondary" id="testConnBtn">Test connection</button>
+      <button class="btn btn-primary" id="saveIntBtn">Save integration</button>
+    </div>
+  </div>
+</div>
+
+<div class="toasts" id="toasts" aria-live="polite"></div><script>
+/* ================= helpers ================= */
+const $  = (s, r = document) => r.querySelector(s);
+const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
+const el = (tag, cls, html) => { const n = document.createElement(tag); if (cls) n.className = cls; if (html != null) n.innerHTML = html; return n; };
+const fmt = n => n.toLocaleString('en-US');
+const store = {
+  get(k, d) { try { const v = localStorage.getItem('tf.' + k); return v == null ? d : JSON.parse(v); } catch (e) { return d; } },
+  set(k, v) { try { localStorage.setItem('tf.' + k, JSON.stringify(v)); } catch (e) {} }
+};
+
+/* ================= real brand marks (Simple Icons, CC0) ================= */
+const LOGOS = {
+  salesforce: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M10.006 5.415a4.195 4.195 0 013.045-1.306c1.56 0 2.954.9 3.69 2.205.63-.3 1.35-.45 2.1-.45 2.85 0 5.159 2.34 5.159 5.22s-2.31 5.22-5.176 5.22c-.345 0-.69-.044-1.02-.104a3.75 3.75 0 01-3.3 1.95c-.6 0-1.155-.15-1.65-.375A4.314 4.314 0 018.88 20.4a4.302 4.302 0 01-4.05-2.82c-.27.062-.54.076-.825.076-2.204 0-4.005-1.8-4.005-4.05 0-1.5.811-2.805 2.01-3.51-.255-.57-.39-1.2-.39-1.846 0-2.58 2.1-4.65 4.65-4.65 1.53 0 2.85.705 3.72 1.8"/></svg>',
+  zendesk: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12.914 2.904V16.29L24 2.905H12.914zM0 2.906C0 5.966 2.483 8.45 5.543 8.45s5.542-2.484 5.543-5.544H0zm11.086 4.807L0 21.096h11.086V7.713zm7.37 7.84c-3.063 0-5.542 2.48-5.542 5.543H24c0-3.06-2.48-5.543-5.543-5.543z"/></svg>',
+  slack: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M5.042 15.165a2.528 2.528 0 0 1-2.52 2.523A2.528 2.528 0 0 1 0 15.165a2.527 2.527 0 0 1 2.522-2.52h2.52v2.52zM6.313 15.165a2.527 2.527 0 0 1 2.521-2.52 2.527 2.527 0 0 1 2.521 2.52v6.313A2.528 2.528 0 0 1 8.834 24a2.528 2.528 0 0 1-2.521-2.522v-6.313zM8.834 5.042a2.528 2.528 0 0 1-2.521-2.52A2.528 2.528 0 0 1 8.834 0a2.528 2.528 0 0 1 2.521 2.522v2.52H8.834zM8.834 6.313a2.528 2.528 0 0 1 2.521 2.521 2.528 2.528 0 0 1-2.521 2.521H2.522A2.528 2.528 0 0 1 0 8.834a2.528 2.528 0 0 1 2.522-2.521h6.312zM18.956 8.834a2.528 2.528 0 0 1 2.522-2.521A2.528 2.528 0 0 1 24 8.834a2.528 2.528 0 0 1-2.522 2.521h-2.522V8.834zM17.688 8.834a2.528 2.528 0 0 1-2.523 2.521 2.527 2.527 0 0 1-2.52-2.521V2.522A2.527 2.527 0 0 1 15.165 0a2.528 2.528 0 0 1 2.523 2.522v6.312zM15.165 18.956a2.528 2.528 0 0 1 2.523 2.522A2.528 2.528 0 0 1 15.165 24a2.527 2.527 0 0 1-2.52-2.522v-2.522h2.52zM15.165 17.688a2.527 2.527 0 0 1-2.52-2.523 2.526 2.526 0 0 1 2.52-2.52h6.313A2.527 2.527 0 0 1 24 15.165a2.528 2.528 0 0 1-2.522 2.523h-6.313z"/></svg>',
+  zoom: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M5.033 14.649H.743a.74.74 0 0 1-.686-.458.74.74 0 0 1 .16-.808L3.19 10.41H1.06A1.06 1.06 0 0 1 0 9.35h3.957c.301 0 .57.18.686.458a.74.74 0 0 1-.161.808L1.51 13.59h2.464c.585 0 1.06.475 1.06 1.06zM24 11.338c0-1.14-.927-2.066-2.066-2.066-.61 0-1.158.265-1.537.686a2.061 2.061 0 0 0-1.536-.686c-1.14 0-2.066.926-2.066 2.066v3.311a1.06 1.06 0 0 0 1.06-1.06v-2.251a1.004 1.004 0 0 1 2.013 0v2.251c0 .586.474 1.06 1.06 1.06v-3.311a1.004 1.004 0 0 1 2.012 0v2.251c0 .586.475 1.06 1.06 1.06zM16.265 12a2.728 2.728 0 1 1-5.457 0 2.728 2.728 0 0 1 5.457 0zm-1.06 0a1.669 1.669 0 1 0-3.338 0 1.669 1.669 0 0 0 3.338 0zm-4.82 0a2.728 2.728 0 1 1-5.458 0 2.728 2.728 0 0 1 5.457 0zm-1.06 0a1.669 1.669 0 1 0-3.338 0 1.669 1.669 0 0 0 3.338 0z"/></svg>',
+  jira: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M11.571 11.513H0a5.218 5.218 0 0 0 5.232 5.215h2.13v2.057A5.215 5.215 0 0 0 12.575 24V12.518a1.005 1.005 0 0 0-1.005-1.005zm5.723-5.756H5.736a5.215 5.215 0 0 0 5.215 5.214h2.129v2.058a5.218 5.218 0 0 0 5.215 5.214V6.758a1.001 1.001 0 0 0-1.001-1.001zM23.013 0H11.455a5.215 5.215 0 0 0 5.215 5.215h2.129v2.057A5.215 5.215 0 0 0 24 12.483V1.005A1.001 1.001 0 0 0 23.013 0Z"/></svg>',
+  google: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12.48 10.92v3.28h7.84c-.24 1.84-.853 3.187-1.787 4.133-1.147 1.147-2.933 2.4-6.053 2.4-4.827 0-8.6-3.893-8.6-8.72s3.773-8.72 8.6-8.72c2.6 0 4.507 1.027 5.907 2.347l2.307-2.307C18.747 1.44 16.133 0 12.48 0 5.867 0 .307 5.387.307 12s5.56 12 12.173 12c3.573 0 6.267-1.173 8.373-3.36 2.16-2.16 2.84-5.213 2.84-7.667 0-.76-.053-1.467-.173-2.053H12.48z"/></svg>',
+  gmail: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M24 5.457v13.909c0 .904-.732 1.636-1.636 1.636h-3.819V11.73L12 16.64l-6.545-4.91v9.273H1.636A1.636 1.636 0 0 1 0 19.366V5.457c0-2.023 2.309-3.178 3.927-1.964L5.455 4.64 12 9.548l6.545-4.91 1.528-1.145C21.69 2.28 24 3.434 24 5.457z"/></svg>',
+  intercom: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M21 0H3C1.343 0 0 1.343 0 3v18c0 1.658 1.343 3 3 3h18c1.658 0 3-1.342 3-3V3c0-1.657-1.342-3-3-3zm-5.801 4.399c0-.44.36-.8.802-.8.44 0 .8.36.8.8v10.688c0 .442-.36.801-.8.801-.443 0-.802-.359-.802-.801V4.399zM11.2 3.994c0-.44.357-.799.8-.799s.8.359.8.799v11.602c0 .44-.357.8-.8.8s-.8-.36-.8-.8V3.994zm-4 .405c0-.44.359-.8.799-.8.443 0 .802.36.802.8v10.688c0 .442-.36.801-.802.801-.44 0-.799-.359-.799-.801V4.399zM3.199 6c0-.442.36-.8.802-.8.44 0 .799.358.799.8v7.195c0 .441-.359.8-.799.8-.443 0-.802-.36-.802-.8V6zM20.52 18.202c-.123.105-3.086 2.593-8.52 2.593-5.433 0-8.397-2.486-8.521-2.593-.335-.288-.375-.792-.086-1.128.285-.334.79-.375 1.125-.09.047.041 2.693 2.211 7.481 2.211 4.848 0 7.456-2.186 7.479-2.207.334-.289.839-.25 1.128.086.289.336.25.84-.086 1.128zm.281-5.007c0 .441-.36.8-.801.8-.441 0-.801-.36-.801-.8V6c0-.442.361-.8.801-.8.441 0 .801.357.801.8v7.195z"/></svg>'
+};
+const brand = id => ({ salesforce: 'var(--brand-salesforce)', zendesk: 'var(--brand-zendesk)', slack: 'var(--brand-slack)', zoom: 'var(--brand-zoom)', jira: 'var(--brand-jira)', google: 'var(--brand-google)', gmail: 'var(--brand-gmail)', intercom: 'var(--brand-intercom)', appstore: 'var(--brand-apple)' }[id] || 'var(--fg-2)');
+const badge = (id, label, attrs) => `<span class="src-badge"${attrs ? ' ' + attrs : ''} style="color:${brand(id)}" title="${label}">${LOGOS[id] || '<span class="logo-mono">' + (label || '?').slice(0, 2).toUpperCase() + '</span>'}</span>`;
+
+/* ================= demo data (synthetic, per brief v1.1) ================= */
+const SOURCES = [
+  { id: 'salesforce', name: 'Salesforce', value: 412, complaints: 178, product: 176, excluded: 58 },
+  { id: 'zendesk', name: 'Zendesk', value: 386, complaints: 165, product: 166, excluded: 55 },
+  { id: 'gmail', name: 'Email + Gmail', value: 298, complaints: 121, product: 130, excluded: 47 },
+  { id: 'slack', name: 'Slack', value: 254, complaints: 74, product: 137, excluded: 43 },
+  { id: 'zoom', name: 'Zoom + Granola', value: 172, complaints: 41, product: 105, excluded: 26 },
+  { id: 'appstore', name: 'App store reviews', value: 136, complaints: 45, product: 72, excluded: 19 }
+];
+const SOURCE_FEED = {
+  salesforce: [
+    { t: 'Recall notice mentioned lot 409-TX — is our inventory affected?', cls: 'label-danger', label: 'Potential MDR', when: '6h ago' },
+    { t: 'Account asks for a batch traceability report on a recent order.', cls: 'label-accent', label: 'Product feedback', when: '9h ago' },
+    { t: 'Case cites a delivery delay on replacement sensors.', cls: 'label-warning', label: 'Complaint', when: '1d ago' }
+  ],
+  zendesk: [
+    { t: 'Stalls at 99% when two profiles are active; local socket hang.', cls: 'label-warning', label: 'Complaint', when: '44 min ago' },
+    { t: 'Three false alarms this week, each woke the whole household.', cls: 'label-warning', label: 'Complaint', when: '2d ago' },
+    { t: 'Can the app email a clean PDF to my clinic instead of screenshots?', cls: 'label-accent', label: 'Product feedback', when: '6d ago' }
+  ],
+  gmail: [
+    { t: 'False low alerts most nights [excerpt].', cls: 'label-warning', label: 'Complaint', when: '2h ago' },
+    { t: 'Device reported a low reading during an episode; the alarm never sounded.', cls: 'label-danger', label: 'Potential MDR', when: '1d ago' },
+    { t: 'Request: a weekly summary email instead of per-alert noise.', cls: 'label-accent', label: 'Product feedback', when: '8d ago' }
+  ],
+  slack: [
+    { t: 'Chart contrast in dark mode is nearly invisible against the grid.', cls: 'label-accent', label: 'Product feedback', when: '5h ago' },
+    { t: 'Nightly upload never completes; exporting the reports manually.', cls: 'label-warning', label: 'Complaint', when: '1d ago' },
+    { t: 'Beta thread: the pairing loop is the worst part of setup.', cls: 'label-accent', label: 'Product feedback', when: '9d ago' }
+  ],
+  zoom: [
+    { t: '[transcript] The export step is the most manual part of my morning.', cls: 'label-accent', label: 'Product feedback', when: '6d ago' },
+    { t: '[transcript] Clinician asks for a shareable pressure report for the clinic.', cls: 'label-accent', label: 'Product feedback', when: '12d ago' },
+    { t: '[transcript] Onboarding call flagged BLE pairing friction.', cls: 'label-accent', label: 'Product feedback', when: '18d ago' }
+  ],
+  appstore: [
+    { t: 'App sync hangs repeatedly at 99% after the update.', cls: 'label-warning', label: 'Complaint', when: '18 min ago' },
+    { t: 'Sensor adhesive failed after a shower; the patch fell off overnight.', cls: 'label-warning', label: 'Complaint', when: '3h ago' },
+    { t: 'Battery used to last two days, now barely one.', cls: 'label-accent', label: 'Product feedback', when: '7d ago' }
+  ]
+};
+const SPLIT = [
+  { name: 'Product feedback', value: 786, color: 'var(--accent)' },
+  { name: 'Complaint candidates', value: 624, color: 'var(--danger)' }
+];
+const TREND = {
+  labels: ['W3', 'W4', 'W5', 'W6', 'W7', 'W8', 'W9', 'W10', 'W11', 'W12', 'W13', 'W14'],
+  quality: [38, 42, 40, 47, 44, 51, 49, 55, 53, 58, 61, 64],
+  product: [52, 55, 60, 58, 63, 66, 64, 70, 72, 69, 75, 78]
+};
+
+const IDEAS = [
+  { id: 'idea-sync-stall', title: 'Nightly sync stalls at 99% on iOS', pod: 'Mobile Platform', priority: 'High', reports: 47, ageDays: 2, sent: 'negative',
+    sources: [['appstore', 'App store reviews'], ['zendesk', 'Zendesk'], ['slack', 'Slack']],
+    quote: '“App sync hangs repeatedly at 99%. Patient unable to export nightly pressure reports for clinic follow-up.”',
+    jira: 'CPAP-2214', jiraTitle: 'Fix sync deadlock on nightly upload (iOS)', jiraStatus: 'In Review', jiraClass: 'label-accent', assignee: 'R. Okafor', sprint: 'W14 · Sprint 31', points: 8, updated: '18 min ago',
+    stage: 'In build', roadmapIdx: 2, roadmapNote: 'Scoped for the W14 freeze. Two related reports currently open against the same socket path.',
+    demand: 47, effort: 62, owner: { name: 'R. Okafor', verified: true, role: 'Mobile Platform lead' },
+    crm: '2 enterprise accounts in cluster · combined ARR $340k', crmVerified: false,
+    why: 'Nine independent sources describe an identical hang at 99% after the 4.2.1 update, all resolving only when the app is force-quit. The similarity and version clustering is what promoted this from isolated reports to one idea.',
+    evidence: [
+      { text: '“Sync hangs at 99% every time on my iPhone after the update.”', src: 'App store · iOS', when: 'Mar 21', prov: 'synthetic' },
+      { text: '“Two profiles active and the socket just hangs; support had no fix.”', src: 'Zendesk #48219', when: 'Mar 22', prov: 'synthetic' },
+      { text: '“Nightly upload never completes, I export manually at the clinic.”', src: 'Slack #voice-of-customer', when: 'Mar 23', prov: 'synthetic' }
+    ] },
+  { id: 'idea-false-alarm', title: 'False low alerts during sleep', pod: 'Algorithms & Safety', priority: 'Critical', reports: 31, ageDays: 3, sent: 'negative',
+    sources: [['gmail', 'Email + Gmail'], ['appstore', 'App store reviews'], ['zendesk', 'Zendesk']],
+    quote: '“false low alerts most nights — I wake up panicked and can’t tell if it is real.”',
+    jira: 'CARD-1108', jiraTitle: 'Reduce false-low alert rate in sleep window', jiraStatus: 'In Progress', jiraClass: 'label-accent', assignee: 'Dr. L. Park', sprint: 'W14 · Sprint 31', points: 13, updated: '1h ago',
+    stage: 'In build', roadmapIdx: 2, roadmapNote: 'Algorithm threshold work with an interim clinician-reviewed suppression rule.',
+    demand: 31, effort: 84, owner: { name: 'Dr. L. Park', verified: true, role: 'Clinical algorithms' },
+    crm: 'Cross-account · no single account concentration', crmVerified: false,
+    why: 'Reports span 11 days and three sources but converge on one threshold band (00:00–05:00). Clinical risk without a known harm event, so it is flagged to quality as well as product.',
+    evidence: [
+      { text: '“false low alerts most nights [excerpt]”', src: 'Email msg-5043', when: 'Mar 23', prov: 'synthetic' },
+      { text: '“Alarm fired at 2am and there was nothing wrong on the repeat reading.”', src: 'App store · iOS', when: 'Mar 19', prov: 'synthetic' },
+      { text: '“Three false alarms this week, each woke the whole household.”', src: 'Zendesk #48107', when: 'Mar 20', prov: 'synthetic' }
+    ] },
+  { id: 'idea-export-pdf', title: 'Export nightly pressure reports as clinician PDF', pod: 'Clinical Workflows', priority: 'Medium', reports: 22, ageDays: 6, sent: 'mixed',
+    sources: [['zendesk', 'Zendesk'], ['zoom', 'Zoom + Granola']],
+    quote: '“I still print screenshots for the clinic. A single PDF would replace my whole morning.”',
+    jira: 'CLIN-770', jiraTitle: 'Clinician PDF export for pressure reports', jiraStatus: 'Planned', jiraClass: 'label-info', assignee: 'Unassigned', sprint: 'W16 · Backlog', points: 5, updated: '2d ago',
+    stage: 'Planned', roadmapIdx: 3, roadmapNote: 'High-demand, low-effort. Best candidate to pull forward into W15 if capacity opens.',
+    demand: 22, effort: 34, owner: { name: 'M. Adeyemi (proposed)', verified: false, role: 'Clinical workflows' },
+    crm: '3 clinic accounts requested this on calls', crmVerified: false,
+    why: 'Recurring request across support tickets and two recorded Zoom calls. Not a safety signal; a workflow gap. Low effort relative to demand.',
+    evidence: [
+      { text: '“Can the app email a clean PDF to my clinic instead of screenshots?”', src: 'Zendesk #47980', when: 'Mar 18', prov: 'synthetic' },
+      { text: '“[transcript] the export step is the most manual part of my morning”', src: 'Zoom call · clinic onboarding', when: 'Mar 17', prov: 'paraphrased public' }
+    ] },
+  { id: 'idea-battery', title: 'Battery drain during continuous monitoring', pod: 'Hardware', priority: 'High', reports: 29, ageDays: 7, sent: 'negative',
+    sources: [['appstore', 'App store reviews'], ['zendesk', 'Zendesk'], ['gmail', 'Email + Gmail']],
+    quote: '“Monitor is at 20% by 3pm; I have to charge mid-day to make it through.”',
+    jira: 'HW-3391', jiraTitle: 'Reduce continuous-monitoring power draw', jiraStatus: 'In Progress', jiraClass: 'label-accent', assignee: 'S. Novak', sprint: 'W14 · Sprint 31', points: 8, updated: '5h ago',
+    stage: 'In build', roadmapIdx: 2, roadmapNote: 'Firmware duty-cycle change in bring-up; see the telemetry evidence attached to HW-3391.',
+    demand: 29, effort: 58, owner: { name: 'S. Novak', verified: true, role: 'Firmware' },
+    crm: 'Spread across consumer base · no account concentration', crmVerified: false,
+    why: 'Telemetry correlates the complaints with a firmware duty-cycle regression introduced in 4.1.8, which is why these reports are grouped rather than treated as device failures.',
+    evidence: [
+      { text: '“Battery used to last two days, now barely one.”', src: 'App store · iOS', when: 'Mar 16', prov: 'synthetic' },
+      { text: '“Continuous mode drains about 8% per hour.”', src: 'Zendesk #47855', when: 'Mar 17', prov: 'synthetic' }
+    ] },
+  { id: 'idea-pairing', title: 'Sensor pairing takes six or more attempts', pod: 'Mobile Platform', priority: 'Medium', reports: 25, ageDays: 9, sent: 'negative',
+    sources: [['zendesk', 'Zendesk'], ['slack', 'Slack'], ['appstore', 'App store reviews']],
+    quote: '“New sensor pairing failed six times before it connected. Almost gave up.”',
+    jira: 'MOB-1980', jiraTitle: 'Improve BLE pairing reliability on first run', jiraStatus: 'Planned', jiraClass: 'label-info', assignee: 'Unassigned', sprint: 'W16 · Backlog', points: 5, updated: '3d ago',
+    stage: 'Planned', roadmapIdx: 3, roadmapNote: 'Onboarding friction; pairs with the activation-funnel work in W16.',
+    demand: 25, effort: 40, owner: { name: 'J. Ferreira (proposed)', verified: false, role: 'Mobile platform' },
+    crm: 'Concentrated in new-customer cohort (first 7 days)', crmVerified: false,
+    why: 'Most reports come from first-week users and mention the pairing step specifically. Grouped because the failure mode is consistent, not intermittent hardware.',
+    evidence: [
+      { text: '“Took me 7 tries to pair the new sensor.”', src: 'Zendesk #47701', when: 'Mar 15', prov: 'synthetic' },
+      { text: '“Pairing loop is the worst part of setup.”', src: 'Slack #beta-feedback', when: 'Mar 15', prov: 'synthetic' }
+    ] },
+  { id: 'idea-contrast', title: 'Chart color contrast fails in dark mode', pod: 'Design System', priority: 'Low', reports: 18, ageDays: 12, sent: 'neutral',
+    sources: [['slack', 'Slack'], ['zendesk', 'Zendesk']],
+    quote: '“In dark mode the alert line is nearly invisible against the grid.”',
+    jira: 'DS-0442', jiraTitle: 'Contrast tokens for charts in dark theme', jiraStatus: 'Backlog', jiraClass: 'label-neutral', assignee: 'Unassigned', sprint: 'Unscheduled', points: 3, updated: '1w ago',
+    stage: 'Later', roadmapIdx: 4, roadmapNote: 'Accessibility debt. Low demand but blocks the dark-theme release checklist.',
+    demand: 18, effort: 22, owner: { name: 'Design System pod', verified: false, role: 'Platform design' },
+    crm: 'Internal + partner feedback', crmVerified: false,
+    why: 'An accessibility issue rather than a feature request: contrast failures are grouped because they share one token root cause across all charts.',
+    evidence: [
+      { text: '“Grid and alert line are almost the same colour in dark mode.”', src: 'Slack #design-system', when: 'Mar 12', prov: 'synthetic' }
+    ] },
+  { id: 'idea-profiles', title: 'Two active profiles cause a socket hang', pod: 'Mobile Platform', priority: 'Medium', reports: 19, ageDays: 4, sent: 'negative',
+    sources: [['zendesk', 'Zendesk'], ['gmail', 'Email + Gmail']],
+    quote: '“Switching between two profiles mid-sync freezes the app.”',
+    jira: 'MOB-2015', jiraTitle: 'Handle profile switch during active sync', jiraStatus: 'In Review', jiraClass: 'label-accent', assignee: 'R. Okafor', sprint: 'W14 · Sprint 31', points: 5, updated: '44 min ago',
+    stage: 'In build', roadmapIdx: 2, roadmapNote: 'Same socket subsystem as the 99% stall — reviewed together.',
+    demand: 19, effort: 44, owner: { name: 'R. Okafor', verified: true, role: 'Mobile Platform lead' },
+    crm: 'Multi-profile clinician accounts only', crmVerified: false,
+    why: 'Reports share a reproducer (profile switch during sync) and a single crash signature, so they are clustered rather than handled as separate tickets.',
+    evidence: [
+      { text: '“Switching profiles while it syncs hangs the app for good.”', src: 'Zendesk #48220', when: 'Mar 22', prov: 'synthetic' }
+    ] }
+];
+
+const PODS = [
+  { id: 'mobile-platform', mono: 'MP', name: 'Mobile Platform', lead: 'R. Okafor', leadVerified: true, pm: 'A. Castillo', okr: 'Activation & sync reliability', health: 'at-risk', complaints: 260 },
+  { id: 'algorithms-safety', mono: 'AS', name: 'Algorithms & Safety', lead: 'Dr. L. Park', leadVerified: true, pm: 'N. Haddad', okr: 'Alert precision & clinical safety', health: 'critical', complaints: 96 },
+  { id: 'clinical-workflows', mono: 'CW', name: 'Clinical Workflows', lead: 'M. Adeyemi', leadVerified: false, pm: 'S. Iyer', okr: 'Clinician handoff & reporting', health: 'ok', complaints: 62 },
+  { id: 'hardware', mono: 'HW', name: 'Hardware', lead: 'S. Novak', leadVerified: true, pm: 'T. Berg', okr: 'Sensor wearability & power', health: 'at-risk', complaints: 104 },
+  { id: 'design-system', mono: 'DS', name: 'Design System', lead: 'Unassigned', leadVerified: false, pm: 'J. Meyer', okr: 'Accessibility & visual tokens', health: 'ok', complaints: 28 },
+  { id: 'platform-data', mono: 'PD', name: 'Platform & Data', lead: 'K. Nakamura', leadVerified: true, pm: 'L. Rossi', okr: 'Intake pipeline & normalization', health: 'ok', complaints: 74 }
+];
+
+const QUALITY = [
+  { id: 'CP-2214', record: 'appstore-2214', classification: 'complaint', quote: 'App sync hangs repeatedly at 99%. Patient unable to export nightly pressure reports for clinic follow-up.', source: 'App store · iOS', sourceId: 'appstore', product: 'CardioPatch monitor app', version: '4.2.1', theme: 'sync-reliability', confidence: 0.62, mdr: true,
+    flags: ['clinical_risk_without_known_harm'],
+    reason: 'The report links a software failure to a missed clinical follow-up (nightly pressure reports for a clinic). The model cannot rule out that the missed export delayed care, so it raises a potential MDR hint for human judgement. Confidence is deliberately low-uncertainty band 0.62 because harm is implied rather than stated.',
+    fta: 'FTA-2026-0443', ftaNote: 'Fault-tree node: export-path failure → delayed clinical review.', related: 3, ageDays: 0.01, when: '18 min ago' },
+  { id: 'CP-2213', record: 'zendesk-2213', classification: 'complaint', quote: 'Stalls at 99% when two profiles are active; dual-profile switching causes a local socket hang.', source: 'Support · Zendesk', sourceId: 'zendesk', product: 'CardioPatch monitor app', version: '4.1.8', theme: 'sync-reliability', confidence: 0.31, mdr: false,
+    flags: [],
+    reason: 'Same failure signature as CP-2214 but the text describes a usability freeze with no clinical consequence stated. Classified as a complaint candidate because it names a device/companion-app malfunction, but no MDR hint is raised.',
+    fta: 'FTA-2026-0443', ftaNote: 'Same fault-tree node as CP-2214.', related: 6, ageDays: 0.03, when: '44 min ago' },
+  { id: 'CP-2208', record: 'gmail-2208', classification: 'complaint', quote: 'The device reported a low reading during an episode and the alarm never sounded. We only found out at the clinic.', source: 'Email · Gmail', sourceId: 'gmail', product: 'CardioPatch sensor', version: 'n/a', theme: 'false-negative', confidence: 0.71, mdr: true,
+    flags: ['patient_harm_reported'],
+    reason: 'Explicit statement that a missed alarm coincided with a clinical episode. This is the clearest MDR candidate in the queue: a reported harm event combined with a device malfunction. Routed to quality with high review priority — no automatic legal determination is made.',
+    fta: 'FTA-2026-0419', ftaNote: 'Fault-tree node: alarm suppression → missed event.', related: 2, ageDays: 0.05, when: '1h ago' },
+  { id: 'CP-2202', record: 'email-5043', classification: 'complaint', quote: 'false low alerts most nights [excerpt]', source: 'Email · Gmail', sourceId: 'gmail', product: 'CardioPatch monitor app', version: null, theme: 'false-alarm', confidence: 0.44, mdr: false,
+    flags: ['clinical_risk_without_known_harm'],
+    reason: 'Repeated false alarms firmware-side can cause alarm fatigue, which the rubric treats as a clinical-risk-without-known-harm flag even though no harm is reported. Uncertainty sits in the mid band, so it stays human-reviewed.',
+    fta: 'FTA-2026-0402', ftaNote: 'Fault-tree node: threshold mis-tune → nuisance alarm.', related: 11, ageDays: 0.1, when: '2h ago' },
+  { id: 'CP-2199', record: 'appstore-2199', classification: 'complaint', quote: 'Sensor adhesive failed after a shower and the patch fell off overnight.', source: 'App store · iOS', sourceId: 'appstore', product: 'CardioPatch sensor', version: 'n/a', theme: 'wearability', confidence: 0.53, mdr: false,
+    flags: [],
+    reason: 'Physical device failure (adhesion) rather than software. Classified as a complaint candidate because it concerns device performance; no MDR hint because the user detected the detachment and re-applied.',
+    fta: 'FTA-2026-0398', ftaNote: 'Fault-tree node: adhesive → sensor loss.', related: 5, ageDays: 0.15, when: '3h ago' },
+  { id: 'CP-2196', record: 'salesforce-2196', classification: 'complaint', quote: 'Recall notice mentioned lot 409-TX on the support call — is our inventory affected?', source: 'Salesforce', sourceId: 'salesforce', product: 'CardioPatch sensor', version: 'lot 409-TX', theme: 'field-safety', confidence: 0.66, mdr: true,
+    flags: ['field_safety_correction'],
+    reason: 'Mentions a field-safety / recall context by lot number. The model routes it to quality with a potential MDR hint because field-corrective language is present; the actual determination belongs to the quality reviewer and legal.',
+    fta: 'FTA-2026-0411', ftaNote: 'Fault-tree node: lot traceability → field action.', related: 4, ageDays: 0.2, when: '4h ago' }
+];
+
+const PIPELINE = [
+  { name: 'Raw intake', detail: 'Sources → unchanged storage', pct: 100, state: 'done' },
+  { name: 'AI normalization', detail: 'Extract into schema v1.1 JSON', pct: 96, state: 'done' },
+  { name: 'Classifier', detail: 'Eligible records only', pct: 88, state: 'running' },
+  { name: 'Human review', detail: 'Quality + product paths diverge', pct: 64, state: 'running' }
+];
+const CONNECTORS = [
+  { id: 'salesforce', name: 'Salesforce', kind: 'CRM · cases + accounts', status: 'ok', last: '4m ago', records: '412' },
+  { id: 'zendesk', name: 'Zendesk', kind: 'Support tickets', status: 'ok', last: '4m ago', records: '386' },
+  { id: 'gmail', name: 'Gmail', kind: 'feedback_mail', status: 'ok', last: '6m ago', records: '298' },
+  { id: 'slack', name: 'Slack', kind: 'Dev + VoC channels', status: 'ok', last: '2m ago', records: '254' },
+  { id: 'zoom', name: 'Zoom + Granola', kind: 'Transcripts (mock access)', status: 'warn', last: '38m ago', records: '172' },
+  { id: 'intercom', name: 'Intercom', kind: 'In-app conversations', status: 'ok', last: '9m ago', records: '0' },
+  { id: 'appstore', name: 'App store reviews', kind: 'iOS · public', status: 'ok', last: '22m ago', records: '136' }
+];
+const TECH = ['Zoom', 'Google Workspace', 'Gmail', 'Slack', 'Salesforce', 'Zendesk', 'Intercom', 'Granola', 'Veeva', 'Jira'];
+const ROADMAP = {
+  'Now · W14': [
+    { title: 'Nightly sync stalls at 99%', jira: 'CPAP-2214', pod: 'Mobile Platform', pct: 70 },
+    { title: 'False low alerts during sleep', jira: 'CARD-1108', pod: 'Algorithms & Safety', pct: 45 },
+    { title: 'Battery drain, continuous mode', jira: 'HW-3391', pod: 'Hardware', pct: 55 }
+  ],
+  'Next · W15–16': [
+    { title: 'Clinician PDF export', jira: 'CLIN-770', pod: 'Clinical Workflows', pct: 10 },
+    { title: 'BLE pairing reliability', jira: 'MOB-1980', pod: 'Mobile Platform', pct: 5 }
+  ],
+  'Later · W17+': [
+    { title: 'Dark-theme chart contrast', jira: 'DS-0442', pod: 'Design System', pct: 0 }
+  ]
+};
+const SHIPPED = [
+  { title: 'Profile-switch socket hang fixed', jira: 'MOB-2015', when: 'Shipped W14' },
+  { title: 'Sensor firmware 4.2.2 duty-cycle patch', jira: 'HW-3360', when: 'Shipped W13' },
+  { title: 'Duplicated alert dedupe in app', jira: 'MOB-1955', when: 'Shipped W13' },
+  { title: 'Granola transcript connector', jira: 'PLT-220', when: 'Shipped W13' }
+];
+const QMS = [
+  { id: 'veeva', mono: 'VV', name: 'Veeva Vault Quality', desc: 'Complaint + nonconformance objects, life sciences QMS.', status: 'connected', tone: 'success', detail: 'Sandbox · 24 packs pushed' },
+  { id: 'mastercontrol', mono: 'MC', name: 'MasterControl', desc: 'Quality Events and CAPA, life-sciences QMS.', status: 'available', tone: 'neutral', detail: 'Not connected' },
+  { id: 'greenlight', mono: 'GG', name: 'Greenlight Guru', desc: 'Medical-device QMS with complaint workflow.', status: 'available', tone: 'neutral', detail: 'Not connected' },
+  { id: 'trackwise', mono: 'TW', name: 'TrackWise (Honeywell)', desc: 'Enterprise quality-management records.', status: 'available', tone: 'neutral', detail: 'Not connected' },
+  { id: 'compliancequest', mono: 'CQ', name: 'ComplianceQuest', desc: 'Salesforce-native QMS and risk module.', status: 'available', tone: 'neutral', detail: 'Not connected' }
+];
+const DESTS = [
+  { id: 'jira', name: 'Jira', desc: 'Product feedback → ideas → tickets, with roadmap evidence.', status: 'connected', tone: 'success', detail: '6 pods mapped' },
+  { id: 'salesforce', name: 'Salesforce CRM', desc: 'Conditional account + ARR context on ideas.', status: 'connected', tone: 'success', detail: 'Read-only' },
+  { id: 'zendesk', name: 'Zendesk', desc: 'Write a linked ticket when a complaint is confirmed.', status: 'available', tone: 'neutral', detail: 'Not connected' }
+];
+</script><script>
+/* ================= count-up ================= */
+function countUp(node) {
+  const target = +node.dataset.count; const dur = 900; const t0 = performance.now();
+  const step = now => { const p = Math.min(1, (now - t0) / dur); const e = 1 - Math.pow(1 - p, 3);
+    node.textContent = fmt(Math.round(target * e)); if (p < 1) requestAnimationFrame(step); };
+  requestAnimationFrame(step);
+}
+
+/* ================= charts ================= */
+function renderSources() {
+  const W = 640, H = 260, pad = { l: 8, r: 8, t: 20, b: 40 };
+  const max = Math.max(...SOURCES.map(s => s.value));
+  const bw = (W - pad.l - pad.r) / SOURCES.length;
+  const bars = SOURCES.map((s, i) => {
+    const h = (s.value / max) * (H - pad.t - pad.b);
+    const x = pad.l + i * bw + bw * 0.18, y = H - pad.b - h, w = bw * 0.64;
+    return '<g class="bar" data-source="' + s.id + '" data-tip="' + s.name + ' · ' + fmt(s.value) + ' reports"><rect x="' + x + '" y="' + y + '" width="' + w + '" height="' + h + '" rx="6" fill="var(--accent)" opacity="0.92"/><text class="axis" x="' + (x + w / 2) + '" y="' + (H - pad.b + 20) + '" text-anchor="middle">' + s.name.split(' ')[0] + '</text><text class="axis" x="' + (x + w / 2) + '" y="' + (y - 8) + '" text-anchor="middle" style="fill:var(--fg-2)">' + fmt(s.value) + '</text></g>';
+  }).join('');
+  const grid = [0.25, 0.5, 0.75].map(g => '<line x1="0" x2="' + W + '" y1="' + (pad.t + g * (H - pad.t - pad.b)) + '" y2="' + (pad.t + g * (H - pad.t - pad.b)) + '" stroke="var(--border-soft)" stroke-dasharray="3 5"/>').join('');
+  $('#chartSources').innerHTML = '<svg viewBox="0 0 ' + W + ' ' + H + '" width="100%" role="img" aria-label="Intake volume by source">' + grid + bars + '</svg><div class="chart-tip" id="tipSources"></div>';
+  bindTips('#chartSources', '#tipSources');
+}
+
+function renderSplit() {
+  const total = SPLIT.reduce((a, b) => a + b.value, 0);
+  const r = 58, C = 2 * Math.PI * r; let off = 0;
+  const segs = SPLIT.map(s => {
+    const len = (s.value / total) * C;
+    const arc = '<circle cx="80" cy="80" r="' + r + '" fill="none" stroke="' + s.color + '" stroke-width="20" stroke-linecap="butt" stroke-dasharray="' + len + ' ' + (C - len) + '" stroke-dashoffset="' + (-off) + '" transform="rotate(-90 80 80)"><title>' + s.name + '</title></circle>';
+    off += len; return arc;
+  }).join('');
+  $('#chartSplit').insertAdjacentHTML('afterbegin', '<svg viewBox="0 0 160 160" width="100%" style="max-width:230px;margin:0 auto" role="img" aria-label="Classifier routing">' + segs + '</svg>');
+  $('#legendSplit').innerHTML = SPLIT.map(s => '<span class="legend-item"><span class="sw" style="background:' + s.color + '"></span>' + s.name + ' · <b class="num">' + fmt(s.value) + '</b></span>').join('') +
+    '<span class="legend-item"><span class="sw" style="background:var(--surface-alt)"></span>Excluded at intake · <b class="num">248</b></span>';
+}
+
+function renderTrend(weeks) {
+  const n = weeks, labels = TREND.labels.slice(-n), q = TREND.quality.slice(-n), p = TREND.product.slice(-n);
+  const W = 920, H = 280, pad = { l: 34, r: 16, t: 18, b: 34 };
+  const max = Math.max(...q, ...p) * 1.15;
+  const X = i => pad.l + (i / (n - 1)) * (W - pad.l - pad.r);
+  const Y = v => H - pad.b - (v / max) * (H - pad.t - pad.b);
+  const line = arr => arr.map((v, i) => (i ? 'L' : 'M') + X(i).toFixed(1) + ' ' + Y(v).toFixed(1)).join(' ');
+  const area = arr => line(arr) + ' L' + X(n - 1) + ' ' + (H - pad.b) + ' L' + X(0) + ' ' + (H - pad.b) + ' Z';
+  const grid = [0, .5, 1].map(g => { const yy = pad.t + g * (H - pad.t - pad.b); return '<line x1="' + pad.l + '" x2="' + (W - pad.r) + '" y1="' + yy + '" y2="' + yy + '" stroke="var(--border-soft)"/><text class="axis" x="4" y="' + (yy + 3) + '">' + Math.round(max * (1 - g)) + '</text>'; }).join('');
+  const xlab = labels.map((l, i) => '<text class="axis" x="' + X(i) + '" y="' + (H - pad.b + 18) + '" text-anchor="middle">' + l + '</text>').join('');
+  const dots = (arr, c) => arr.map((v, i) => '<circle cx="' + X(i) + '" cy="' + Y(v) + '" r="3.2" fill="' + c + '"/>').join('');
+  $('#chartTrend').innerHTML = '<svg viewBox="0 0 ' + W + ' ' + H + '" width="100%" role="img" aria-label="Quality versus product weekly volume">' +
+    '<defs><linearGradient id="gProd" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="var(--accent)" stop-opacity="0.30"/><stop offset="1" stop-color="var(--accent)" stop-opacity="0"/></linearGradient>' +
+    '<linearGradient id="gQual" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="var(--danger)" stop-opacity="0.22"/><stop offset="1" stop-color="var(--danger)" stop-opacity="0"/></linearGradient></defs>' +
+    grid + '<path d="' + area(p) + '" fill="url(#gProd)"/><path d="' + area(q) + '" fill="url(#gQual)"/>' +
+    '<path d="' + line(p) + '" fill="none" stroke="var(--accent)" stroke-width="2.5" stroke-linejoin="round"/>' +
+    '<path d="' + line(q) + '" fill="none" stroke="var(--danger)" stroke-width="2.5" stroke-linejoin="round"/>' +
+    dots(p, 'var(--accent)') + dots(q, 'var(--danger)') + xlab + '</svg>';
+}
+
+function bindTips(host, tip) {
+  const h = $(host), t = $(tip); if (!h || !t) return;
+  $$('.bar, .pt', h).forEach(b => {
+    b.addEventListener('mousemove', e => { const r = h.getBoundingClientRect(); t.textContent = b.dataset.tip; t.style.left = (e.clientX - r.left) + 'px'; t.style.top = (e.clientY - r.top) + 'px'; t.classList.add('on'); });
+    b.addEventListener('mouseleave', () => t.classList.remove('on'));
+  });
+}
+
+/* ================= overview lists ================= */
+function renderStream() {
+  const rows = [
+    { src: 'appstore', name: 'App store · iOS', t: 'CPAP app sync stall after nightly upload', label: 'Potential MDR', cls: 'label-danger', when: '18 min ago' },
+    { src: 'zendesk', name: 'Zendesk #48219', t: 'Stalls at 99% when two profiles are active', label: 'Complaint', cls: 'label-warning', when: '44 min ago' },
+    { src: 'gmail', name: 'Email msg-5043', t: 'False low alerts most nights', label: 'Complaint', cls: 'label-warning', when: '2h ago' },
+    { src: 'zoom', name: 'Zoom · clinic call', t: 'Clinician PDF export request', label: 'Product feedback', cls: 'label-accent', when: '3h ago' },
+    { src: 'slack', name: 'Slack #design-system', t: 'Chart contrast in dark mode', label: 'Product feedback', cls: 'label-accent', when: '5h ago' },
+    { src: 'salesforce', name: 'Salesforce case', t: 'Recall notice — lot 409-TX inventory', label: 'Potential MDR', cls: 'label-danger', when: '6h ago' }
+  ];
+  $('#triageStream').innerHTML = rows.map(r => '<div class="stream-row src-row" data-source="' + r.src + '" role="button" tabindex="0" aria-label="View ' + r.name + ' feedback" data-search="' + (r.t + ' ' + r.name).toLowerCase() + '">' + badge(r.src, r.name) +
+    '<div><div class="stream-title">' + r.t + '</div><div class="stream-meta">' + r.name + ' · ' + r.when + '</div></div>' +
+    '<span class="label ' + r.cls + '">' + r.label + '</span></div>').join('');
+}
+function renderFreshness() {
+  const rows = CONNECTORS.slice(0, 4);
+  $('#freshnessList').innerHTML = rows.map(c => '<div class="row-between src-row" data-source="' + c.id + '" role="button" tabindex="0" aria-label="View ' + c.name + ' status" style="padding:10px 0;border-bottom:1px solid var(--border-soft)"><div class="row" style="gap:10px">' + badge(c.id, c.name) + '<div><div style="font-size:13px;font-weight:500">' + c.name + '</div><div class="meta">' + c.records + ' records</div></div></div><span class="label ' + (c.status === 'warn' ? 'label-warning' : 'label-success') + '"><span class="dot"></span>' + c.last + '</span></div>').join('');
+}
+
+/* ================= ideas ================= */
+let ideaSort = 'demand', ideaPod = '', ideaAge = 0;
+function sparkline(seed) {
+  const pts = Array.from({ length: 12 }, (_, i) => 8 + Math.abs(Math.sin(i * 1.3 + seed) * 12) + i);
+  const max = Math.max(...pts);
+  const d = pts.map((v, i) => (i ? 'L' : 'M') + (i * 4) + ' ' + (24 - (v / max) * 20)).join(' ');
+  return '<svg class="spark" width="48" height="24" viewBox="0 0 48 24" aria-hidden="true"><path d="' + d + ' L44 24 L0 24 Z" fill="var(--accent)" opacity="0.15"/><path d="' + d + '" fill="none" stroke="var(--accent)" stroke-width="1.6"/></svg>';
+}
+function renderIdeas() {
+  let list = IDEAS.filter(i => !ideaPod || i.pod === ideaPod);
+  if (ideaAge) list = list.filter(i => i.ageDays <= ideaAge);
+  const order = { Critical: 0, High: 1, Medium: 2, Low: 3 };
+  if (ideaSort === 'demand') list = list.slice().sort((a, b) => b.reports - a.reports);
+  if (ideaSort === 'priority') list = list.slice().sort((a, b) => order[a.priority] - order[b.priority]);
+  if (ideaSort === 'recent') list = list.slice().sort((a, b) => a.ageDays - b.ageDays);
+  $('#ideaGrid').innerHTML = list.map((i, k) => {
+    const pcls = i.priority === 'Critical' ? 'label-danger' : i.priority === 'High' ? 'label-warning' : i.priority === 'Medium' ? 'label-info' : 'label-neutral';
+    return '<button class="glass idea-card rise" style="--i:' + k + '" data-idea="' + i.id + '" data-search="' + (i.title + ' ' + i.pod + ' ' + i.jira).toLowerCase() + '" data-od-id="' + i.id + '">' +
+      '<div class="i-top"><span class="label label-outline">' + i.pod + '</span><span class="label ' + pcls + '">' + i.priority + '</span></div>' +
+      '<h3>' + i.title + '</h3>' +
+      '<p class="i-quote">' + i.quote + '</p>' +
+      '<div class="i-foot"><span class="mini-logos">' + i.sources.slice(0, 3).map(s => badge(s[0], s[1])).join('') + '</span>' +
+      '<span class="meta">' + i.reports + ' reports</span>' + sparkline(i.reports) + '</div>' +
+      '<div class="i-foot" style="border-top:1px solid var(--border-soft);padding-top:12px"><span class="row" style="gap:6px;color:var(--brand-jira)"><span style="width:14px;height:14px">' + LOGOS.jira + '</span><b class="mono" style="font-size:11.5px">' + i.jira + '</b></span>' +
+      '<span class="label ' + i.jiraClass + '" style="margin-left:auto">' + i.jiraStatus + '</span></div></button>';
+  }).join('');
+  $('#ideaEmpty').classList.toggle('hide', list.length > 0);
+}
+
+/* ================= idea detail ================= */
+const STAGES = ['Intake', 'Triage', 'In build', 'In review', 'Shipped'];
+function showIdea(id) {
+  const i = IDEAS.find(x => x.id === id); if (!i) return;
+  $('#detailEyebrow').textContent = 'IDEA · ' + i.pod.toUpperCase();
+  $('#detailTitle').textContent = i.title;
+  $('#detailMeta').innerHTML = '<button type="button" class="label label-outline pod-jump" data-pod-jump="' + i.pod + '" title="View ' + i.pod + ' on the team page"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3"/><path d="M3 20a6 6 0 0 1 12 0"/></svg>' + i.pod + '</button><span class="label ' + (i.priority === 'Critical' ? 'label-danger' : 'label-warning') + '">' + i.priority + ' priority</span><span class="label label-neutral"><span class="dot"></span>' + i.reports + ' reports in cluster</span>';
+  $('#detailEvidenceCount').textContent = i.reports + ' reports';
+  $('#detailEvidenceList').innerHTML = i.evidence.map(e => '<div class="evidence-quote">' + e.text + '<span class="whisper">' + e.src + ' · ' + e.when + ' · provenance: ' + e.prov + '</span></div>').join('');
+  $('#detailWhy').textContent = i.why;
+  $('#detailJiraLogo').innerHTML = LOGOS.jira; $('#detailJiraLogo').style.color = 'var(--brand-jira)';
+  $('#detailJiraKey').textContent = i.jira; $('#detailJiraTitle').textContent = i.jiraTitle;
+  const js = $('#detailJiraStatus'); js.textContent = i.jiraStatus; js.className = 'label ' + i.jiraClass;
+  $('#detailJiraAssignee').textContent = i.assignee; $('#detailJiraSprint').textContent = i.sprint;
+  $('#detailJiraPoints').textContent = i.points; $('#detailJiraUpdated').textContent = i.updated;
+  $('#detailRoadmapStage').textContent = i.stage;
+  $('#detailRoadmapTrack').innerHTML = STAGES.map((s, idx) => '<span class="seg-item ' + (idx < i.roadmapIdx ? 'done' : idx === i.roadmapIdx ? 'now' : '') + '">' + s + '</span>').join('');
+  $('#detailRoadmapNote').textContent = i.roadmapNote;
+  const dmax = 50, emax = 90;
+  $('#detailDemand').textContent = i.reports + ' reports'; $('#detailDemandBar').style.width = Math.min(100, (i.demand / dmax) * 100) + '%';
+  $('#detailEffort').textContent = i.effort + ' pts'; $('#detailEffortBar').style.width = (i.effort / emax * 100) + '%';
+  $('#detailContext').innerHTML =
+    '<div class="kv"><span class="k">SUGGESTED OWNER</span><span class="v">' + i.owner.name + ' ' + (i.owner.verified ? '<span class="label label-success" style="font-size:10px">verified</span>' : '<span class="unverified">UNVERIFIED</span>') + '</span></div>' +
+    '<div class="kv"><span class="k">ROLE</span><span class="v">' + i.owner.role + '</span></div>' +
+    '<div class="kv"><span class="k">CRM CONTEXT</span><span class="v">' + (i.crmVerified ? '' : '<span class="unverified">UNVERIFIED</span> ') + i.crm + '</span></div>' +
+    '<p class="meta">Owner and CRM mapping stay marked unverified until a human checks them.</p>';
+  go('idea');
+}
+
+/* ================= quality deck ================= */
+let queue = [], decisions = [], busy = false;
+function persist() { store.set('deck', { queue: queue.map(q => q.id), decisions: decisions }); }
+function restore() {
+  const s = store.get('deck', null);
+  if (s && Array.isArray(s.queue)) { queue = s.queue.map(id => QUALITY.find(q => q.id === id)).filter(Boolean); decisions = s.decisions || []; }
+  else queue = QUALITY.slice();
+}
+function renderDeck() {
+  const deck = $('#qualityDeck'); deck.innerHTML = '';
+  const top3 = queue.slice(0, 3);
+  top3.forEach((it, idx) => {
+    const c = el('div', 'swipe-card'); c.dataset.id = it.id; c.tabIndex = 0;
+    const mdr = it.mdr ? '<span class="label label-danger"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 2 20h20L12 3Z"/><path d="M12 10v4M12 17h.01"/></svg>Potential MDR</span>' : '<span class="label label-warning">Complaint candidate</span>';
+    c.innerHTML =
+      '<div class="sw-flag approve">APPROVE</div><div class="sw-flag deny">DENY</div>' +
+      '<div class="sw-edge approve"></div><div class="sw-edge deny"></div>' +
+      '<div class="row-between"><div class="row" style="gap:10px">' + badge(it.sourceId, it.source, 'data-source="' + it.sourceId + '" role="button" tabindex="0" aria-label="View ' + it.source + ' records"') + '<div><div class="mono" style="font-size:11.5px;color:var(--meta)">' + it.id + ' · ' + it.record + '</div><div style="font-size:12.5px">' + it.source + '</div></div></div>' + mdr + '</div>' +
+      '<div class="q-text">' + it.quote + '</div>' +
+      '<div class="row wrap" style="gap:8px"><span class="label label-neutral">' + it.product + '</span>' + (it.version ? '<span class="label label-outline mono">v' + it.version + '</span>' : '') + '</div>' +
+      '<div class="rationale" style="margin-top:auto">' + it.reason.slice(0, 180) + '…</div>' +
+      '<div class="row-between" style="padding-top:12px;border-top:1px solid var(--border-soft)"><span class="meta">classifier confidence ' + it.confidence.toFixed(2) + ' · ' + it.when + '</span><span class="meta">' + it.related + ' related reports</span></div>';
+    const rot = idx * -1.4, sc = 1 - idx * 0.035, ty = idx * 10;
+    c.style.transform = 'rotate(' + rot + 'deg) scale(' + sc + ') translateY(' + ty + 'px)';
+    c.style.zIndex = 10 - idx; c.style.opacity = idx === 0 ? 1 : 0.75;
+    if (idx === 0) attachDrag(c);
+    deck.appendChild(c);
+  });
+  const empty = '<div class="deck-empty"><div><div style="font-family:var(--font-display);font-size:18px;font-weight:600">Queue clear</div><p class="sub" style="margin-top:6px">Every pending item has a logged decision.</p><button class="btn btn-secondary btn-sm" id="reloadDeck" style="margin-top:14px">Reload demo queue</button></div></div>';
+  if (!queue.length) { deck.innerHTML = empty; const r = $('#reloadDeck'); if (r) r.onclick = () => { queue = QUALITY.slice(); decisions = []; persist(); renderDeck(); renderDecisionLog(); renderQms(); updateDetail(); }; }
+  $('#deckCount').textContent = queue.length + ' remaining';
+  $('#qtabPending').textContent = queue.length;
+  const hasItems = queue.length > 0;
+  ['#approveBtn', '#denyBtn', '#skipBtn'].forEach(sel => { const b = $(sel); if (b) b.disabled = !hasItems; });
+  updateDetail(); renderDecisionLog(); renderQms();
+}
+function updateDetail() {
+  const it = queue[0]; const host = $('#qualityDetail');
+  if (!it) { host.innerHTML = '<div class="panel-head"><div><h3>Classifier rationale</h3></div></div><div class="empty">Advance the deck to inspect an item.</div>'; return; }
+  host.innerHTML =
+    '<div class="panel-head"><div><h3>' + it.id + ' · rationale</h3><p class="sub">' + it.classification + ' → ' + (it.mdr ? 'MDR review' : 'quality review') + '</p></div><span class="label ' + (it.mdr ? 'label-danger' : 'label-warning') + '">conf ' + it.confidence.toFixed(2) + '</span></div>' +
+    '<div class="rationale" style="margin-bottom:12px">' + it.reason + '</div>' +
+    '<div class="stack" style="gap:8px">' +
+    '<div class="kv"><span class="k">FTA REPORT</span><span class="v mono">' + it.fta + '</span></div>' +
+    '<div class="kv"><span class="k">FAULT-TREE NODE</span><span class="v">' + it.ftaNote + '</span></div>' +
+    '<div class="kv"><span class="k">PRIORITY SUBFLAGS</span><span class="v">' + (it.flags.length ? it.flags.map(f => '<span class="label label-warning" style="font-size:10px">' + f + '</span>').join(' ') : '—') + '</span></div>' +
+    '<div class="kv"><span class="k">RELATED REPORTS</span><span class="v num">' + it.related + '</span></div>' +
+    '</div><p class="meta" style="margin-top:10px">A complaint is only a candidate for human review. No automatic legal or MDR determination.</p>';
+}
+function logDecision(it, action) {
+  decisions.unshift({ id: it.id, action, title: it.quote.slice(0, 54) + '…', when: 'just now' });
+  if (decisions.length > 12) decisions.pop();
+}
+function renderDecisionLog() {
+  const host = $('#decisionLog');
+  if (!decisions.length) { host.innerHTML = '<div class="empty" style="padding:24px 0">No decisions yet this session.</div>'; return; }
+  host.innerHTML = decisions.map(d => '<div class="decision-row"><span class="src-badge" style="width:26px;height:26px;border-radius:8px;color:' + (d.action === 'approve' ? 'var(--success)' : d.action === 'deny' ? 'var(--danger)' : 'var(--fg-2)') + '">' +
+    (d.action === 'approve' ? '<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L19 7"/></svg>' : d.action === 'deny' ? '<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6l12 12M18 6 6 18"/></svg>' : '<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/></svg>') + '</span>' +
+    '<span class="grow"><b class="mono">' + d.id + '</b> ' + (d.action === 'approve' ? 'approved → QMS' : d.action === 'deny' ? 'denied → product' : 'marked for follow-up') + '<br><span class="meta">' + d.title + '</span></span><span class="meta">' + d.when + '</span></div>').join('');
+}
+function renderQms() {
+  const approved = decisions.filter(d => d.action === 'approve');
+  $('#qmsCount').textContent = approved.length + ' queued';
+  $('#qtabApproved').textContent = approved.length;
+  $('#pushQmsBtn').disabled = approved.length === 0;
+  const host = $('#qmsQueue');
+  host.innerHTML = approved.length ? approved.map(a => '<div class="decision-row" style="background:var(--success-bg);border-color:color-mix(in oklch, var(--success) 25%, transparent)"><span class="mono" style="font-weight:600;color:var(--success)">' + a.id + '</span><span class="grow meta" style="color:var(--success)">Complaint_Type__c ← complaint</span><span class="label label-success">ready</span></div>').join('')
+    : '<p class="sub" style="font-size:12px">Approved complaint packets appear here before export.</p>';
+}
+function resolve(action) {
+  if (!queue.length) return;
+  const it = queue.shift();
+  if (action === 'skip') { queue.push(it); toast('Marked ' + it.id + ' for follow-up', 'info'); }
+  else { logDecision(it, action); toast(action === 'approve' ? it.id + ' approved → queued for QMS' : it.id + ' denied → returned to product', action === 'approve' ? 'success' : 'danger'); }
+  persist(); renderDeck();
+  if (!queue.length) persist();
+}
+function fly(card, dir) {
+  card.style.transition = 'transform .42s var(--ease), opacity .42s var(--ease)';
+  if (dir === 0) card.style.transform = 'translateY(190px) scale(.9)';
+  else card.style.transform = 'translateX(' + (dir * 620) + 'px) rotate(' + (dir * 26) + 'deg)';
+  card.style.opacity = '0';
+}
+function act(action) {
+  if (busy || !queue.length) return;
+  const card = $('#qualityDeck .swipe-card');
+  const dir = action === 'approve' ? 1 : action === 'deny' ? -1 : 0;
+  if (!card) { resolve(action); return; }
+  busy = true;
+  fly(card, dir);
+  setTimeout(() => { resolve(action); busy = false; }, 200);
+}
+function attachDrag(card) {
+  let sx = 0, sy = 0, dx = 0, dy = 0, down = false;
+  const ap = $('.sw-flag.approve', card), dn = $('.sw-flag.deny', card);
+  const ea = $('.sw-edge.approve', card), ed = $('.sw-edge.deny', card);
+  const clearStamps = () => { ap.style.opacity = 0; dn.style.opacity = 0; if (ea) ea.style.opacity = 0; if (ed) ed.style.opacity = 0; };
+  card.addEventListener('pointerdown', e => { if (e.target.closest('button, [data-source]')) return; down = true; sx = e.clientX; sy = e.clientY; card.setPointerCapture(e.pointerId); card.style.transition = 'none'; });
+  card.addEventListener('pointermove', e => {
+    if (!down) return; dx = e.clientX - sx; dy = e.clientY - sy;
+    const tilt = Math.max(-16, Math.min(16, dx * 0.055));
+    card.style.transform = 'translate(' + dx + 'px,' + dy * 0.4 + 'px) rotate(' + tilt + 'deg)';
+    const p = Math.max(0, Math.min(1, dx / 140)), n = Math.max(0, Math.min(1, -dx / 140));
+    ap.style.opacity = p; dn.style.opacity = n;
+    if (ea) ea.style.opacity = p * .85; if (ed) ed.style.opacity = n * .85;
+  });
+  const end = () => {
+    if (!down) return; down = false;
+    if (dx > 120) { busy = true; fly(card, 1); setTimeout(() => { resolve('approve'); busy = false; }, 190); }
+    else if (dx < -120) { busy = true; fly(card, -1); setTimeout(() => { resolve('deny'); busy = false; }, 190); }
+    else { card.style.transition = 'transform .35s var(--ease-spring)'; card.style.transform = ''; clearStamps(); }
+    dx = 0; dy = 0;
+  };
+  card.addEventListener('pointerup', end); card.addEventListener('pointercancel', end);
+}
+function renderQualityTable(tab) {
+  const map = {
+    complaint: QUALITY.slice(),
+    mdr: QUALITY.filter(q => q.mdr),
+    excluded: [
+      { id: 'raw-8812', classification: 'excluded', quote: '“Thanks, the replacement arrived quickly.”', source: 'Zendesk', sourceId: 'zendesk', theme: '—', mdr: false, reviewer: '—', ageDays: 6, when: 'Mar 20' },
+      { id: 'raw-8790', classification: 'excluded', quote: '“Where do I download the desktop app?”', source: 'Salesforce', sourceId: 'salesforce', theme: '—', mdr: false, reviewer: '—', ageDays: 40, when: 'Feb 14' }
+    ]
+  };
+  const rows = (map[tab] || []).filter(r => !qualityAge || r.ageDays <= qualityAge);
+  $('#qualityTableTitle').textContent = tab === 'mdr' ? 'Potential MDR' : tab === 'excluded' ? 'Excluded at intake' : 'Complaint candidates';
+  $('#qualityTableCount').textContent = rows.length + ' rows';
+  $('#qualityAgeNote').textContent = qualityAge ? 'Showing last ' + qualityAge + ' days' : 'Showing all time';
+  $('#qualityTableBody').innerHTML = rows.map(r => '<tr><td class="mono">' + r.id + '</td><td><span class="label ' + (r.classification === 'excluded' ? 'label-neutral' : r.mdr ? 'label-danger' : 'label-warning') + '">' + (r.classification === 'excluded' ? 'excluded' : 'complaint candidate') + '</span></td><td style="max-width:340px">' + r.quote + '</td><td><button type="button" class="src-link" data-source="' + r.sourceId + '">' + r.source + '</button></td><td>' + (r.mdr ? '<span class="label label-danger">flagged</span>' : '—') + '</td><td>' + (r.reviewer || '—') + '</td><td class="mono">' + r.when + '</td></tr>').join('');
+}
+
+/* ================= team / pods ================= */
+const initials = s => (String(s).replace(/[^A-Za-z ]/g, '').trim().split(/\s+/).filter(Boolean).slice(0, 2).map(w => w[0].toUpperCase()).join('') || '—');
+const podStat = (n, l) => '<div class="pod-stat"><div class="n num">' + n + '</div><div class="l">' + l + '</div></div>';
+function renderPods() {
+  const tone = { ok: 'label-success', 'at-risk': 'label-warning', critical: 'label-danger' };
+  const text = { ok: 'On track', 'at-risk': 'Watch', critical: 'Needs decision' };
+  $('#podGrid').innerHTML = PODS.map((p, k) => {
+    const ideas = IDEAS.filter(i => i.pod === p.name);
+    const reports = ideas.reduce((s, i) => s + i.reports, 0);
+    return '<div class="glass pod-card rise" style="--i:' + k + '" data-od-id="pod-' + p.id + '">' +
+      '<div class="pod-head"><span class="pod-monogram" aria-hidden="true">' + p.mono + '</span>' +
+      '<div class="grow"><div class="pod-name">' + p.name + '</div><div class="pod-role">' + p.okr + '</div></div>' +
+      '<span class="label ' + tone[p.health] + '"><span class="dot"></span>' + text[p.health] + '</span></div>' +
+      '<div class="pod-people">' +
+        '<div class="pod-person"><span class="ava" aria-hidden="true">' + initials(p.lead) + '</span><span class="grow"><b>' + p.lead + '</b> ' + (p.leadVerified ? '<span class="label label-success" style="font-size:9.5px">verified lead</span>' : '<span class="unverified">UNVERIFIED</span>') + '</span><span class="role">Pod lead</span></div>' +
+        '<div class="pod-person"><span class="ava" aria-hidden="true">' + initials(p.pm) + '</span><span class="grow"><b>' + p.pm + '</b></span><span class="role">Product mgr</span></div>' +
+      '</div>' +
+      '<div class="pod-stats">' + podStat(ideas.length, 'ideas') + podStat(reports, 'reports') + podStat(fmt(p.complaints), 'complaint cand.') + '</div>' +
+      '<div class="pod-ideas"><div class="pod-ideas-head"><span class="meta">Ideas owned by this pod</span><button type="button" class="btn btn-ghost btn-sm" data-pod-jump="' + p.name + '">Filter ideas</button></div>' +
+      (ideas.length ? ideas.map(i => '<button type="button" class="pod-idea" data-idea="' + i.id + '"><span class="grow"><span class="pi-title">' + i.title + '</span><br><span class="pi-meta">' + i.jira + ' · ' + i.priority + ' · ' + i.reports + ' reports</span></span><span class="label ' + (i.jiraClass || 'label-neutral') + '">' + i.jiraStatus + '</span></button>').join('') : '<p class="pod-empty">No idea clusters assigned yet — feedback for this pod is still below the clustering threshold.</p>') +
+      '</div></div>';
+  }).join('');
+  const withLead = PODS.filter(p => p.leadVerified).length;
+  const pct = Math.round((withLead / PODS.length) * 100);
+  $('#podCoverageTag').textContent = withLead + ' of ' + PODS.length + ' pods led';
+  $('#podCoverageLabel').textContent = 'Pods with a named, verified lead';
+  $('#podCoveragePct').textContent = pct + '%';
+  $('#podCoverageBar').style.width = pct + '%';
+}
+function focusPod(name) {
+  const pill = $$('[data-filter="pod"]').find(p => p.dataset.value === name);
+  $$('[data-filter="pod"]').forEach(x => x.classList.remove('on'));
+  if (pill) { pill.classList.add('on'); ideaPod = name; }
+  else { const all = $('[data-filter="pod"][data-value=""]'); if (all) all.classList.add('on'); ideaPod = ''; }
+  renderIdeas();
+  go('ideas');
+}
+
+/* ================= roadmap ================= */
+function renderRoadmap() {
+  const colors = { 'Now · W14': 'var(--accent)', 'Next · W15–16': 'var(--info)', 'Later · W17+': 'var(--muted)' };
+  $('#roadmapLanes').innerHTML = Object.entries(ROADMAP).map(([lane, items]) =>
+    '<div class="lane"><div class="lane-head"><span class="sw" style="background:' + colors[lane] + '"></span><strong style="font-size:13.5px">' + lane + '</strong><span class="meta" style="margin-left:auto">' + items.length + '</span></div>' +
+    items.map(it => { const idea = IDEAS.find(i => i.jira === it.jira); return '<button type="button" class="lane-card"' + (idea ? ' data-jira="' + it.jira + '"' : ' disabled') + '><div class="row-between"><span class="mono" style="font-size:11px;color:var(--meta)">' + it.jira + '</span><span class="label label-outline" style="font-size:10px">' + it.pod + '</span></div><div style="font-size:13px;font-weight:500">' + it.title + '</div>' + (idea ? '<div class="row-between"><span class="si-meta">' + idea.reports + ' reports in cluster</span><span class="si-meta">' + idea.priority + '</span></div>' : '') + '<div class="progress"><i style="width:' + it.pct + '%"></i></div></button>'; }).join('') + '</div>').join('');
+  const stageTone = { 'In build': 'label-accent', 'Planned': 'label-info', 'Later': 'label-neutral' };
+  const demand = IDEAS.slice().sort((a, b) => b.reports - a.reports);
+  const maxRep = Math.max.apply(null, demand.map(i => i.reports));
+  $('#demandCommit').innerHTML = demand.map(i => '<button type="button" class="commit-row" data-jira="' + i.jira + '"><span class="grow"><span class="cr-title">' + i.title + '</span><br><span class="si-meta">' + i.pod + ' · ' + i.jira + ' · demand ' + i.demand + '/50 · ' + i.effort + ' pts</span></span><span class="cr-demand"><span class="progress"><i style="width:' + Math.round((i.reports / maxRep) * 100) + '%"></i></span><span class="num">' + i.reports + '</span></span><span class="label ' + (stageTone[i.stage] || 'label-neutral') + '">' + i.stage + '</span></button>').join('');
+  const committed = IDEAS.filter(i => i.stage === 'In build' || i.stage === 'Planned').length;
+  const pct = Math.round((committed / IDEAS.length) * 100);
+  $('#roadmapCoverage').textContent = committed + ' of ' + IDEAS.length + ' committed';
+  $('#coverageLabel').textContent = 'Customer clusters already in build or planned for this cycle';
+  $('#coveragePct').textContent = pct + '%';
+  $('#coverageBar').style.width = pct + '%';
+  const pts = IDEAS.map(i => '<div class="pt" style="left:' + (18 + (i.effort / 90) * 74) + '%;top:' + (86 - (i.demand / 50) * 74) + '%;width:' + (20 + i.reports) + 'px;height:' + (20 + i.reports) + 'px;background:var(--accent);" data-tip="' + i.title + ' · ' + i.reports + ' reports · ' + i.effort + ' pts">' + i.reports + '</div>').join('');
+  $('#demandMatrix').innerHTML = '<div class="grid-line" style="left:50%;top:12px;bottom:44px;width:1px"></div><div class="grid-line" style="top:50%;left:12px;right:12px;height:1px"></div>' + pts +
+    '<span class="axis-y">LOW EFFORT</span><span class="axis-x">HIGH DEMAND →</span><div class="chart-tip" id="tipMatrix"></div>';
+  bindTips('#demandMatrix', '#tipMatrix');
+  $('#shippedList').innerHTML = SHIPPED.map(s => '<div class="stream-row" style="cursor:default">' + badge('jira', 'Jira') + '<div><div class="stream-title">' + s.title + '</div><div class="stream-meta">' + s.jira + '</div></div><span class="label label-success">' + s.when + '</span></div>').join('');
+}
+
+/* ================= integrations ================= */
+function intCard(o, isQms) {
+  const tone = o.tone === 'success' ? 'label-success' : 'label-neutral';
+  return '<div class="glass int-card" data-od-id="int-' + o.id + '"><div class="ic-top"><span class="logo-tile">' + (o.id === 'jira' || o.id === 'salesforce' || o.id === 'zendesk' ? '<span style="color:' + brand(o.id) + ';width:22px;height:22px">' + LOGOS[o.id] + '</span>' : '<span class="logo-mono">' + o.mono + '</span>') + '</span><div><div class="ic-name">' + o.name + '</div><span class="label ' + tone + '" style="font-size:10px"><span class="dot"></span>' + o.status + '</span></div></div>' +
+    '<p class="ic-desc">' + o.desc + '</p>' +
+    '<div class="ic-foot"><span class="meta">' + o.detail + '</span>' + (isQms ? '<button class="btn btn-secondary btn-sm" data-configure="' + o.id + '" data-name="' + o.name + '">Configure</button>' : '<button class="btn btn-ghost btn-sm" data-toggle-int>' + (o.tone === 'success' ? 'Manage' : 'Connect') + '</button>') + '</div></div>';
+}
+function renderIntegrations() {
+  $('#qmsGrid').innerHTML = QMS.map(q => intCard(q, true)).join('');
+  $('#sourceGrid').innerHTML = SOURCES.map(s => { const c = CONNECTORS.find(x => x.id === s.id) || {}; return '<div class="glass int-card"><div class="ic-top src-row" data-source="' + s.id + '" role="button" tabindex="0" aria-label="View ' + s.name + ' feedback and ideas"><span class="logo-tile" style="color:' + brand(s.id) + '">' + (LOGOS[s.id] || '<span class="logo-mono">AS</span>') + '</span><div><div class="ic-name">' + s.name + '</div><span class="label ' + (c.status === 'warn' ? 'label-warning' : 'label-success') + '" style="font-size:10px"><span class="dot"></span>' + (c.last || 'live') + '</span></div></div><p class="ic-desc">' + (c.kind || 'Feedback source') + ' · ' + s.value + ' records this cycle</p><div class="ic-foot"><button type="button" class="src-link" data-source="' + s.id + '">View records</button><span class="switch ' + (c.status === 'warn' ? '' : 'on') + '" data-toggle-int role="switch" tabindex="0"></span></div></div>'; }).join('');
+  $('#destGrid').innerHTML = DESTS.map(d => intCard(d, false)).join('');
+  bindSwitches();
+}
+function bindSwitches() {
+  $$('[data-toggle-int]').forEach(s => s.addEventListener('click', () => { s.classList.toggle('on'); toast(s.classList.contains('on') ? 'Integration enabled' : 'Integration paused', s.classList.contains('on') ? 'success' : 'info'); }));
+}
+
+/* ================= data drawer ================= */
+function renderData() {
+  $('#pipelineStages').innerHTML = PIPELINE.map(p => '<div><div class="row-between" style="font-size:12.5px;margin-bottom:5px"><span>' + p.name + ' <span class="meta">· ' + p.detail + '</span></span><span class="num">' + p.pct + '%</span></div><div class="progress"><i style="width:' + p.pct + '%;background:' + (p.state === 'done' ? 'var(--success)' : 'var(--accent)') + '"></i></div></div>').join('');
+  $('#connectorList').innerHTML = CONNECTORS.map(c => { const tone = c.status === 'warn' ? 'label-warning' : 'label-success'; return '<div class="row-between" style="padding:9px 11px;border:1px solid var(--border-soft);border-radius:10px;background:var(--glass-hi)"><div class="row" style="gap:10px">' + badge(c.id, c.name) + '<div><div style="font-size:12.5px;font-weight:500">' + c.name + '</div><div class="meta">' + c.kind + '</div></div></div><div style="text-align:right"><span class="label ' + tone + '" style="font-size:10px"><span class="dot"></span>' + c.last + '</span><div class="meta" style="margin-top:3px">' + c.records + ' rec</div></div></div>'; }).join('');
+  $('#techStack').innerHTML = TECH.map(t => '<span class="label label-outline">' + t + '</span>').join('');
+  const now = new Date();
+  $('#drawerSyncTime').textContent = 'Last sync ' + now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) + ' · next in 11 min';
+}
+function openData() { $('#dataDrawer').classList.add('on'); $('#dataScrim').classList.add('on'); renderData(); }
+function closeData() { $('#dataDrawer').classList.remove('on'); $('#dataScrim').classList.remove('on'); }
+
+/* ================= source detail drawer ================= */
+const srcStat = (n, l) => '<div class="src-stat"><div class="n num">' + n + '</div><div class="l">' + l + '</div></div>';
+function openSource(id) {
+  const s = SOURCES.find(x => x.id === id); if (!s) return;
+  const c = CONNECTORS.find(x => x.id === id) || {};
+  const feed = SOURCE_FEED[id] || [];
+  const ideas = IDEAS.filter(i => i.sources.some(x => x[0] === id));
+  $('#sourceLogo').innerHTML = '<span style="color:' + brand(id) + ';width:22px;height:22px;display:block">' + (LOGOS[id] || '<span class="logo-mono">' + s.name.slice(0, 2).toUpperCase() + '</span>') + '</span>';
+  $('#sourceName').textContent = s.name;
+  $('#sourceKind').textContent = (c.kind || 'Feedback source') + ' · ' + (c.status === 'warn' ? 'transcript access mocked · ' + (c.last || '') : 'streaming · last sync ' + (c.last || 'live'));
+  $('#sourceStats').innerHTML =
+    srcStat(fmt(s.value), 'records this cycle') +
+    srcStat(fmt(s.complaints), 'complaint candidates') +
+    srcStat(fmt(s.product), 'product feedback') +
+    srcStat(String(ideas.length), ideas.length === 1 ? 'linked idea' : 'linked ideas');
+  $('#sourceFeed').innerHTML = feed.length ? feed.map(f => '<div class="src-feed-row"><span class="label ' + f.cls + '" style="font-size:10px">' + f.label + '</span><span class="sr-t">' + f.t + '</span><span class="sr-w">' + f.when + '</span></div>').join('') : '<p class="sub" style="font-size:12px">No records in this synthetic slice.</p>';
+  $('#sourceIdeas').innerHTML = ideas.length ? ideas.map(i => '<button type="button" class="src-idea-row" data-source-idea="' + i.id + '"><span class="grow"><span class="si-title">' + i.title + '</span><br><span class="si-meta">' + i.jira + ' · ' + i.reports + ' reports · ' + i.pod + '</span></span><span class="label ' + i.jiraClass + '">' + i.jiraStatus + '</span></button>').join('') : '<p class="sub" style="font-size:12px">No idea clusters yet — reports from this source are still below the clustering threshold.</p>';
+  $('#sourceDrawer').classList.add('on'); $('#sourceScrim').classList.add('on');
+}
+function closeSource() { $('#sourceDrawer').classList.remove('on'); $('#sourceScrim').classList.remove('on'); }
+
+/* ================= assistant chat ================= */
+let chatScope = 'product';
+const CHAT = [
+  { who: 'bot', text: 'I’m grounded on the ' + fmt(1658) + ' schema v1.1 records in this cycle. Ask me to pull evidence, cross-check Jira status, or summarise a cluster.', cites: ['schema v1.1', '1,658 records'] }
+];
+const REPLIES = {
+  owner: { text: 'Two ideas still have unverified owners: “Clinician PDF export as clinician PDF” (proposed: M. Adeyemi) and “BLE pairing reliability” (proposed: J. Ferreira). Both need a human confirmation before they count as owned.', cites: ['CLIN-770', 'MOB-1980'] },
+  false: { text: 'The false-alarm cluster spans 31 reports across email, App Store and Zendesk over 11 days, all inside the 00:00–05:00 window. It is linked to CARD-1108 (In Progress) and carries a clinical-risk-without-known-harm flag.', cites: ['email-5043', 'CARD-1108', 'FTA-2026-0402'] },
+  mdr: { text: 'Two MDR candidates report actual or potential harm: CP-2208 (missed alarm during an episode — patient_harm_reported) and CP-2196 (field-corrective lot 409-TX). CP-2214 is a third, lower-confidence candidate with implied risk only.', cites: ['CP-2208', 'CP-2196', 'CP-2214'] },
+  default: { text: 'Here’s what I found across the demo dataset. The strongest signal is the sync-reliability cluster: 66 reports total across CPAP-2214 and MOB-2015, both in the current sprint, with two enterprise accounts ($340k ARR) behind them.', cites: ['CPAP-2214', 'MOB-2015', 'Zendesk #48219'] }
+};
+function renderChat() {
+  const t = $('#chatThread');
+  t.innerHTML = CHAT.map(m => msgHtml(m)).join('');
+  t.scrollTop = t.scrollHeight;
+}
+const msgHtml = m => '<div class="msg ' + (m.who === 'me' ? 'me' : 'bot') + '">' + m.text + (m.cites ? '<div class="cites">' + m.cites.map(c => '<span class="label ' + (m.who === 'me' ? 'label-outline' : 'label-accent') + '" style="font-size:10px">' + c + '</span>').join('') + '</div>' : '') + '</div>';
+function setScope(scope) {
+  chatScope = scope === 'quality' ? 'quality' : 'product';
+  const on = chatScope === 'quality';
+  $('#scopeToggle').classList.toggle('on', on);
+  $('#scopeToggle').setAttribute('aria-checked', on ? 'true' : 'false');
+  $('#scopeBar').classList.toggle('quality', on);
+  $$('#scopeToggle .scope-opt').forEach(o => o.classList.toggle('on', (o.dataset.opt === 'quality') === on));
+  $('#scopeLabel').innerHTML = '<span class="scope-pulse" aria-hidden="true"></span><span>' + (on
+    ? '<b>Product + quality &amp; compliance</b> <span class="sc-sub">· complaint candidates &amp; MDR flags included</span>'
+    : '<b>Product feedback</b> only <span class="sc-sub">· quality &amp; compliance excluded</span>') + '</span>';
+}
+function ask(text) {
+  if (!text.trim()) return;
+  CHAT.push({ who: 'me', text });
+  const thread = $('#chatThread'); thread.insertAdjacentHTML('beforeend', msgHtml({ who: 'me', text }));
+  thread.insertAdjacentHTML('beforeend', '<div class="msg bot" id="typing"><span class="typing"><i></i><i></i><i></i></span></div>');
+  thread.scrollTop = thread.scrollHeight;
+  setTimeout(() => {
+    const t = $('#typing'); if (t) t.remove();
+    const low = text.toLowerCase();
+    const qualityTopic = low.includes('mdr') || low.includes('harm') || low.includes('complaint') || low.includes('quality') || low.includes('compliance');
+    let r;
+    if (qualityTopic && chatScope === 'product') {
+      r = { text: 'That lives in the quality &amp; compliance lane, which is outside the current scope. Flip the scope toggle to “+ Quality” and I’ll pull complaint candidates, potential MDR flags and the FTA rationale with citations.', cites: ['scope: product feedback'] };
+    } else {
+      r = low.includes('owner') ? REPLIES.owner : low.includes('false') || low.includes('alarm') ? REPLIES.false : low.includes('mdr') || low.includes('harm') ? REPLIES.mdr : REPLIES.default;
+    }
+    CHAT.push({ who: 'bot', ...r }); thread.insertAdjacentHTML('beforeend', msgHtml({ who: 'bot', ...r })); thread.scrollTop = thread.scrollHeight;
+  }, 850);
+}
+
+/* ================= nav / routing ================= */
+const VALID = ['overview', 'ideas', 'quality', 'roadmap', 'team', 'integrations', 'assistant', 'idea'];
+function go(view) {
+  if (!VALID.includes(view)) view = 'overview';
+  $$('.view').forEach(v => v.classList.remove('active'));
+  const host = $('#view-' + view); if (host) host.classList.add('active');
+  $$('.nav-item').forEach(n => n.classList.toggle('active', n.dataset.view === view || (view === 'idea' && n.dataset.view === 'ideas')));
+  store.set('view', view);
+  closeSidebar();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+  if (view === 'assistant') setTimeout(() => { const i = $('#chatInput'); if (i) i.focus(); }, 200);
+  if (view === 'quality') { renderDeck(); renderQualityTable(currentQtab); }
+}
+function openSidebar() { $('#sidebar').classList.add('open'); }
+function closeSidebar() { $('#sidebar').classList.remove('open'); }
+
+/* ================= toast / ripple ================= */
+function toast(text, kind) {
+  const icons = { success: '<path d="M5 12l5 5L19 7"/>', danger: '<path d="M6 6l12 12M18 6 6 18"/>', info: '<circle cx="12" cy="12" r="9"/><path d="M12 8h.01M11 12h1v4h1"/>' };
+  const n = el('div', 'toast ' + (kind || ''), '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">' + (icons[kind] || icons.info) + '</svg><span>' + text + '</span>');
+  $('#toasts').appendChild(n); setTimeout(() => { n.style.opacity = '0'; n.style.transform = 'translateY(8px)'; setTimeout(() => n.remove(), 300); }, 3200);
+}
+function ripple(e) {
+  const b = e.currentTarget, r = b.getBoundingClientRect();
+  const s = el('span', 'ripple'); const d = Math.max(r.width, r.height); s.style.width = s.style.height = d + 'px';
+  s.style.left = (e.clientX - r.left - d / 2) + 'px'; s.style.top = (e.clientY - r.top - d / 2) + 'px';
+  b.appendChild(s); setTimeout(() => s.remove(), 620);
+}
+
+/* ================= wiring ================= */
+let currentQtab = 'pending', qualityAge = 0;
+function init() {
+  renderSources(); renderSplit(); renderTrend(12); renderStream(); renderFreshness();
+  renderIdeas(); renderRoadmap(); renderPods(); renderIntegrations(); renderData(); renderChat(); restore();
+
+  $$('.nav-item').forEach(n => n.addEventListener('click', () => go(n.dataset.view)));
+  $$('[data-goto]').forEach(b => b.addEventListener('click', () => go(b.dataset.goto)));
+  $$('[data-od-id^="kpi-"] .k-num span[data-count]').forEach(n => { if (!$('#view-overview').classList.contains('active') || true) countUp(n); });
+
+  $('#menuBtn').addEventListener('click', openSidebar);
+  $('#dataBtn').addEventListener('click', openData);
+  $('#openDataFromOverview').addEventListener('click', openData);
+  $('#closeData').addEventListener('click', closeData);
+  $('#dataScrim').addEventListener('click', closeData);
+  $('#closeSource').addEventListener('click', closeSource);
+  $('#sourceScrim').addEventListener('click', closeSource);
+  $('#sourceIdeas').addEventListener('click', e => { const b = e.target.closest('[data-source-idea]'); if (b) { closeSource(); showIdea(b.dataset.sourceIdea); } });
+  document.addEventListener('click', e => { const t = e.target.closest('[data-source]'); if (t && t.dataset.source) { e.preventDefault(); openSource(t.dataset.source); } });
+  document.addEventListener('keydown', e => { if (e.key !== 'Enter' && e.key !== ' ') return; const t = e.target.closest && e.target.closest('[data-source]'); if (t && t.dataset.source && t.getAttribute('role') === 'button') { e.preventDefault(); openSource(t.dataset.source); } });
+  $('#assistantBtn').addEventListener('click', () => go('assistant'));
+
+  $('#ideaGrid').addEventListener('click', e => { const c = e.target.closest('[data-idea]'); if (c) showIdea(c.dataset.idea); });
+  $('#podGrid').addEventListener('click', e => {
+    const jump = e.target.closest('[data-pod-jump]'); if (jump) { focusPod(jump.dataset.podJump); return; }
+    const card = e.target.closest('[data-idea]'); if (card) showIdea(card.dataset.idea);
+  });
+  document.addEventListener('click', e => { const p = e.target.closest('[data-pod-jump]'); if (p && !e.target.closest('#podGrid')) focusPod(p.dataset.podJump); });
+  const openJira = e => { const b = e.target.closest('[data-jira]'); if (b) { const idea = IDEAS.find(i => i.jira === b.dataset.jira); if (idea) showIdea(idea.id); } };
+  $('#roadmapLanes').addEventListener('click', openJira);
+  $('#demandCommit').addEventListener('click', openJira);
+  $('#ideasSeg').addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; $$('#ideasSeg button').forEach(x => x.classList.remove('on')); b.classList.add('on'); ideaSort = b.dataset.sort; renderIdeas(); });
+  $('#ideasDate').addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; $$('#ideasDate button').forEach(x => x.classList.remove('on')); b.classList.add('on'); ideaAge = parseInt(b.dataset.age, 10) || 0; renderIdeas(); });
+  $('#qualityDate').addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; $$('#qualityDate button').forEach(x => x.classList.remove('on')); b.classList.add('on'); qualityAge = parseInt(b.dataset.age, 10) || 0; if (currentQtab !== 'pending') renderQualityTable(currentQtab); });
+  $$('[data-filter="pod"]').forEach(p => p.addEventListener('click', () => { $$('[data-filter="pod"]').forEach(x => x.classList.remove('on')); p.classList.add('on'); ideaPod = p.dataset.value; renderIdeas(); }));
+
+  $$('#qualityTabs .tab').forEach(t => t.addEventListener('click', () => { currentQtab = t.dataset.qtab; $$('#qualityTabs .tab').forEach(x => x.classList.remove('on')); t.classList.add('on'); const pending = currentQtab === 'pending'; $('#qualityDeckTab').classList.toggle('hide', !pending); $('#qualityTableTab').classList.toggle('hide', pending); $('#qualityDateBar').classList.toggle('hide', pending); if (!pending) renderQualityTable(currentQtab); }));
+  $('#approveBtn').addEventListener('click', () => act('approve'));
+  $('#denyBtn').addEventListener('click', () => act('deny'));
+  $('#skipBtn').addEventListener('click', () => act('skip'));
+  $('#resetDeckBtn').addEventListener('click', () => { queue = QUALITY.slice(); decisions = []; persist(); renderDeck(); renderDecisionLog(); renderQms(); toast('Deck reset', 'info'); });
+  $('#pushQmsBtn').addEventListener('click', () => { const n = decisions.filter(d => d.action === 'approve').length; toast('Exported ' + n + ' packet' + (n === 1 ? '' : 's') + ' to Veeva Vault Quality (sandbox mock)', 'success'); decisions = decisions.filter(d => d.action !== 'approve'); persist(); renderDecisionLog(); renderQms(); });
+  $('#exportCsvBtn').addEventListener('click', () => toast('CSV export queued — audit-safe snapshot', 'success'));
+
+  document.addEventListener('keydown', e => {
+    if (e.key !== 'ArrowRight' && e.key !== 'ArrowLeft' && e.key !== 'ArrowDown') return;
+    if (!$('#view-quality').classList.contains('active') || currentQtab !== 'pending') return;
+    const ae = document.activeElement;
+    if (ae && (ae.tagName === 'INPUT' || ae.tagName === 'TEXTAREA' || ae.isContentEditable)) return;
+    if ($('#intModal').classList.contains('on') || $('#dataScrim').classList.contains('on') || $('#sourceScrim').classList.contains('on')) return;
+    e.preventDefault();
+    act(e.key === 'ArrowRight' ? 'approve' : e.key === 'ArrowLeft' ? 'deny' : 'skip');
+  });
+
+  $('#addIntegrationBtn').addEventListener('click', () => openModal('Veeva Vault Quality', 'VV'));
+  $('#closeModal').addEventListener('click', closeModal);
+  $('#intModal').addEventListener('click', e => { if (e.target.id === 'intModal') closeModal(); });
+  $('#testConnBtn').addEventListener('click', () => toast('Connection OK · sandbox tenant responded in 142 ms', 'success'));
+  $('#saveIntBtn').addEventListener('click', () => { closeModal(); toast('Integration saved — human approval gate is on', 'success'); });
+  $('#modalToggle').addEventListener('click', () => $('#modalToggle').classList.toggle('on'));
+  $$('[data-configure]').forEach(b => b.addEventListener('click', () => openModal(b.dataset.name, (QMS.find(q => q.id === b.dataset.configure) || {}).mono || '·')));
+
+  $('#runSyncBtn').addEventListener('click', () => { const btn = $('#runSyncBtn'); btn.disabled = true; btn.textContent = 'Syncing…'; setTimeout(() => { btn.disabled = false; btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-3-6.7L21 8"/><path d="M21 3v5h-5"/></svg>Run sync now'; toast('Sync complete · 14 new records ingested', 'success'); $('#dataSyncLabel').textContent = 'Synced just now · 7 sources'; }, 1400); });
+
+  $('#chatForm').addEventListener('submit', e => { e.preventDefault(); const v = $('#chatInput').value; $('#chatInput').value = ''; ask(v); });
+  $$('.prompt-chip').forEach(c => c.addEventListener('click', () => ask(c.textContent)));
+  const sc = $('#scopeToggle');
+  sc.addEventListener('click', () => setScope(chatScope === 'product' ? 'quality' : 'product'));
+  sc.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setScope(chatScope === 'product' ? 'quality' : 'product'); } });
+
+  const gs = $('#globalSearch');
+  gs.addEventListener('input', () => {
+    const q = gs.value.trim().toLowerCase();
+    $$('#ideaGrid .idea-card').forEach(c => c.classList.toggle('hide', q && !c.dataset.search.includes(q)));
+    $$('#triageStream .stream-row').forEach(r => r.classList.toggle('hide', q && !(r.dataset.search || '').includes(q)));
+    $$('#qualityTableBody tr').forEach(r => r.classList.toggle('hide', q && !r.textContent.toLowerCase().includes(q)));
+  });
+
+  $$('.btn').forEach(b => b.addEventListener('click', ripple));
+  $$('.switch').forEach(s => s.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); s.click(); } }));
+
+  const sb = $('#syncBar'); let sp = 0; const iv = setInterval(() => { sp = Math.min(72, sp + 4); sb.style.width = sp + '%'; $('#syncPct').textContent = sp + '%'; if (sp >= 72) clearInterval(iv); }, 40);
+
+  go(store.get('view', 'overview'));
+}
+function openModal(name, mono) {
+  $('#intModalTitle').textContent = name;
+  $('#mName').value = name;
+  $('#modalLogo').innerHTML = '<span class="logo-mono">' + (mono || '·') + '</span>';
+  $('#intModal').classList.add('on');
+}
+function closeModal() { $('#intModal').classList.remove('on'); }
+
+document.addEventListener('DOMContentLoaded', init);
+</script>
+</body>
+</html>
