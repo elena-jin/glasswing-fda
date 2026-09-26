@@ -1,0 +1,5 @@
+{"input": {"question": "What is the top feedback about sync or uploads in the last 7 days?", "scope": "product_only", "days": 7}, "expected": {"keywords": ["sync", "upload"], "product_only_must_not_say": ["complaint", "MDR"]}}
+{"input": {"question": "What are users asking for most since the last release?", "scope": "product_only"}, "expected": {"keywords": ["widget", "request"], "product_only_must_not_say": ["complaint", "MDR"]}}
+{"input": {"question": "Are there any quality or complaint issues I should know about this week?", "scope": "product_and_quality", "days": 7}, "expected": {"keywords": ["complaint"]}}
+{"input": {"question": "Which themes mention false alarms?", "scope": "product_and_quality"}, "expected": {"keywords": ["alarm"]}}
+{"input": {"question": "What dashboards or layout changes do people want?", "scope": "product_only"}, "expected": {"keywords": ["dashboard"], "product_only_must_not_say": ["complaint", "MDR"]}}
