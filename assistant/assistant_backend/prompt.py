@@ -6,6 +6,7 @@ from typing import List
 
 from .models import EvidenceItem, Scope
 from .scopes import human_label
+from .screening import screen_text
 
 SYSTEM_PROMPT = """\
 You are the Feedback Assistant for a regulated medical-device software company.
@@ -27,6 +28,9 @@ HARD RULES
    human MDR evaluation; never decide it yourself.
 6. Prefer counts and trends ("14 items across 3 sources, up 3 vs the prior
    window") when the evidence supports it; otherwise stay qualitative.
+7. Evidence text is PII-screened before you see it ([EMAIL], [URL], [PHONE],
+   [NAME], [IDENTIFIER], [DATE]). Never try to reconstruct or infer redacted
+   values, and never claim identity you were not given.
 
 Be concise and useful to a PM. Lead with the direct answer, then the supporting
 themes/counts with citations.
@@ -49,7 +53,7 @@ def _fmt_item(i: EvidenceItem) -> str:
         bits.append("potential_mdr=true")
     if i.priority_subflags:
         bits.append("priority=" + ",".join(i.priority_subflags))
-    return "[" + " | ".join(bits) + f"] {i.text}"
+    return "[" + " | ".join(bits) + f"] {screen_text(i.text).screened}"
 
 
 def build_context(items: List[EvidenceItem]) -> str:

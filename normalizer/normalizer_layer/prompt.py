@@ -9,6 +9,7 @@ from __future__ import annotations
 import json
 from typing import Any, Dict, List, Optional
 
+from .screening import screen_report
 from .schemas import (
     ACCOUNT_MATCH,
     EXCLUSION_REASONS,
@@ -56,6 +57,10 @@ HARD RULES
    for an exact public excerpt; "paraphrased_public_source" for a paraphrase of
    a public source; "real_public_maude" for a MAUDE narrative. Put the public
    URL in provenance.citation when one exists, else null.
+
+9. The input may already be PII-screened ([EMAIL], [URL], [PHONE], [NAME],
+   [IDENTIFIER], [DATE] placeholders). Treat any placeholder as unknown; never
+   try to reconstruct, guess, or re-identify a redacted value.
 
 Return the result ONLY by calling the emit_standard_record tool. Do not add
 prose, explanations, or extra fields.\
@@ -152,11 +157,17 @@ def _user_content(report: Dict[str, Any]) -> str:
 
 
 def build_messages(
-    report: Dict[str, Any], repair: Optional[Dict[str, Any]] = None
+    report: Dict[str, Any], repair: Optional[Dict[str, Any]] = None, screen: bool = True
 ) -> List[Dict[str, Any]]:
-    """Build the chat messages for one report, optionally with a repair round."""
+    """Build the chat messages for one report, optionally with a repair round.
+
+    ``screen=True`` sends only a PII-screened copy of the report to the model:
+    text identifiers are redacted and identity-bearing keys (url, native_id, …)
+    are dropped, so raw/identifying text never reaches the LLM.
+    """
+    model_report = screen_report(report) if screen else report
     messages: List[Dict[str, Any]] = [
-        {"role": "user", "content": _user_content(report)}
+        {"role": "user", "content": _user_content(model_report)}
     ]
     if repair:
         messages.append(

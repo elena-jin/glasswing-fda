@@ -2,21 +2,21 @@
 
 from __future__ import annotations
 
-import hashlib
 import json
 from dataclasses import dataclass, field
 from typing import Any, Dict, List, Optional
 
 from .providers import Provider, ModelProvider
 from .schemas import ACCOUNT_MATCH, SOURCE_TYPES, VERSION_EVIDENCE, validate_record
+from .screening import SourceVault, new_case_id
 
 SCHEMA_VERSION = "1.1"  # record.version stays 1.1; v1.2 is an additive extension
 
 
 def _derive_id(source_type: str, native_id: Optional[str], text: str) -> str:
-    basis = native_id or text or source_type
-    digest = hashlib.sha1(basis.encode("utf-8")).hexdigest()[:12]
-    return f"{source_type}-{digest}"
+    # Random, opaque case id — NOT a hash of the native/account id (per the
+    # HIPAA-aware data-boundary guidance). The source link lives in the vault.
+    return new_case_id()
 
 
 def _pick(value: Any, allowed: List[str], default: str) -> str:

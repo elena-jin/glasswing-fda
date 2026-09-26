@@ -1,0 +1,30 @@
+﻿Feedback classifier: labeling rubric (dataset v1.1)
+For David's classifier training set (feedback-classifier-inputs train/eval JSON). Companion to the full complaint-criteria rubric doc. September 26, 2026.
+Guardrail
+"complaint" means candidate for human Quality review. It is never a legal complaint determination, an MDR decision, or a QMS write. Zero false negatives is the design goal: when unsure, label complaint and route to human review.
+Label rules
+* complaint: any post-distribution communication, from any channel or third party, alleging a possible deficiency in identity, quality, durability, reliability, safety, effectiveness or performance of a device, its companion app/software, accessories, labeling or packaging. Includes failed, stale, missing or wrong readings; sync, pairing, crash, login and data-integrity failures; missed, late, false or confusing alarms; wrong treatment guidance; user error and usability problems; component wear; security concerns. No harm, lot number or proof required.
+* product_feedback: clearly cosmetic or convenience preferences with no alleged failure, clinical effect or plausible risk (feature requests, layout, fonts, integrations, export, localization, widgets, alarm option requests without any claim an alarm failed).
+* Excluded at intake (not sent to classifier): logistics, internal speculation with no customer report, generic praise, billing or shipping with no product allegation, pure how-to questions.
+* Mixed or ambiguous signals route to Quality. Do not downgrade because the message says UI, bug, known issue, user error, no harm, or "just feedback".
+Priority flags on complaint labels
+* potential_mdr=true: possible death or serious injury, or a malfunction likely to cause or contribute to one if it recurs (21 CFR 803.50). A flag for human MDR evaluation only; most complaints are not MDRs.
+* priority_subflags (urgency hints, not terminal labels): possible_death_or_serious_injury, possible_recurrent_harmful_malfunction, clinical_risk_without_known_harm, cybersecurity_safety, needs_device_scope_check, insufficient_information.
+Provenance
+* synthetic: template-generated text grounded in public connected-device app review patterns (myAir sync backlogs, Libre alarm and connectivity complaints, DreamMapper sync regressions, Omnipod and MiniMed pairing failures) and FDA citation analysis. Fictional products and accounts only.
+* paraphrased_public_source: paraphrased from a real public source with citation URL; no reviewer names or identifying details copied. Real data is never renamed and called synthetic.
+* Held-out eval split (356 records) must never be trained or tuned on.
+Boundary examples
+* "Could you let me reorder the dashboard cards?" = product_feedback.
+* "The tiny number made me misread my result" = complaint (usability with plausible clinical impact).
+* "Alarm is too loud and I can't use it at work" = complaint (alarm design alleged to limit use).
+* "Patient dropped the machine and it stopped working" = complaint (durability allegation counts even if use error or out of warranty).
+* "Tech support fixed it over the phone" does not remove the complaint (React Health letter).
+Sources
+* 21 CFR Part 820 (QMSR, effective Feb 2 2026; ISO 13485 8.2.2 complaint handling; 820.35 records): ecfr.gov/current/title-21/chapter-I/subchapter-H/part-820
+* 21 CFR 803.50 (MDR reporting): ecfr.gov/current/title-21/chapter-I/subchapter-H/part-803/subpart-E/section-803.50
+* FDA warning letter, 3B Medical dba React Health (May 2026): cancelled app-sync, dropped-device and "inquiry" reports still met the complaint definition; missing MDR follow-up on choking and shortness of breath.
+* FDA warning letter, Robbins Instruments (Jan 2025): wear-and-tear dismissal did not remove the duty to investigate device failures.
+* FDA warning letter, Contec Medical (Oct 2025): missed ecommerce and international complaints; user-error and component-wear feedback still counts.
+* FDA recall notice, Dexcom G7/ONE+ apps: software design error failing to alert on unexpected sensor failure.
+* Public review/support pages: FreeStyle Libre 3 App Store reviews, r/SleepApnea myAir sync thread, cpaptalk DreamMapper thread, Omnipod 5 and MiniMed Mobile troubleshooting pages. URLs are in the per-record citations in the labels files.

@@ -89,16 +89,17 @@ class ModelProvider(Provider):
     """Shared prompt handling for LLM-backed providers."""
 
     def __init__(self, model: str, api_key: str, base_url: Optional[str] = None,
-                 timeout: float = 60.0, max_tokens: int = 2048) -> None:
+                 timeout: float = 60.0, max_tokens: int = 2048, screen: bool = True) -> None:
         self.model = model
         self.api_key = api_key
         self.base_url = base_url
         self.timeout = timeout
         self.max_tokens = max_tokens
+        self.screen = screen  # PII/PHI-screen the report before it reaches the model
 
     def normalize(self, report, repair=None):
         system = SYSTEM_PROMPT
-        messages = build_messages(report, repair)
+        messages = build_messages(report, repair, screen=self.screen)
         return self._call(system, messages)
 
 

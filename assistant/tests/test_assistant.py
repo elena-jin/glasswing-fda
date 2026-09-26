@@ -87,6 +87,20 @@ def test_chatbot_quality_scope_sees_complaints():
     assert "email-5043" in resp.citations
 
 
+def test_evidence_text_is_screened_for_the_model():
+    from assistant_backend.models import EvidenceItem
+    from assistant_backend.prompt import build_context
+
+    items = [EvidenceItem(id="case-1", classification="product_feedback", occurred_at=None,
+                          product="App", version=None, theme_id=None,
+                          source_type="feedback_mail",
+                          text="Email me at a@b.com or see https://x/y")]
+    ctx = build_context(items)
+    assert "a@b.com" not in ctx
+    assert "https://x/y" not in ctx
+    assert "[EMAIL]" in ctx
+
+
 def main():
     tests = [v for k, v in sorted(globals().items()) if k.startswith("test_")]
     failures = 0

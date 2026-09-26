@@ -120,13 +120,38 @@ def test_repair_round_fixes_invalid_model_output():
     assert result.record["evidence"]["text"] == "Fixed verbatim excerpt."
 
 
-def test_id_is_stable_and_derived_when_absent():
+def test_case_id_is_random_not_derived():
     r = postprocess({"source_type": "feedback_mail"},
                     _valid_raw(text="same text"))
     r2 = postprocess({"source_type": "feedback_mail"},
                      _valid_raw(text="same text"))
-    assert r["id"] == r2["id"]
-    assert r["id"].startswith("feedback_mail-")
+    assert r["id"].startswith("case-") and r2["id"].startswith("case-")
+    assert r["id"] != r2["id"]  # random case id, not a hash of the text/account
+
+
+def test_screening_redacts_identifiers_and_drops_identity_keys():
+    from normalizer_layer.screening import screen_report, screen_text
+
+    s = screen_text("Email jane.doe@example.com or call +1 415 555 0142 on 2026-03-02. MRN: 88231.")
+    assert "[EMAIL]" in s.screened and "[PHONE]" in s.screened and "[DATE]" in s.screened
+
+    rep = screen_report({"source_type": "feedback_mail",
+                         "raw": {"url": "https://x/y", "native_id": "acct-1",
+                                 "Body": "Contact me at a@b.com"}})
+    assert rep["raw"]["url"] == "[REDACTED]"
+    assert rep["raw"]["native_id"] == "[REDACTED]"
+    assert "[EMAIL]" in rep["raw"]["Body"]
+
+
+def test_prompt_never_contains_raw_identifiers():
+    from normalizer_layer.prompt import build_messages
+
+    msgs = build_messages({"source_type": "feedback_mail",
+                           "raw": {"url": "https://secret.example/x",
+                                   "Body": "mail me at a@b.com"}})
+    content = msgs[0]["content"]
+    assert "a@b.com" not in content
+    assert "https://secret.example" not in content
 
 
 def test_extract_json_from_dsml_and_fences():
