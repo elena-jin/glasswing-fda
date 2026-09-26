@@ -1,0 +1,138 @@
+{
+  "synthetic": true,
+  "description": "Human-written fixture answer key. Model never receives this during inference. Complaint means route for human Quality review, not a legal determination.",
+  "results": [
+    {
+      "id": "sf-case-1001",
+      "expected": {
+        "classification": "complaint",
+        "route": "human_quality_review",
+        "theme_id": "upload-stall",
+        "review_required": true,
+        "reason": "Possible missed therapy data visibility; Quality should review context, not automatically call it a reportable complaint. A linked CRM ID is a proposed account link, not proof the speaker was that account."
+      },
+      "note": "complaint is a candidate routing label, not a legal complaint determination"
+    },
+    {
+      "id": "zd-2001-c1",
+      "expected": {
+        "classification": "complaint",
+        "route": "human_quality_review",
+        "theme_id": "upload-stall",
+        "review_required": true,
+        "reason": "Reported device/product problem for human review."
+      },
+      "note": "complaint is a candidate routing label, not a legal complaint determination"
+    },
+    {
+      "id": "slack-3001",
+      "expected": {
+        "classification": "complaint",
+        "route": "human_quality_review",
+        "theme_id": "upload-stall",
+        "review_required": true,
+        "reason": "Do not carry version from other records onto this one."
+      },
+      "note": "complaint is a candidate routing label, not a legal complaint determination"
+    },
+    {
+      "id": "granola-4001-s1",
+      "expected": {
+        "classification": "complaint",
+        "route": "human_quality_review",
+        "theme_id": "upload-stall",
+        "review_required": true,
+        "reason": "Reported device/product problem for human review."
+      },
+      "note": "complaint is a candidate routing label, not a legal complaint determination"
+    },
+    {
+      "id": "email-5001",
+      "expected": {
+        "classification": "complaint",
+        "route": "human_quality_review",
+        "theme_id": "upload-stall",
+        "review_required": true,
+        "reason": "Reported device/product problem for human review."
+      },
+      "note": "complaint is a candidate routing label, not a legal complaint determination"
+    },
+    {
+      "id": "zoom-6001-t12",
+      "expected": {
+        "classification": "complaint",
+        "route": "human_quality_review",
+        "theme_id": "missing-night",
+        "review_required": true,
+        "reason": "Reported device/product problem for human review."
+      },
+      "note": "complaint is a candidate routing label, not a legal complaint determination"
+    },
+    {
+      "id": "zoom-6001-chat4",
+      "expected": {
+        "classification": null,
+        "route": "excluded",
+        "theme_id": null,
+        "review_required": false,
+        "reason": "Not customer product feedback."
+      },
+      "note": null
+    },
+    {
+      "id": "zd-2002-c1",
+      "expected": {
+        "classification": "product_feedback",
+        "route": "product_triage",
+        "theme_id": "dashboard-layout",
+        "review_required": false,
+        "reason": "Customer-requested change or usability improvement."
+      },
+      "note": null
+    },
+    {
+      "id": "sf-case-1002",
+      "expected": {
+        "classification": "product_feedback",
+        "route": "product_triage",
+        "theme_id": "dashboard-layout",
+        "review_required": false,
+        "reason": "Customer-requested change or usability improvement."
+      },
+      "note": null
+    },
+    {
+      "id": "email-5002",
+      "expected": {
+        "classification": "product_feedback",
+        "route": "product_triage",
+        "theme_id": "settings-readability",
+        "review_required": false,
+        "reason": "Customer-requested change or usability improvement."
+      },
+      "note": null
+    },
+    {
+      "id": "slack-3002",
+      "expected": {
+        "classification": null,
+        "route": "excluded",
+        "theme_id": null,
+        "review_required": false,
+        "reason": "Not customer product feedback."
+      },
+      "note": null
+    },
+    {
+      "id": "zd-2003-c1",
+      "expected": {
+        "classification": "complaint",
+        "route": "human_quality_review",
+        "theme_id": "status-mismatch",
+        "review_required": true,
+        "reason": "Escalate for human Quality review promptly; model cannot judge reportability or device causation."
+      },
+      "note": "complaint is a candidate routing label, not a legal complaint determination"
+    }
+  ]
+}
