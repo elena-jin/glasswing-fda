@@ -1,0 +1,179 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.org/feedback-classifier-input.schema.v1_1.json",
+  "title": "Standardized feedback classifier input v1.1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "id",
+    "synthetic",
+    "source",
+    "evidence",
+    "context",
+    "intake"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "1.1"
+    },
+    "id": {
+      "type": "string"
+    },
+    "synthetic": {
+      "type": "boolean"
+    },
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "type",
+        "native_id",
+        "url",
+        "occurred_at"
+      ],
+      "properties": {
+        "type": {
+          "enum": [
+            "feedback_mail",
+            "granola_transcript",
+            "salesforce_case",
+            "slack_feedback_channel",
+            "zendesk_comment",
+            "zoom_chat",
+            "zoom_transcript",
+            "app_store_review",
+            "fda_public_record"
+          ]
+        },
+        "native_id": {
+          "type": "string"
+        },
+        "url": {
+          "type": "string"
+        },
+        "occurred_at": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "evidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "text",
+        "speaker_provenance",
+        "text_kind"
+      ],
+      "properties": {
+        "text": {
+          "type": "string"
+        },
+        "speaker_provenance": {
+          "type": "string"
+        },
+        "text_kind": {
+          "type": "string"
+        }
+      }
+    },
+    "context": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "reported_customer",
+        "account_id_hint",
+        "account_match",
+        "product_hint",
+        "version",
+        "version_evidence"
+      ],
+      "properties": {
+        "reported_customer": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "account_id_hint": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "account_match": {
+          "enum": [
+            "confirmed",
+            "unverified",
+            "none"
+          ]
+        },
+        "product_hint": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "version": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "version_evidence": {
+          "enum": [
+            "explicit",
+            "unknown"
+          ]
+        }
+      }
+    },
+    "intake": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "eligible_for_classification",
+        "exclusion_reason"
+      ],
+      "properties": {
+        "eligible_for_classification": {
+          "type": "boolean"
+        },
+        "exclusion_reason": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      }
+    },
+    "provenance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "basis",
+        "citation"
+      ],
+      "properties": {
+        "kind": {
+          "enum": [
+            "synthetic",
+            "paraphrased_public_source"
+          ]
+        },
+        "basis": {
+          "type": "string"
+        },
+        "citation": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      }
+    }
+  },
+  "_changelog": "v1.1 (2026-09-26): source.type adds app_store_review and fda_public_record; optional top-level provenance object added; schema_version const 1.1. All v1.0 records remain valid after bumping schema_version and adding provenance."
+}

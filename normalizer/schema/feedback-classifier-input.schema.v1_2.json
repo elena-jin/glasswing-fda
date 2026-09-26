@@ -1,0 +1,204 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.org/feedback-classifier-input.schema.v1_2.json",
+  "title": "Standardized feedback classifier input v1.2 (extends v1.1)",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "id",
+    "synthetic",
+    "source",
+    "evidence",
+    "context",
+    "intake"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "1.1"
+    },
+    "id": {
+      "type": "string"
+    },
+    "synthetic": {
+      "type": "boolean"
+    },
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "type",
+        "native_id",
+        "url",
+        "occurred_at"
+      ],
+      "properties": {
+        "type": {
+          "enum": [
+            "feedback_mail",
+            "granola_transcript",
+            "salesforce_case",
+            "slack_feedback_channel",
+            "zendesk_comment",
+            "zoom_chat",
+            "zoom_transcript",
+            "app_store_review",
+            "fda_public_record"
+          ]
+        },
+        "native_id": {
+          "type": "string"
+        },
+        "url": {
+          "type": "string"
+        },
+        "occurred_at": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date-time"
+        }
+      }
+    },
+    "evidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "text",
+        "speaker_provenance",
+        "text_kind"
+      ],
+      "properties": {
+        "text": {
+          "type": "string"
+        },
+        "speaker_provenance": {
+          "type": "string"
+        },
+        "text_kind": {
+          "type": "string"
+        }
+      }
+    },
+    "context": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "reported_customer",
+        "account_id_hint",
+        "account_match",
+        "product_hint",
+        "version",
+        "version_evidence"
+      ],
+      "properties": {
+        "reported_customer": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "account_id_hint": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "account_match": {
+          "enum": [
+            "confirmed",
+            "unverified",
+            "none",
+            "unknown"
+          ]
+        },
+        "product_hint": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "version": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "version_evidence": {
+          "enum": [
+            "explicit",
+            "unknown"
+          ]
+        }
+      }
+    },
+    "intake": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "eligible_for_classification",
+        "exclusion_reason"
+      ],
+      "properties": {
+        "eligible_for_classification": {
+          "type": "boolean"
+        },
+        "exclusion_reason": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      }
+    },
+    "provenance": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "kind",
+        "basis",
+        "citation"
+      ],
+      "properties": {
+        "kind": {
+          "enum": [
+            "synthetic",
+            "paraphrased_public_source",
+            "verbatim_public_excerpt",
+            "adversarial_synthetic",
+            "real_public_maude"
+          ]
+        },
+        "basis": {
+          "type": "string"
+        },
+        "citation": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "challenge_category": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "evaluation_only": {
+          "type": "boolean"
+        },
+        "contrast_pair_id": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "redactions": {
+          "type": "object"
+        }
+      }
+    }
+  },
+  "_changelog": "v1.2 (2026-09-26): additive over v1.1. occurred_at may be null; account_match adds unknown; provenance.kind adds verbatim_public_excerpt/adversarial_synthetic/real_public_maude and optional challenge_category/evaluation_only/contrast_pair_id/redactions; provenance allows extra keys. All v1.1 records remain valid."
+}
