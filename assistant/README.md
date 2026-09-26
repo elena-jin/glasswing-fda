@@ -112,3 +112,27 @@ python -m assistant_backend.evals.braintrust_eval
   makes a legal/MDR determination; it only surfaces evidence and flags.
 - Retrieval is filter-based (scope + time/product/theme/keyword). Semantic search
   can be layered on later by swapping `retrieval.fetch_evidence`.
+
+## Jira (Product handoff)
+
+Approved **product_feedback** items become a Jira issue via the REST API v3
+(`assistant/assistant_backend/integrations/jira.py`). The summary/description are
+**PII-screened** first and the evidence **case IDs** are appended; nothing else is
+sent. Complaints/MDR never go here (Quality path only).
+
+Env (server-only — never expose to the browser):
+```bash
+JIRA_BASE_URL=https://your-domain.atlassian.net
+JIRA_EMAIL=you@example.com
+JIRA_API_TOKEN=...            # id.atlassian.com/manage-profile/security/api-tokens
+JIRA_PROJECT_KEY=FDA
+JIRA_ISSUE_TYPE=Task          # optional
+```
+```python
+from assistant_backend.integrations.jira import create_product_issue
+create_product_issue("Widget for weekly trend", "Requested by 6 users.", case_ids=["case-abc"])
+```
+
+Use an **API token** for the internal prototype; use **OAuth 2.0 (3LO)** and the
+customer's own project for a real tenant. Jira Cloud has a free tier for a demo
+project.

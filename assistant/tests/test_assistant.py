@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import json
 import os
 import sys
 
@@ -99,6 +100,32 @@ def test_evidence_text_is_screened_for_the_model():
     assert "a@b.com" not in ctx
     assert "https://x/y" not in ctx
     assert "[EMAIL]" in ctx
+
+
+def test_jira_create_issue_payload_and_screening():
+    from assistant_backend.integrations.jira import JiraConfig, JiraClient
+
+    cfg = JiraConfig(base_url="https://acme.atlassian.net", email="a@b.com",
+                     api_token="token", project_key="FDA")
+    client = JiraClient(cfg)
+    captured = {}
+
+    def fake_request(method, path, body=None):
+        captured.update(method=method, path=path, body=body)
+        return {"id": "10001", "key": "FDA-12"}
+
+    client._request = fake_request  # type: ignore[assignment]
+    res = client.create_issue("Add widget (contact a@b.com)",
+                              "Users want a widget. Email me.",
+                              case_ids=["case-1", "case-2"], labels=["test-flight"])
+    assert res["key"] == "FDA-12"
+    assert res["url"].endswith("/browse/FDA-12")
+    fields = captured["body"]["fields"]
+    assert captured["path"] == "/rest/api/3/issue"
+    assert fields["project"]["key"] == "FDA"
+    assert "[EMAIL]" in fields["summary"] and "a@b.com" not in fields["summary"]
+    desc = json.dumps(fields["description"])
+    assert "case-1" in desc and "case-2" in desc  # evidence case IDs attached
 
 
 def main():
