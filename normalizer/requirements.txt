@@ -1,0 +1,3 @@
+# Schema validation. Model providers use the Python standard library (urllib),
+# so no LLM SDK is required. `anthropic` / `openai` are optional if you prefer them.
+jsonschema>=4.18
