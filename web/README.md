@@ -25,7 +25,17 @@ test-flight-app/
 └── README.md
 ```
 
+**Live (production):** https://test-flight-console-pearl.vercel.app
+
 ## Deploy to Vercel
+
+This repo is connected to the Vercel project **`glasswing-fda/test-flight-console`**
+with **Root Directory = `web`**, so any push to `main` auto-deploys. To deploy by
+hand, run from the **repo root** (not `web/`):
+
+```bash
+vercel --prod
+```
 
 The project has **no build step and no dependencies** — Vercel serves the static
 files and turns everything under `api/` into Node serverless functions.
