@@ -787,3 +787,10 @@ h3 { font-size: var(--size-md); font-weight: 600; letter-spacing: -.01em; }
   body { background: #fff !important; color: #000 !important; }
   .glass { box-shadow: none !important; border-color: #ddd !important; }
 }
+
+/* form controls (date inputs, selects) used in toolbars + panels */
+.input {
+  padding: 8px 10px; border-radius: var(--radius-btn); border: 1px solid var(--border);
+  background: var(--surface); color: var(--fg); font-size: 12.5px; font-family: inherit;
+}
+.input:focus { outline: 2px solid var(--accent); outline-offset: 1px; }

@@ -160,17 +160,33 @@ function renderFreshness() {
 }
 
 /* ================= ideas ================= */
-let ideaSort = 'demand', ideaAge = 0;
+let ideaSort = 'demand', ideaAge = 0, ideaStatus = 'all', ideaKind = 'all', ideaFrom = '', ideaTo = '';
 function sparkline(seed) {
   const pts = Array.from({ length: 12 }, (_, i) => 8 + Math.abs(Math.sin(i * 1.3 + seed) * 12) + i);
   const max = Math.max(...pts);
   const d = pts.map((v, i) => (i ? 'L' : 'M') + (i * 4) + ' ' + (24 - (v / max) * 20)).join(' ');
   return '<svg class="spark" width="48" height="24" viewBox="0 0 48 24" aria-hidden="true"><path d="' + d + ' L44 24 L0 24 Z" fill="var(--accent)" opacity="0.15"/><path d="' + d + '" fill="none" stroke="var(--accent)" stroke-width="1.6"/></svg>';
 }
+function ideaDate(i) { return new Date(Date.now() - i.ageDays * 86400000); }
+function ideaInDateRange(i) {
+  if (!ideaFrom && !ideaTo) return true;
+  const d = ideaDate(i);
+  if (ideaFrom && d < new Date(ideaFrom + 'T00:00:00')) return false;
+  if (ideaTo && d > new Date(ideaTo + 'T23:59:59')) return false;
+  return true;
+}
+function ideaStatusMatch(i) {
+  if (ideaStatus === 'roadmap') return i.stage === 'In build' || i.stage === 'Planned';
+  if (ideaStatus === 'open') return i.stage === 'Later';
+  return true;
+}
+function ideaKindMatch(i) { return ideaKind === 'all' || (i.kind || 'feature') === ideaKind; }
 function ideaCard(i, k) {
   const pcls = i.priority === 'Critical' ? 'label-danger' : i.priority === 'High' ? 'label-warning' : i.priority === 'Medium' ? 'label-info' : 'label-neutral';
+  const kind = i.kind || 'feature';
+  const kcls = kind === 'bug' ? 'label-warning' : 'label-accent';
   return '<button class="glass idea-card rise" style="--i:' + k + '" data-idea="' + i.id + '" data-search="' + (i.title + ' ' + i.pod + ' ' + i.jira).toLowerCase() + '" data-od-id="' + i.id + '">' +
-    '<div class="i-top"><span class="label ' + pcls + '">' + i.priority + '</span></div>' +
+    '<div class="i-top"><span class="label ' + pcls + '">' + i.priority + '</span><span class="label ' + kcls + '" style="font-size:10px;text-transform:capitalize">' + kind + '</span></div>' +
     '<h3>' + i.title + '</h3>' +
     '<p class="i-quote">' + i.quote + '</p>' +
     '<div class="i-foot"><span class="mini-logos">' + i.sources.slice(0, 3).map(s => badge(s[0], s[1])).join('') + '</span>' +
@@ -179,7 +195,7 @@ function ideaCard(i, k) {
     '<span class="label ' + i.jiraClass + '" style="margin-left:auto">' + i.jiraStatus + '</span></div></button>';
 }
 function renderIdeas() {
-  let list = IDEAS.slice();
+  let list = IDEAS.filter(i => ideaStatusMatch(i) && ideaKindMatch(i) && ideaInDateRange(i));
   if (ideaAge) list = list.filter(i => i.ageDays <= ideaAge);
   const order = { Critical: 0, High: 1, Medium: 2, Low: 3 };
   if (ideaSort === 'demand') list = list.slice().sort((a, b) => b.reports - a.reports);
@@ -589,7 +605,18 @@ function init() {
   $('#roadmapLanes').addEventListener('click', openJira);
   $('#demandCommit').addEventListener('click', openJira);
   $('#ideasSeg').addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; $$('#ideasSeg button').forEach(x => x.classList.remove('on')); b.classList.add('on'); ideaSort = b.dataset.sort; renderIdeas(); });
-  $('#ideasDate').addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; $$('#ideasDate button').forEach(x => x.classList.remove('on')); b.classList.add('on'); ideaAge = parseInt(b.dataset.age, 10) || 0; renderIdeas(); });
+  $('#ideasDate').addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; $$('#ideasDate button').forEach(x => x.classList.remove('on')); b.classList.add('on'); ideaAge = parseInt(b.dataset.age, 10) || 0; ideaFrom = ''; ideaTo = ''; const a = $('#ideaFrom'), c = $('#ideaTo'); if (a) a.value = ''; if (c) c.value = ''; renderIdeas(); });
+  const iStatus = $('#ideasStatus');
+  if (iStatus) iStatus.addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; $$('#ideasStatus button').forEach(x => x.classList.remove('on')); b.classList.add('on'); ideaStatus = b.dataset.status || 'all'; renderIdeas(); });
+  const iKind = $('#ideasKind');
+  if (iKind) iKind.addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; $$('#ideasKind button').forEach(x => x.classList.remove('on')); b.classList.add('on'); ideaKind = b.dataset.kind || 'all'; renderIdeas(); });
+  function useCustomDates() {
+    ideaAge = 0; const any = $('#ideasDate button[data-age="0"]'); if (any) { $$('#ideasDate button').forEach(x => x.classList.remove('on')); any.classList.add('on'); }
+    const a = $('#ideaFrom'), c = $('#ideaTo'); ideaFrom = a ? a.value : ''; ideaTo = c ? c.value : ''; renderIdeas();
+  }
+  const iFrom = $('#ideaFrom'); if (iFrom) iFrom.addEventListener('change', useCustomDates);
+  const iTo = $('#ideaTo'); if (iTo) iTo.addEventListener('change', useCustomDates);
+  const iClear = $('#ideaClearDates'); if (iClear) iClear.addEventListener('click', () => { const a = $('#ideaFrom'), c = $('#ideaTo'); if (a) a.value = ''; if (c) c.value = ''; ideaFrom = ''; ideaTo = ''; renderIdeas(); });
   const ar = $('#analyticsRange');
   if (ar) ar.addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; $$('#analyticsRange button').forEach(x => x.classList.remove('on')); b.classList.add('on'); analyticsDays = parseInt(b.dataset.days, 10) || 7; renderAnalytics(); });
   const pdf = $('#analyticsPdf');

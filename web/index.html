@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Test Flight — Quality &amp; Product Console</title>
 <meta name="description" content="Turn scattered device and companion-app feedback into traceable Quality and Product workflows." />
-<link rel="stylesheet" href="assets/styles.css?v=20260927c" />
+<link rel="stylesheet" href="assets/styles.css?v=20260927d" />
 </head>
 <body>
 
@@ -228,7 +228,6 @@
       <section class="view" id="view-ideas" data-od-id="view-ideas">
         <div class="page-head">
           <div>
-            <p class="eyebrow" style="margin-bottom:6px">Product path · theme + sentiment → cross-source idea</p>
             <h1>Ideas</h1>
             <p class="sub">Each idea is a cluster of feedback from one or more sources, linked to a Jira ticket as evidence. Ownership lives on the Pods page.</p>
           </div>
@@ -240,18 +239,42 @@
           </div>
         </div>
 
-        <div class="glass toolbar" data-od-id="ideas-toolbar">
-          <div class="seg" id="ideasSeg" role="group" aria-label="Sort">
-            <button class="on" data-sort="demand">Top demand</button>
-            <button data-sort="recent">Newest</button>
-            <button data-sort="priority">Priority</button>
+        <div class="glass toolbar" data-od-id="ideas-toolbar" style="flex-direction:column;align-items:stretch;gap:12px">
+          <div class="row wrap" style="gap:10px;align-items:center">
+            <div class="seg" id="ideasSeg" role="group" aria-label="Sort">
+              <button class="on" data-sort="demand">Top demand</button>
+              <button data-sort="recent">Newest</button>
+              <button data-sort="priority">Priority</button>
+            </div>
+            <span style="width:1px;height:24px;background:var(--border-soft)"></span>
+            <div class="seg" id="ideasDate" role="group" aria-label="Quick date range">
+              <button class="on" data-age="0">Any time</button>
+              <button data-age="7">Last 7 days</button>
+              <button data-age="30">Last 30 days</button>
+              <button data-age="90">Last 90 days</button>
+            </div>
+            <span class="row wrap" style="gap:6px;align-items:center;margin-left:auto">
+              <span class="meta" style="font-size:11px">From</span>
+              <input type="date" id="ideaFrom" class="input" style="max-width:160px" aria-label="From date" />
+              <span class="meta" style="font-size:11px">to</span>
+              <input type="date" id="ideaTo" class="input" style="max-width:160px" aria-label="To date" />
+              <button class="btn btn-ghost btn-sm" id="ideaClearDates" type="button">Clear</button>
+            </span>
           </div>
-          <span style="width:1px;height:24px;background:var(--border-soft)"></span>
-          <div class="seg" id="ideasDate" role="group" aria-label="Date range">
-            <button class="on" data-age="0">Any time</button>
-            <button data-age="7">Last 7 days</button>
-            <button data-age="30">Last 30 days</button>
-            <button data-age="90">Last 90 days</button>
+          <div class="row wrap" style="gap:10px;align-items:center">
+            <span class="meta" style="font-size:11px">Status</span>
+            <div class="seg" id="ideasStatus" role="group" aria-label="Roadmap status">
+              <button class="on" data-status="all">All</button>
+              <button data-status="roadmap">On roadmap (Jira)</button>
+              <button data-status="open">Not started</button>
+            </div>
+            <span style="width:1px;height:24px;background:var(--border-soft)"></span>
+            <span class="meta" style="font-size:11px">Type</span>
+            <div class="seg" id="ideasKind" role="group" aria-label="Feedback type">
+              <button class="on" data-kind="all">All</button>
+              <button data-kind="feature">Feature</button>
+              <button data-kind="bug">Bug</button>
+            </div>
           </div>
         </div>
 
@@ -766,12 +789,12 @@
 
 
 <div class="toasts" id="toasts" aria-live="polite"></div>
-<script src="assets/data.js?v=20260927c"></script>
-<script src="assets/app.js?v=20260927c"></script>
-<script src="assets/tf.config.js?v=20260927c"></script>
-<script src="assets/backend.js?v=20260927c"></script>
-<script src="assets/classifier.js?v=20260927c"></script>
-<script src="assets/runtime-badges.js?v=20260927c"></script>
-<script src="assets/runtime.js?v=20260927c"></script>
+<script src="assets/data.js?v=20260927d"></script>
+<script src="assets/app.js?v=20260927d"></script>
+<script src="assets/tf.config.js?v=20260927d"></script>
+<script src="assets/backend.js?v=20260927d"></script>
+<script src="assets/classifier.js?v=20260927d"></script>
+<script src="assets/runtime-badges.js?v=20260927d"></script>
+<script src="assets/runtime.js?v=20260927d"></script>
 </body>
 </html>

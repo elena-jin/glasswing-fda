@@ -614,6 +614,24 @@ for _idea in IDEAS:
     for _ev in _idea["evidence"]:
         _ev["url"] = evidence_url(_ev["src"])
 
+# Feedback type: a bug report vs a feature request. Drives the Ideas "Feature/Bug"
+# filter. (Bugs are defect/regression reports; everything else is a request.)
+IDEA_KIND = {
+    "idea-sync-stall": "bug",
+    "idea-false-alarm": "bug",
+    "idea-mask-fit": "bug",
+    "idea-humidifier": "bug",
+    "idea-readability": "bug",
+    "idea-clinician-pdf": "feature",
+    "idea-health-integration": "feature",
+    "idea-alarm-customization": "feature",
+    "idea-widget": "feature",
+    "idea-localization": "feature",
+    "idea-notifications": "feature",
+}
+for _idea in IDEAS:
+    _idea["kind"] = IDEA_KIND.get(_idea["id"], "feature")
+
 DATA = {
     "sources": SOURCES,
     "sourceFeed": SOURCE_FEED,

@@ -325,7 +325,8 @@
           "prov": "synthetic",
           "url": "https://aerishealth.slack.com/archives/C06AERIS01"
         }
-      ]
+      ],
+      "kind": "bug"
     },
     {
       "id": "idea-false-alarm",
@@ -393,7 +394,8 @@
           "prov": "synthetic",
           "url": "https://aerishealth.zendesk.com/agent/tickets/48107"
         }
-      ]
+      ],
+      "kind": "bug"
     },
     {
       "id": "idea-mask-fit",
@@ -454,7 +456,8 @@
           "prov": "synthetic",
           "url": "https://aerishealth.zendesk.com/agent/tickets/47855"
         }
-      ]
+      ],
+      "kind": "bug"
     },
     {
       "id": "idea-clinician-pdf",
@@ -511,7 +514,8 @@
           "prov": "paraphrased public",
           "url": "https://us06web.zoom.us/rec/share/aeris-air-clinic-onboarding"
         }
-      ]
+      ],
+      "kind": "feature"
     },
     {
       "id": "idea-health-integration",
@@ -572,7 +576,8 @@
           "prov": "synthetic",
           "url": "https://app.intercom.com/a/inbox/aeris-air/"
         }
-      ]
+      ],
+      "kind": "feature"
     },
     {
       "id": "idea-alarm-customization",
@@ -633,7 +638,8 @@
           "prov": "synthetic",
           "url": "https://aerishealth.slack.com/archives/C06AERIS01"
         }
-      ]
+      ],
+      "kind": "feature"
     },
     {
       "id": "idea-humidifier",
@@ -694,7 +700,8 @@
           "prov": "synthetic",
           "url": "https://aerishealth.lightning.force.com/lightning/r/Case/0098214/view"
         }
-      ]
+      ],
+      "kind": "bug"
     },
     {
       "id": "idea-widget",
@@ -751,7 +758,8 @@
           "prov": "synthetic",
           "url": "https://app.intercom.com/a/inbox/aeris-air/"
         }
-      ]
+      ],
+      "kind": "feature"
     },
     {
       "id": "idea-localization",
@@ -808,7 +816,8 @@
           "prov": "synthetic",
           "url": "https://mail.google.com/mail/u/0/#all/5110"
         }
-      ]
+      ],
+      "kind": "feature"
     },
     {
       "id": "idea-notifications",
@@ -865,7 +874,8 @@
           "prov": "synthetic",
           "url": "https://apps.apple.com/us/app/aeris-air/id6472108933?see-all=reviews"
         }
-      ]
+      ],
+      "kind": "feature"
     },
     {
       "id": "idea-readability",
@@ -915,7 +925,8 @@
           "prov": "synthetic",
           "url": "https://aerishealth.slack.com/archives/C06AERIS01"
         }
-      ]
+      ],
+      "kind": "bug"
     }
   ],
   "pods": [
