@@ -103,6 +103,30 @@ async function introspect(prefix = 'tf_') {
   return out;
 }
 
+/* Exact row count for a table + filter via HEAD + Prefer: count=exact. Returns
+ * an aggregate number only — never rows, never text. */
+async function count(table, query) {
+  if (!configured()) throw new SupabaseError('supabase_not_configured', 500, null);
+  const url = new URL(`${envUrl()}/rest/v1/${String(table).replace(/^\//, '')}`);
+  for (const [k, v] of Object.entries(query || {})) {
+    if (v === undefined || v === null) continue;
+    url.searchParams.set(k, String(v));
+  }
+  const res = await fetchImpl(url.toString(), {
+    method: 'HEAD',
+    headers: {
+      apikey: serviceKey(),
+      authorization: `Bearer ${serviceKey()}`,
+      prefer: 'count=exact',
+      range: '0-0',
+    },
+  });
+  if (!res.ok && res.status !== 206) throw new SupabaseError(`supabase_${res.status}`, res.status, null);
+  const cr = res.headers && typeof res.headers.get === 'function' ? res.headers.get('content-range') : null;
+  const total = cr && cr.includes('/') ? parseInt(cr.split('/')[1], 10) : NaN;
+  return Number.isFinite(total) ? total : 0;
+}
+
 module.exports = {
   SupabaseError,
   configured,
@@ -112,6 +136,7 @@ module.exports = {
   update,
   upsert,
   introspect,
+  count,
   __setFetch,
   _envUrl: envUrl,
 };

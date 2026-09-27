@@ -10,10 +10,13 @@ process.env.SUPABASE_SERVICE_ROLE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY ||
 delete process.env.TF_INTERNAL_TOKEN;
 delete process.env.TF_ADMIN_TOKEN;
 
-function jsonResponse(rows, status = 200) {
+function jsonResponse(rows, status = 200, headers) {
+  const h = {};
+  for (const [k, v] of Object.entries(headers || {})) h[k.toLowerCase()] = String(v);
   return {
     ok: status >= 200 && status < 300,
     status,
+    headers: { get: (k) => h[String(k).toLowerCase()] ?? null },
     async text() { return JSON.stringify(rows); },
     async json() { return rows; },
   };
@@ -87,6 +90,9 @@ function install(db) {
     for (const [k, v] of Object.entries(query)) {
       if (['select', 'order', 'limit', 'offset'].includes(k)) continue;
       rows = rows.filter((r) => matchFilter(r[k], v));
+    }
+    if (method === 'HEAD') {
+      return jsonResponse([], 206, { 'content-range': '0-0/' + rows.length });
     }
     if (query.limit) rows = rows.slice(0, parseInt(query.limit, 10));
     return jsonResponse(rows);
