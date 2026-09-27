@@ -182,11 +182,10 @@ function ideaStatusMatch(i) {
 }
 function ideaKindMatch(i) { return ideaKind === 'all' || (i.kind || 'feature') === ideaKind; }
 function ideaCard(i, k) {
-  const pcls = i.priority === 'Critical' ? 'label-danger' : i.priority === 'High' ? 'label-warning' : i.priority === 'Medium' ? 'label-info' : 'label-neutral';
   const kind = i.kind || 'feature';
   const kcls = kind === 'bug' ? 'label-warning' : 'label-accent';
   return '<button class="glass idea-card rise" style="--i:' + k + '" data-idea="' + i.id + '" data-search="' + (i.title + ' ' + i.pod + ' ' + i.jira).toLowerCase() + '" data-od-id="' + i.id + '">' +
-    '<div class="i-top"><span class="label ' + pcls + '">' + i.priority + '</span><span class="label ' + kcls + '" style="font-size:10px;text-transform:capitalize">' + kind + '</span></div>' +
+    '<div class="i-top"><span class="label ' + kcls + '" style="font-size:10px;text-transform:capitalize">' + kind + '</span></div>' +
     '<h3>' + i.title + '</h3>' +
     '<p class="i-quote">' + i.quote + '</p>' +
     '<div class="i-foot"><span class="mini-logos">' + i.sources.slice(0, 3).map(s => badge(s[0], s[1])).join('') + '</span>' +
@@ -197,9 +196,7 @@ function ideaCard(i, k) {
 function renderIdeas() {
   let list = IDEAS.filter(i => ideaStatusMatch(i) && ideaKindMatch(i) && ideaInDateRange(i));
   if (ideaAge) list = list.filter(i => i.ageDays <= ideaAge);
-  const order = { Critical: 0, High: 1, Medium: 2, Low: 3 };
   if (ideaSort === 'demand') list = list.slice().sort((a, b) => b.reports - a.reports);
-  if (ideaSort === 'priority') list = list.slice().sort((a, b) => order[a.priority] - order[b.priority]);
   if (ideaSort === 'recent') list = list.slice().sort((a, b) => a.ageDays - b.ageDays);
   $('#ideaGrid').innerHTML = list.map((i, k) => ideaCard(i, k)).join('');
   $('#ideaEmpty').classList.toggle('hide', list.length > 0);
@@ -211,7 +208,7 @@ function showIdea(id) {
   const i = IDEAS.find(x => x.id === id); if (!i) return;
   const de = $('#detailEyebrow'); if (de) de.textContent = 'IDEA';
   $('#detailTitle').textContent = i.title;
-  $('#detailMeta').innerHTML = '<span class="label ' + (i.priority === 'Critical' ? 'label-danger' : i.priority === 'High' ? 'label-warning' : 'label-info') + '">' + i.priority + ' priority</span><span class="label label-neutral"><span class="dot"></span>' + i.reports + ' reports in cluster</span>';
+  $('#detailMeta').innerHTML = '<span class="label label-neutral"><span class="dot"></span>' + i.reports + ' reports in cluster</span>';
   $('#detailEvidenceCount').textContent = i.reports + ' reports';
   $('#detailEvidenceList').innerHTML = i.evidence.map(e => '<div class="evidence-quote">' + e.text + '<span class="whisper">' + e.src + ' · ' + e.when + ' · provenance: ' + e.prov + '</span>' + (e.url ? '<a class="ev-link" href="' + e.url + '" target="_blank" rel="noopener noreferrer" title="Open the source record"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6M21 3l-9 9M10 5H5a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5"/></svg>Open source</a>' : '') + '</div>').join('');
   $('#detailWhy').textContent = i.why;
@@ -507,7 +504,7 @@ function renderRoadmap() {
   const colors = { 'Now · W14': 'var(--accent)', 'Next · W15-16': 'var(--info)', 'Later · W17+': 'var(--muted)' };
   $('#roadmapLanes').innerHTML = Object.entries(ROADMAP).map(([lane, items]) =>
     '<div class="lane"><div class="lane-head"><span class="sw" style="background:' + colors[lane] + '"></span><strong style="font-size:13.5px">' + lane + '</strong><span class="meta" style="margin-left:auto">' + items.length + '</span></div>' +
-    items.map(it => { const idea = IDEAS.find(i => i.jira === it.jira); return '<button type="button" class="lane-card"' + (idea ? ' data-jira="' + it.jira + '"' : ' disabled') + '><div class="row-between"><span class="mono" style="font-size:11px;color:var(--meta)">' + it.jira + '</span><span class="label label-outline" style="font-size:10px">' + it.pod + '</span></div><div style="font-size:13px;font-weight:500">' + it.title + '</div>' + (idea ? '<div class="row-between"><span class="si-meta">' + idea.reports + ' reports in cluster</span><span class="si-meta">' + idea.priority + '</span></div>' : '') + '<div class="progress"><i style="width:' + it.pct + '%"></i></div></button>'; }).join('') + '</div>').join('');
+    items.map(it => { const idea = IDEAS.find(i => i.jira === it.jira); return '<button type="button" class="lane-card"' + (idea ? ' data-jira="' + it.jira + '"' : ' disabled') + '><div class="row-between"><span class="mono" style="font-size:11px;color:var(--meta)">' + it.jira + '</span><span class="label label-outline" style="font-size:10px">' + it.pod + '</span></div><div style="font-size:13px;font-weight:500">' + it.title + '</div>' + (idea ? '<div class="row-between"><span class="si-meta">' + idea.reports + ' reports in cluster</span><span class="si-meta">' + idea.stage + '</span></div>' : '') + '<div class="progress"><i style="width:' + it.pct + '%"></i></div></button>'; }).join('') + '</div>').join('');
   const stageTone = { 'In build': 'label-accent', 'Planned': 'label-info', 'Later': 'label-neutral' };
   const demand = IDEAS.slice().sort((a, b) => b.reports - a.reports);
   const maxRep = Math.max.apply(null, demand.map(i => i.reports));
