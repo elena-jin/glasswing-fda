@@ -18,11 +18,13 @@ credits are spent.
 cd braintrust
 npm install
 cp .env.example .env      # fill BRAINTRUST_API_KEY (+ BRAINTRUST_ENABLE=1)
-npm run eval
+npm run eval             # hits ASSISTANT_URL (may make model calls via the route)
+npm run eval:offline     # fixtures only — NO model calls, NO network to the app
 ```
 
-`ASSISTANT_URL` points at the deployment under test (default:
-`https://test-flight-console-pearl.vercel.app`).
+`eval.offline.ts` scores pre-recorded synthetic fixtures (grounded citations,
+no-evidence refusal, product-scope quality refusal) — it validates the scorers
+without spending credits. `ASSISTANT_URL` only applies to the online script.
 
 ## Dataset
 
@@ -50,6 +52,11 @@ retrieval ids, refusal flags, model, token counts, latency, scores. Full prompts
 model output text and retrieved source text are **not** logged unless
 `BRAINTRUST_LOG_CONTENT=1` is explicitly set. No keys are committed and none are
 sent to the browser.
+
+**Runtime tracing is opt-in.** The chat route traces only when `CHAT_TRACE=1`
+*and* `BRAINTRUST_API_KEY` are set, and only emits the same sanitized metadata
+(request id, scope, outcome, synthetic citation ids, model, tokens, latency,
+score) — never prompt/output/evidence text or real rows.
 
 ## Not run here
 

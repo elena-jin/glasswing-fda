@@ -10,5 +10,5 @@
     "types": ["node"],
     "noEmit": true
   },
-  "include": ["eval.ts"]
+  "include": ["eval.ts", "eval.offline.ts"]
 }

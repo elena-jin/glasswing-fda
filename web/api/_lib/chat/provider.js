@@ -4,10 +4,12 @@
  * chosen. No provider is called until CHAT_PROVIDER + CHAT_MODEL + CHAT_API_KEY
  * are set AND the endpoint host is allowlisted.
  *
- *   CHAT_PROVIDER   openai | anthropic | openrouter | sciforium | deepseek
+ *   CHAT_PROVIDER   openai | anthropic | openrouter | sciforium | deepseek | groq
  *   CHAT_MODEL      model id
  *   CHAT_API_KEY    secret (server-only; never returned, never sent to clients)
  *   CHAT_BASE_URL   optional override; host MUST be in the allowlist
+ *   CHAT_TEMPERATURE optional numeric override; OMITTED by default so models
+ *                    that reject temperature:0 (e.g. reasoning/gpt-oss) work.
  */
 
 const ALLOWED_HOSTS = new Set([
@@ -16,6 +18,7 @@ const ALLOWED_HOSTS = new Set([
   'openrouter.ai',
   'api.sciforium.com',
   'api.deepseek.com',
+  'api.groq.com',
   'generativelanguage.googleapis.com',
 ]);
 
@@ -25,6 +28,7 @@ const DEFAULT_BASE = {
   openrouter: 'https://openrouter.ai/api/v1',
   sciforium: 'https://api.sciforium.com/v1',
   deepseek: 'https://api.deepseek.com/v1',
+  groq: 'https://api.groq.com/openai/v1',
 };
 
 let fetchImpl = typeof fetch === 'function' ? fetch : null;
@@ -37,7 +41,14 @@ function config() {
   const model = (process.env.CHAT_MODEL || '').trim();
   const key = (process.env.CHAT_API_KEY || '').trim();
   const base = (process.env.CHAT_BASE_URL || DEFAULT_BASE[provider] || '').trim();
-  return { provider, model, key, base };
+  const temperature = numberOrNull(process.env.CHAT_TEMPERATURE);
+  return { provider, model, key, base, temperature };
+}
+
+function numberOrNull(v) {
+  if (v == null || String(v).trim() === '') return null;
+  const n = Number(v);
+  return Number.isFinite(n) ? n : null;
 }
 
 /* Never include the key. Returns only why it is unavailable. */
@@ -64,17 +75,23 @@ async function chat({ system, user, maxTokens }) {
   if (!cfg.ok) return { ok: false, error: cfg.reason };
 
   const started = Date.now();
+  const full = config();
   try {
     let url; const headers = { 'content-type': 'application/json' }; let body;
     if (cfg.provider === 'anthropic') {
       url = `${cfg.base.replace(/\/$/, '')}/messages`;
-      headers['x-api-key'] = config().key;
+      headers['x-api-key'] = full.key;
       headers['anthropic-version'] = '2023-06-01';
       body = { model: cfg.model, max_tokens: maxTokens, system, messages: [{ role: 'user', content: user }] };
+      if (full.temperature != null) body.temperature = full.temperature;
     } else {
+      // OpenAI-compatible (openai, openrouter, sciforium, deepseek, groq).
       url = `${cfg.base.replace(/\/$/, '')}/chat/completions`;
-      headers.authorization = `Bearer ${config().key}`;
-      body = { model: cfg.model, max_tokens: maxTokens, temperature: 0, messages: [{ role: 'system', content: system }, { role: 'user', content: user }] };
+      headers.authorization = `Bearer ${full.key}`;
+      body = { model: cfg.model, max_tokens: maxTokens, messages: [{ role: 'system', content: system }, { role: 'user', content: user }] };
+      // temperature is OMITTED unless explicitly configured: several models
+      // (e.g. Groq openai/gpt-oss-20b) reject or ignore temperature:0.
+      if (full.temperature != null) body.temperature = full.temperature;
     }
 
     const res = await fetchImpl(url, { method: 'POST', headers, body: JSON.stringify(body) });

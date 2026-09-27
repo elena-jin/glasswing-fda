@@ -5,7 +5,8 @@
   "description": "Braintrust dev evals for the grounded Test Flight assistant. Synthetic-only, sanitized traces, gated behind explicit opt-in.",
   "type": "module",
   "scripts": {
-    "eval": "tsx eval.ts"
+    "eval": "tsx eval.ts",
+    "eval:offline": "tsx eval.offline.ts"
   },
   "dependencies": {
     "braintrust": "^0.0.181"
