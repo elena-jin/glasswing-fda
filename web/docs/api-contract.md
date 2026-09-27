@@ -176,6 +176,27 @@ only and are never sent to the browser. Setup steps: `docs/connectors.md`.
 
 ---
 
+## Classifier panel (`/api/classifier/*`)
+
+Server-only reads/writes over Supabase, coded to the **live schema**. Partition
+and `synthetic` live on `tf_source_items` and are joined on the text record id.
+Public reads require `synthetic = true AND data_partition IN ('train','validation','demo')`.
+Write endpoints require an authenticated internal reviewer (`TF_INTERNAL_TOKEN` +
+`x-tf-internal`; reviewer id from `x-tf-reviewer`). Full detail:
+`docs/classifier-panel.md`.
+
+| Method | Path | Purpose |
+| --- | --- | --- |
+| GET | `/api/classifier/summary` | Per-run confusion matrix + precision/recall/specificity/FN + per-split. Offline by default; a run with no visible labelled pairs is an honest empty state. `maude_stress` is recall-only. |
+| GET | `/api/classifier/records` | `?partition&label&limit&offset`. Public ⇒ synthetic train/validation/demo only; a real partition → **403**. |
+| GET | `/api/classifier/record` | `?id=` detail. A real-source record → **403 with no evidence text**. |
+| POST | `/api/classifier/review` | internal only → `tf_review_decisions` + audit. `final_label ∈ {complaint,product_feedback,excluded}`; route derived. Optional pending candidate. |
+| GET/POST | `/api/classifier/candidates` | internal only. `{id, action:"approve"\|"revoke"}` → `approved`/`rejected`. Approving `locked_eval`/`maude_stress`/non-synthetic → **409 `training_leak_blocked`**. |
+| POST | `/api/classifier/retrain` | internal only → **202**, immutable `tf_model_runs` row (`status:"pending"`, `data_partition:"train"`) with the held-out eval gate. No training runs in the browser. |
+| GET | `/api/classifier/schema` | Guarded recon (`x-tf-admin` = `TF_ADMIN_TOKEN`); returns `tf_*` column names only, else 404. |
+
+---
+
 ## Schema v1.1 record (input to the classifier)
 
 ```

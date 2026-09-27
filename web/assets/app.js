@@ -397,6 +397,7 @@ function renderData() {
   $('#techStack').innerHTML = TECH.map(t => '<span class="label label-outline">' + t + '</span>').join('');
   const now = new Date();
   $('#drawerSyncTime').textContent = 'Last sync ' + now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) + ' · next in 11 min';
+  if (typeof window.renderClassifierPanel === 'function') { try { window.renderClassifierPanel(); } catch (e) {} }
 }
 function openData() { $('#dataModal').classList.add('on'); renderData(); }
 function closeData() { $('#dataModal').classList.remove('on'); }

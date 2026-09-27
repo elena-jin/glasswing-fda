@@ -1,0 +1,16 @@
+# local-only: secrets, caches, run outputs, downloaded weights
+.env
+.env.*
+*.local
+cache/
+caches/
+runs/
+output/
+outputs/
+*.onnx
+*.safetensors
+*.bin
+*.h5
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
