@@ -13,16 +13,16 @@ function baseDb(extra) {
   return install({
     tables: Object.assign({
       tf_normalized_records: [
-        { id: 'n-syn', case_id: 'case-syn', partition: 'synthetic', split: 'train', synthetic: true, text_screened: 'sync stalls', product: 'Aeris Air app' },
-        { id: 'n-real', case_id: 'case-real', partition: 'real_eval', split: 'eval', synthetic: false, text_screened: 'real PHI text', product: 'Aeris Air app' },
-        { id: 'n-maude', case_id: 'case-maude', partition: 'maude', split: 'eval', synthetic: false, text_screened: 'MAUDE narrative', product: 'CPAP' },
+        { id: 'n-syn', data_partition: 'synthetic', split: 'train', screened_text: 'sync stalls', context: { product_hint: 'Aeris Air app' } },
+        { id: 'n-real', data_partition: 'real_eval', split: 'eval', screened_text: 'real PHI text' },
+        { id: 'n-maude', data_partition: 'maude', split: 'eval', screened_text: 'MAUDE narrative' },
       ],
       tf_reference_labels: [
-        { id: 'l1', normalized_record_id: 'n-syn', label: 'complaint', split: 'train' },
-        { id: 'l2', normalized_record_id: 'n-real', label: 'complaint', split: 'eval' },
+        { record_id: 'n-syn', label: 'complaint', split: 'train' },
+        { record_id: 'n-real', label: 'complaint', split: 'eval' },
       ],
       tf_predictions: [
-        { id: 'p1', normalized_record_id: 'n-syn', predicted_label: 'complaint', confidence: 0.9, threshold: 0.5, route: 'quality', run_id: 'run1' },
+        { id: 'p1', record_id: 'n-syn', predicted_label: 'complaint', confidence: 0.9, threshold: 0.5, route: 'quality', run_id: 'run1' },
       ],
       tf_model_runs: [],
       tf_review_decisions: [],
@@ -42,8 +42,8 @@ test('records: public audience only receives synthetic records', async () => {
   assert.ok(partitions.every((p) => /^synthetic/.test(p)), 'no real/maude records leak to public');
 
   const call = db.calls.find((c) => c.table === 'tf_normalized_records');
-  assert.match(call.query.partition, /in\.\(/);
-  assert.ok(!/real|maude/.test(call.query.partition), 'server-side filter excludes real/maude');
+  assert.match(call.query.data_partition, /in\.\(/);
+  assert.ok(!/real|maude/.test(call.query.data_partition), 'server-side filter excludes real/maude');
 });
 
 test('records: requesting a non-visible partition is a 403, not an empty list', async () => {
@@ -57,21 +57,23 @@ test('review: writes a decision and an audit event', async () => {
   const db = baseDb();
   const res = await invoke(review, {
     method: 'POST', url: '/api/classifier/review',
-    body: { normalized_record_id: 'n-syn', reviewer: 'khizar', decision: 'override', corrected_label: 'product_feedback', reason: 'not a complaint' },
+    body: { record_id: 'n-syn', reviewer: 'khizar', decision: 'override', corrected_label: 'product_feedback', reason: 'not a complaint' },
   });
   assert.strictEqual(res.statusCode, 202);
   assert.strictEqual(res.body.ok, true);
   assert.strictEqual(res.body.auditLogged, true);
   assert.strictEqual(db.tables.tf_review_decisions.length, 1);
+  assert.strictEqual(db.tables.tf_review_decisions[0].reviewer_id, 'khizar');
+  assert.strictEqual(db.tables.tf_review_decisions[0].final_label, 'product_feedback');
   assert.strictEqual(db.tables.tf_audit_events.length, 1);
-  assert.strictEqual(db.tables.tf_audit_events[0].action, 'review.saved');
+  assert.strictEqual(db.tables.tf_audit_events[0].event_type, 'review.saved');
 });
 
 test('review: public cannot review a non-synthetic record', async () => {
   baseDb();
   const res = await invoke(review, {
     method: 'POST', url: '/api/classifier/review',
-    body: { normalized_record_id: 'n-real', reviewer: 'khizar', decision: 'agree' },
+    body: { record_id: 'n-real', reviewer: 'khizar', decision: 'agree' },
   });
   assert.strictEqual(res.statusCode, 403);
 });
@@ -80,7 +82,7 @@ test('review: override without a corrected label is rejected', async () => {
   baseDb();
   const res = await invoke(review, {
     method: 'POST', url: '/api/classifier/review',
-    body: { normalized_record_id: 'n-syn', reviewer: 'khizar', decision: 'override' },
+    body: { record_id: 'n-syn', reviewer: 'khizar', decision: 'override' },
   });
   assert.strictEqual(res.statusCode, 400);
   assert.strictEqual(res.body.error, 'override_requires_corrected_label');
@@ -88,7 +90,8 @@ test('review: override without a corrected label is rejected', async () => {
 
 test('candidates: approving a locked-eval candidate is blocked (409)', async () => {
   const db = baseDb({
-    tf_training_candidates: [{ id: 'c1', normalized_record_id: 'n-real', proposed_label: 'complaint', status: 'pending' }],
+    tf_review_decisions: [{ id: 'rev1', record_id: 'n-real', reviewer_id: 'khizar', final_label: 'complaint' }],
+    tf_training_candidates: [{ id: 'c1', review_id: 'rev1', candidate_status: 'pending' }],
   });
   const res = await invoke(candidates, {
     method: 'POST', url: '/api/classifier/candidates',
@@ -96,12 +99,13 @@ test('candidates: approving a locked-eval candidate is blocked (409)', async () 
   });
   assert.strictEqual(res.statusCode, 409);
   assert.strictEqual(res.body.error, 'training_leak_blocked');
-  assert.strictEqual(db.tables.tf_training_candidates[0].status, 'pending', 'status unchanged on block');
+  assert.strictEqual(db.tables.tf_training_candidates[0].candidate_status, 'pending', 'status unchanged on block');
 });
 
 test('candidates: approving a synthetic train candidate succeeds', async () => {
   const db = baseDb({
-    tf_training_candidates: [{ id: 'c2', normalized_record_id: 'n-syn', proposed_label: 'complaint', status: 'pending' }],
+    tf_review_decisions: [{ id: 'rev2', record_id: 'n-syn', reviewer_id: 'khizar', final_label: 'complaint' }],
+    tf_training_candidates: [{ id: 'c2', review_id: 'rev2', candidate_status: 'pending' }],
   });
   const res = await invoke(candidates, {
     method: 'POST', url: '/api/classifier/candidates',
@@ -109,8 +113,8 @@ test('candidates: approving a synthetic train candidate succeeds', async () => {
   });
   assert.strictEqual(res.statusCode, 202);
   assert.strictEqual(res.body.ok, true);
-  assert.strictEqual(db.tables.tf_training_candidates[0].status, 'approved');
-  assert.ok(db.tables.tf_audit_events.some((e) => e.action === 'candidate.approve'));
+  assert.strictEqual(db.tables.tf_training_candidates[0].candidate_status, 'approved');
+  assert.ok(db.tables.tf_audit_events.some((e) => e.event_type === 'candidate.approve'));
 });
 
 test('retrain: requires a held-out eval split', async () => {
@@ -130,8 +134,9 @@ test('retrain: blocks locked eval from training and records the gate', async () 
   assert.ok(res.body.gate.blocked.includes('maude'));
   assert.ok(res.body.gate.blocked.includes('real_eval'));
   assert.deepStrictEqual(res.body.gate.train, ['synthetic']);
-  assert.strictEqual(db.tables.tf_model_runs[0].metrics.gate.exclude_locked_eval, true);
-  assert.strictEqual(db.tables.tf_model_runs[0].status, 'requested');
+  const run = db.tables.tf_model_runs[0];
+  assert.strictEqual(run.parameters.gate.exclude_locked_eval, true);
+  assert.strictEqual(run.status, 'requested');
 });
 
 test('router: unknown resource returns 404 without touching the DB', async () => {
@@ -151,10 +156,11 @@ test('router: dispatches to a resource by query param', async () => {
 test('summary: a run without predictions is an honest empty state', async () => {
   install({
     tables: {
-      tf_model_runs: [{ id: 'run1', model_version: 'modernbert-gate-v1', run_type: 'offline', status: 'succeeded', eval_split: 'eval' }],
+      tf_model_runs: [{ id: 'run1', model_version_id: 'modernbert-gate-v1', run_type: 'offline', status: 'succeeded', dataset_version: 'v1.3' }],
       tf_predictions: [],
       tf_reference_labels: [],
       tf_normalized_records: [],
+      tf_model_versions: [],
     },
   });
   const res = await invoke(summary, { method: 'GET', url: '/api/classifier/summary' });
@@ -166,10 +172,11 @@ test('summary: a run without predictions is an honest empty state', async () => 
 test('summary: metrics provenance comes from the run, offline labelled', async () => {
   install({
     tables: {
-      tf_model_runs: [{ id: 'run1', model_version: 'modernbert-gate-v1', run_type: 'offline', status: 'succeeded', eval_split: 'eval', threshold: 0.5 }],
-      tf_predictions: [{ id: 'p1', run_id: 'run1', normalized_record_id: 'n-syn', predicted_label: 'complaint', confidence: 0.8 }],
-      tf_reference_labels: [{ id: 'l1', normalized_record_id: 'n-syn', label: 'complaint', split: 'eval' }],
-      tf_normalized_records: [{ id: 'n-syn', partition: 'synthetic_eval', split: 'eval' }],
+      tf_model_runs: [{ id: 'run1', model_version_id: 'mv1', run_type: 'offline', status: 'succeeded', dataset_version: 'v1.3', parameters: { threshold: 0.5 } }],
+      tf_model_versions: [{ id: 'mv1', model_family: 'ModernBERT', status: 'exploratory', threshold: 0.5 }],
+      tf_predictions: [{ id: 'p1', run_id: 'run1', record_id: 'n-syn', predicted_label: 'complaint', confidence: 0.8 }],
+      tf_reference_labels: [{ record_id: 'n-syn', label: 'complaint', split: 'eval' }],
+      tf_normalized_records: [{ id: 'n-syn', data_partition: 'synthetic_eval', split: 'eval' }],
     },
   });
   const res = await invoke(summary, { method: 'GET', url: '/api/classifier/summary' });
@@ -177,5 +184,6 @@ test('summary: metrics provenance comes from the run, offline labelled', async (
   assert.strictEqual(run.empty, false);
   assert.strictEqual(run.offline, true);
   assert.strictEqual(run.confusion.tp, 1);
+  assert.strictEqual(run.modelFamily, 'ModernBERT');
   assert.match(run.provenance, /tf_predictions/);
 });

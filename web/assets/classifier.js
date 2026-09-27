@@ -145,10 +145,10 @@
       '<button class="btn btn-primary btn-sm" id="clfSaveReview" type="button">Save review</button>' +
       '</div>' +
       '<p class="meta" style="margin:8px 0 0">Human status: <b>' + esc(d.humanStatus || 'unreviewed') + '</b>' +
-      (cand.id ? ' · candidate ' + esc(cand.status) + ' <button class="btn btn-ghost btn-sm" data-cand="' + esc(cand.id) + '" data-cand-action="approve">Approve</button> <button class="btn btn-ghost btn-sm" data-cand="' + esc(cand.id) + '" data-cand-action="revoke">Revoke</button>' : '') +
+      (cand.id ? ' · candidate ' + esc(cand.candidate_status || cand.status || 'pending') + ' <button class="btn btn-ghost btn-sm" data-cand="' + esc(cand.id) + '" data-cand-action="approve">Approve</button> <button class="btn btn-ghost btn-sm" data-cand="' + esc(cand.id) + '" data-cand-action="revoke">Revoke</button>' : '') +
       '</p></div>' +
       (d.reviews && d.reviews.length ? '<div class="stack" style="gap:4px">' + d.reviews.map(function (rv) {
-        return '<p class="meta">' + esc(when(rv.created_at)) + ' · ' + esc(rv.reviewer) + ' · ' + esc(rv.decision) + (rv.corrected_label ? ' → ' + esc(rv.corrected_label) : '') + (rv.reason ? ' · ' + esc(rv.reason) : '') + '</p>';
+        return '<p class="meta">' + esc(when(rv.decision_at || rv.created_at)) + ' · ' + esc(rv.reviewer_id || rv.reviewer) + ' · ' + esc(rv.final_label || rv.decision) + (rv.override_reason ? ' · ' + esc(rv.override_reason) : '') + '</p>';
       }).join('') + '</div>' : '');
   }
 
@@ -173,7 +173,7 @@
     var makeCand = ($('#clfMakeCand') || {}).checked || false;
     api('/api/classifier/review', {
       method: 'POST', headers: { 'content-type': 'application/json' },
-      body: JSON.stringify({ normalized_record_id: id, reviewer: reviewer, decision: decision, corrected_label: corrected, reason: reason, create_candidate: makeCand }),
+      body: JSON.stringify({ record_id: id, reviewer: reviewer, decision: decision, corrected_label: corrected, reason: reason, create_candidate: makeCand }),
     }).then(function (r) {
       setStatus(r.body && r.body.ok ? 'Review saved (audit logged).' : 'Review failed: ' + ((r.body && r.body.error) || r.status));
       loadRecord(id, reviewer);

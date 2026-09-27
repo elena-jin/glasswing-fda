@@ -1,0 +1,156 @@
+{
+  "tf_audit_events": [
+    "id",
+    "actor_id",
+    "event_type",
+    "object_type",
+    "object_id",
+    "detail",
+    "created_at"
+  ],
+  "tf_model_runs": [
+    "id",
+    "model_version_id",
+    "dataset_version",
+    "data_partition",
+    "code_ref",
+    "parameters",
+    "started_at",
+    "finished_at",
+    "status",
+    "metrics",
+    "cohort_metrics",
+    "artifact_uri"
+  ],
+  "tf_model_versions": [
+    "id",
+    "model_family",
+    "artifact_uri",
+    "artifact_sha256",
+    "code_ref",
+    "threshold",
+    "status",
+    "trained_at",
+    "promoted_at",
+    "notes",
+    "created_at"
+  ],
+  "tf_normalized_records": [
+    "id",
+    "schema_version",
+    "evidence_text",
+    "screened_text",
+    "source",
+    "evidence",
+    "context",
+    "intake",
+    "provenance",
+    "eligibility",
+    "exclusion_reason",
+    "created_at"
+  ],
+  "tf_predictions": [
+    "id",
+    "record_id",
+    "model_version_id",
+    "run_id",
+    "complaint_score",
+    "threshold",
+    "predicted_label",
+    "route",
+    "confidence",
+    "rationale",
+    "created_at"
+  ],
+  "tf_product_handoffs": [
+    "id",
+    "theme_id",
+    "reviewer_id",
+    "approved_at",
+    "jira_issue_key",
+    "jira_issue_url",
+    "status",
+    "payload",
+    "created_at"
+  ],
+  "tf_qms_handoffs": [
+    "id",
+    "quality_review_id",
+    "approved_by",
+    "approved_at",
+    "external_qms_id",
+    "status",
+    "screened_payload",
+    "created_at"
+  ],
+  "tf_quality_reviews": [
+    "id",
+    "record_id",
+    "reviewer_id",
+    "decision",
+    "potential_mdr",
+    "reportability_status",
+    "rationale",
+    "reviewed_at",
+    "created_at"
+  ],
+  "tf_reference_labels": [
+    "record_id",
+    "label",
+    "route",
+    "theme_id",
+    "potential_mdr",
+    "priority_subflags",
+    "reason",
+    "label_source",
+    "adjudicated",
+    "added_at"
+  ],
+  "tf_review_decisions": [
+    "id",
+    "record_id",
+    "prediction_id",
+    "reviewer_id",
+    "final_label",
+    "final_route",
+    "override_reason",
+    "notes",
+    "decision_at",
+    "approved_for_training",
+    "revoked_at"
+  ],
+  "tf_source_items": [
+    "id",
+    "source_type",
+    "native_id",
+    "source_url",
+    "occurred_at",
+    "received_at",
+    "payload",
+    "synthetic",
+    "data_partition",
+    "provenance"
+  ],
+  "tf_theme_evidence": [
+    "theme_id",
+    "record_id"
+  ],
+  "tf_themes": [
+    "id",
+    "title",
+    "summary",
+    "owner_hint",
+    "owner_verified",
+    "status",
+    "created_at"
+  ],
+  "tf_training_candidates": [
+    "id",
+    "review_id",
+    "candidate_status",
+    "weight",
+    "dataset_version",
+    "used_in_run",
+    "created_at"
+  ]
+}
