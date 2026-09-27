@@ -210,7 +210,7 @@ function showIdea(id) {
   $('#detailTitle').textContent = i.title;
   $('#detailMeta').innerHTML = '<span class="label label-neutral"><span class="dot"></span>' + i.reports + ' reports in cluster</span>';
   $('#detailEvidenceCount').textContent = i.reports + ' reports';
-  $('#detailEvidenceList').innerHTML = i.evidence.map(e => '<div class="evidence-quote">' + e.text + '<span class="whisper">' + e.src + ' · ' + e.when + ' · provenance: ' + e.prov + '</span>' + (e.url ? '<a class="ev-link" href="' + e.url + '" target="_blank" rel="noopener noreferrer" title="Open the source record"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6M21 3l-9 9M10 5H5a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5"/></svg>Open source</a>' : '') + '</div>').join('');
+  $('#detailEvidenceList').innerHTML = i.evidence.map(e => '<div class="evidence-quote evidence-row"><div class="ev-text">' + e.text + '</div>' + (e.url ? '<a class="ev-src" href="' + e.url + '" target="_blank" rel="noopener noreferrer" title="Open source">' + e.src + ' \u2197</a>' : '<span class="ev-src muted">' + e.src + '</span>') + '</div>').join('');
   $('#detailWhy').textContent = i.why;
   $('#detailJiraLogo').innerHTML = LOGOS.jira; $('#detailJiraLogo').style.color = 'var(--brand-jira)';
   $('#detailJiraKey').textContent = i.jira; $('#detailJiraTitle').textContent = i.jiraTitle;
