@@ -1,4 +1,4 @@
-/* Test Flight  -  runtime badge logic (pure; browser + node testable).
+/* Prism  -  runtime badge logic (pure; browser + node testable).
  *
  * These labels are the ONLY source of truth for status shown to the user. No
  * hardcoded "Healthy" / "Synced" strings live in the markup any more.

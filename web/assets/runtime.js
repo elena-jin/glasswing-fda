@@ -1,4 +1,4 @@
-/* Test Flight  -  runtime status renderer.
+/* Prism  -  runtime status renderer.
  *
  * At load (and on every app re-render) this fetches real evidence and replaces
  * the hardcoded source-status surfaces:

@@ -1,4 +1,4 @@
-/* Test Flight  -  Quality & Product Console
+/* Prism  -  Quality & Product Console
  * Application logic. Requires assets/data.js to be loaded first (declares
  * SOURCES, SOURCE_FEED, SPLIT, TREND, IDEAS, PODS, QUALITY, PIPELINE,
  * CONNECTORS, TECH, ROADMAP, SHIPPED, QMS, DESTS on window).

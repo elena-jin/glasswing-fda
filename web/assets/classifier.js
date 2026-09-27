@@ -1,4 +1,4 @@
-/* Test Flight  -  classifier panel (Data status popup).
+/* Prism  -  classifier panel (Data status popup).
  *
  * Renders into the Classifier section of the Data status modal opened by
  * assets/app.js `renderData()` (which calls `window.renderClassifierPanel`).
