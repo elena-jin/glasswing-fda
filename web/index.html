@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Test Flight — Quality &amp; Product Console</title>
 <meta name="description" content="Turn scattered device and companion-app feedback into traceable Quality and Product workflows." />
-<link rel="stylesheet" href="assets/styles.css?v=20260927g" />
+<link rel="stylesheet" href="assets/styles.css?v=20260927h" />
 </head>
 <body>
 
@@ -29,10 +29,6 @@
       <button class="nav-item active" data-view="overview" data-od-id="nav-overview">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 13h6V4H4zM14 20h6v-9h-6zM4 20h6v-3H4zM14 7h6V4h-6z"/></svg>
         Overview
-      </button>
-      <button class="nav-item" data-view="analytics" data-od-id="nav-analytics">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20V4M4 20h16"/><rect x="7" y="12" width="3" height="5"/><rect x="12" y="8" width="3" height="9"/><rect x="17" y="5" width="3" height="12"/></svg>
-        Analytics
       </button>
       <button class="nav-item" data-view="ideas" data-od-id="nav-ideas">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-4 10.5c.6.6 1 1.4 1 2.2h6c0-.8.4-1.6 1-2.2A6 6 0 0 0 12 3Z"/></svg>
@@ -363,6 +359,15 @@
           </div>
         </div>
 
+        <div class="glass toolbar" data-od-id="quality-tabs">
+          <div class="seg" id="qualitySeg" role="group" aria-label="Quality view">
+            <button class="on" data-qtab="deck">Review deck</button>
+            <button data-qtab="all">All classifications</button>
+          </div>
+          <span style="width:1px;height:22px;background:var(--border-soft)"></span>
+          <span class="meta" id="retrainCount">0 corrections queued for retraining</span>
+        </div>
+
         <div id="qualityDeckTab">
           <div class="review-layout">
             <div>
@@ -381,7 +386,7 @@
                   <span class="deck-key" aria-hidden="true">→</span>
                 </button>
               </div>
-              <p class="deck-hint">Drag the card, tap the buttons, or press <kbd>←</kbd> to deny / <kbd>→</kbd> to approve · <span id="deckCount">6 remaining</span></p>
+              <p class="deck-hint">Drag the card, tap the buttons, or press <kbd>←</kbd> to deny / <kbd>→</kbd> to approve · <span id="deckCount">6 remaining</span> · <button class="btn btn-ghost btn-sm" id="undoBtn" type="button">Undo last</button></p>
             </div>
 
             <div class="stack" style="gap:var(--space-md)">
@@ -390,6 +395,36 @@
                 <div class="empty">Advance the deck to inspect an item.</div>
               </div>
               <p class="rat-foot" style="margin-top:0">A complaint is only a candidate for human review. No automatic legal or MDR determination is ever made.</p>
+            </div>
+          </div>
+        </div>
+
+        <div id="qualityAllTab" style="display:none">
+          <div class="review-layout">
+            <div class="glass panel" data-od-id="all-classifications">
+              <div class="panel-head">
+                <div><h3>All classifications</h3><p class="sub">Everything the model labelled — reclassify to correct it. Corrections feed the next training run.</p></div>
+                <span class="label label-neutral" id="allCount">0</span>
+              </div>
+              <div style="overflow-x:auto">
+                <table class="ds-table" id="allTable">
+                  <thead><tr><th>Record</th><th>Current</th><th>Evidence</th><th>Source</th><th>Conf.</th><th></th></tr></thead>
+                  <tbody id="allTableBody"></tbody>
+                </table>
+              </div>
+            </div>
+
+            <div class="stack" style="gap:var(--space-md)">
+              <div class="glass panel" id="reclassPanel" data-od-id="reclassify">
+                <div class="panel-head"><div><h3>Reclassify</h3><p class="sub">Move between Quality and Product, or approve.</p></div></div>
+                <div class="empty">Select a record on the left.</div>
+              </div>
+              <div class="glass panel" data-od-id="retrain-queue">
+                <div class="panel-head"><div><h3>Retraining queue</h3><p class="sub">Human corrections become training candidates.</p></div><span class="label label-accent" id="retrainBadge">0</span></div>
+                <div class="stack" id="retrainList" style="gap:6px"><p class="meta">No corrections yet.</p></div>
+                <button class="btn btn-primary btn-sm" id="retrainBtn" style="margin-top:12px">Request retraining</button>
+                <p class="meta" style="margin-top:6px">Runs server-side with a held-out eval gate — never in the browser. Requires an internal reviewer.</p>
+              </div>
             </div>
           </div>
         </div>
@@ -778,12 +813,12 @@
 
 
 <div class="toasts" id="toasts" aria-live="polite"></div>
-<script src="assets/data.js?v=20260927g"></script>
-<script src="assets/app.js?v=20260927g"></script>
-<script src="assets/tf.config.js?v=20260927g"></script>
-<script src="assets/backend.js?v=20260927g"></script>
-<script src="assets/classifier.js?v=20260927g"></script>
-<script src="assets/runtime-badges.js?v=20260927g"></script>
-<script src="assets/runtime.js?v=20260927g"></script>
+<script src="assets/data.js?v=20260927h"></script>
+<script src="assets/app.js?v=20260927h"></script>
+<script src="assets/tf.config.js?v=20260927h"></script>
+<script src="assets/backend.js?v=20260927h"></script>
+<script src="assets/classifier.js?v=20260927h"></script>
+<script src="assets/runtime-badges.js?v=20260927h"></script>
+<script src="assets/runtime.js?v=20260927h"></script>
 </body>
 </html>

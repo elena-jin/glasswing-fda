@@ -293,7 +293,7 @@ function renderDecisionLog() {
   if (!decisions.length) { host.innerHTML = '<div class="empty" style="padding:24px 0">No decisions yet this session.</div>'; return; }
   host.innerHTML = decisions.map(d => '<div class="decision-row"><span class="src-badge" style="width:26px;height:26px;border-radius:8px;color:' + (d.action === 'approve' ? 'var(--success)' : d.action === 'deny' ? 'var(--danger)' : 'var(--fg-2)') + '">' +
     (d.action === 'approve' ? '<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L19 7"/></svg>' : d.action === 'deny' ? '<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6l12 12M18 6 6 18"/></svg>' : '<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/></svg>') + '</span>' +
-    '<span class="grow"><b class="mono">' + d.id + '</b> ' + (d.action === 'approve' ? 'approved → QMS' : d.action === 'deny' ? 'denied → product' : 'marked for follow-up') + '<br><span class="meta">' + d.title + '</span></span><span class="meta">' + d.when + '</span></div>').join('');
+    '<span class="grow"><b class="mono">' + d.id + '</b> ' + (d.action === 'approve' ? 'approved → QMS' : d.action === 'deny' ? 'denied → product' : 'marked for follow-up') + '<br><span class="meta">' + d.title + '</span></span><button class="btn btn-ghost btn-sm" data-undo="' + d.id + '">Undo</button><span class="meta">' + d.when + '</span></div>').join('');
 }
 function renderQms() {
   const approved = decisions.filter(d => d.action === 'approve');
@@ -363,6 +363,100 @@ function renderQualityTable() {
     '<td><button type="button" class="src-link" data-source="' + r.sourceId + '">' + r.source + '</button></td>' +
     '<td>' + (r.mdr ? '<span class="label label-danger">flagged</span>' : '—') + '</td>' +
     '<td>' + (r.reviewer || '—') + '</td><td class="mono">' + r.when + '</td></tr>').join('');
+}
+
+/* ================= quality: undo + all classifications + retraining ================= */
+function undoDecision(id) {
+  let idx = -1;
+  for (let k = 0; k < decisions.length; k++) { if (decisions[k].id === id) { idx = k; break; } }
+  if (idx < 0) { toast('Nothing to undo for ' + id, 'info'); return; }
+  const [d] = decisions.splice(idx, 1);
+  const it = QUALITY.find(q => q.id === d.id);
+  if (it && !queue.some(q => q.id === it.id)) queue.unshift(it);
+  persist(); renderDeck(); renderDecisionLog(); renderQms();
+  toast('Undid ' + d.id + ' — back in the review queue', 'info');
+}
+function undoLastDecision() { if (!decisions.length) { toast('No decisions to undo', 'info'); return; } undoDecision(decisions[0].id); }
+
+let classified = null, selectedClassified = null, retrainQueue = store.get('retrain', []);
+function sortClassified() { return classified.slice().sort((a, b) => (a.label === b.label) ? b.confidence - a.confidence : (a.label === 'complaint' ? -1 : 1)); }
+function buildClassified() {
+  if (classified) return classified;
+  const comp = QUALITY.map(q => ({ id: q.id, label: 'complaint', mdr: !!q.mdr, source: q.source, sourceId: q.sourceId, text: q.quote, confidence: q.confidence, theme: q.theme }));
+  const fb = IDEAS.map(i => ({ id: i.jira, label: 'product_feedback', mdr: false, source: (i.sources[0] ? i.sources[0][1] : 'Feedback'), sourceId: (i.sources[0] ? i.sources[0][0] : ''), text: i.quote, confidence: 0.82, theme: i.title }));
+  classified = comp.concat(fb);
+  return classified;
+}
+function renderAllClassifications() {
+  const host = $('#allTableBody'); if (!host) return;
+  buildClassified();
+  host.innerHTML = sortClassified().map(r =>
+    '<tr data-rec="' + r.id + '"><td class="mono">' + r.id + '</td>' +
+    '<td><span class="label ' + (r.label === 'complaint' ? 'label-danger' : 'label-accent') + '">' + r.label + '</span></td>' +
+    '<td class="cell-evidence"><span class="cell-quote">' + r.text + '</span></td>' +
+    '<td>' + r.source + '</td><td class="mono">' + Number(r.confidence).toFixed(2) + '</td>' +
+    '<td><button class="btn btn-ghost btn-sm" data-rec-open="' + r.id + '">Open</button></td></tr>').join('');
+  const c = $('#allCount'); if (c) c.textContent = classified.length + ' records';
+  renderRetrainQueue();
+}
+function renderReclass(id) {
+  const r = buildClassified().find(x => x.id === id); if (!r) return;
+  selectedClassified = id;
+  const host = $('#reclassPanel'); if (!host) return;
+  host.innerHTML =
+    '<div class="panel-head"><div><h3 class="mono">' + r.id + '</h3><p class="sub">' + r.source + '</p></div><span class="label ' + (r.label === 'complaint' ? 'label-danger' : 'label-accent') + '">' + r.label + '</span></div>' +
+    '<p style="font-size:12.5px;margin:8px 0">' + r.text + '</p>' +
+    '<p class="meta">theme ' + r.theme + ' · confidence ' + Number(r.confidence).toFixed(2) + (r.mdr ? ' · potential MDR' : '') + '</p>' +
+    '<div class="row wrap" style="gap:8px;margin-top:10px">' +
+    (r.label === 'complaint'
+      ? '<button class="btn btn-secondary btn-sm" data-move="product_feedback">Move to product feedback</button>'
+      : '<button class="btn btn-secondary btn-sm" data-move="complaint">Move to Quality (complaint)</button>') +
+    '<button class="btn btn-primary btn-sm" data-rec-approve="' + r.id + '">Approve current label</button>' +
+    (r._prev ? '<button class="btn btn-ghost btn-sm" data-rec-undo="' + r.id + '">Undo change</button>' : '') +
+    '</div>' +
+    '<p class="meta" style="margin-top:10px">A label change is a training correction, not a legal complaint/MDR determination.</p>';
+}
+function addRetrain(entry) { retrainQueue.unshift(entry); if (retrainQueue.length > 50) retrainQueue.pop(); store.set('retrain', retrainQueue); }
+function renderRetrainQueue() {
+  const badge = $('#retrainBadge'); if (badge) badge.textContent = retrainQueue.length;
+  const count = $('#retrainCount'); if (count) count.textContent = retrainQueue.length + ' correction' + (retrainQueue.length === 1 ? '' : 's') + ' queued for retraining';
+  const host = $('#retrainList'); if (!host) return;
+  host.innerHTML = retrainQueue.length
+    ? retrainQueue.slice(0, 8).map(e => '<p class="meta"><b class="mono">' + e.id + '</b> ' + e.from + ' → ' + e.to + '</p>').join('')
+    : '<p class="meta">No corrections yet.</p>';
+}
+function moveLabel(id, to) {
+  const r = buildClassified().find(x => x.id === id); if (!r || r.label === to) return;
+  const from = r.label; r._prev = from; r.label = to;
+  addRetrain({ id: id, from: from, to: to, at: new Date().toISOString() });
+  renderAllClassifications(); renderReclass(id);
+  toast(id + ' → ' + to + ' · added to retraining queue', 'success');
+}
+function undoClassChange(id) {
+  const r = buildClassified().find(x => x.id === id); if (!r || !r._prev) return;
+  r.label = r._prev; delete r._prev;
+  for (let k = 0; k < retrainQueue.length; k++) { if (retrainQueue[k].id === id) { retrainQueue.splice(k, 1); break; } }
+  store.set('retrain', retrainQueue);
+  renderAllClassifications(); renderReclass(id);
+  toast('Change undone for ' + id, 'info');
+}
+function showQualityTab(tab) {
+  const deck = $('#qualityDeckTab'), all = $('#qualityAllTab');
+  if (deck) deck.style.display = tab === 'all' ? 'none' : '';
+  if (all) all.style.display = tab === 'all' ? 'block' : 'none';
+  if (tab === 'all') renderAllClassifications();
+}
+function requestRetraining() {
+  const base = (window.TF_CONFIG && window.TF_CONFIG.apiBase) || '';
+  if (!retrainQueue.length) { toast('No corrections to train on yet', 'info'); return; }
+  fetch(base + '/api/classifier/retrain', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ dataset_version: 'synthetic-v1.1', reason: 'human reclassification', corrections: retrainQueue.length }) })
+    .then(res => res.json().then(b => ({ s: res.status, b })))
+    .then(({ s, b }) => {
+      if (b && b.ok) toast('Retraining request queued (server-side).', 'success');
+      else if (s === 401) toast('Retraining requires an authenticated internal reviewer.', 'info');
+      else toast('Retraining request failed: ' + ((b && b.error) || s), 'danger');
+    })
+    .catch(() => toast('Retraining endpoint unavailable.', 'info'));
 }
 
 /* ================= team / pods ================= */
@@ -633,6 +727,18 @@ function init() {
   $('#resetDeckBtn').addEventListener('click', () => { queue = QUALITY.slice(); decisions = []; persist(); renderDeck(); renderDecisionLog(); renderQms(); toast('Deck reset', 'info'); });
   $('#pushQmsBtn').addEventListener('click', () => { const n = decisions.filter(d => d.action === 'approve').length; toast('Exported ' + n + ' packet' + (n === 1 ? '' : 's') + ' to Veeva Vault Quality (sandbox mock)', 'success'); decisions = decisions.filter(d => d.action !== 'approve'); persist(); renderDecisionLog(); renderQms(); });
   $('#exportCsvBtn').addEventListener('click', () => toast('CSV export queued — audit-safe snapshot', 'success'));
+
+  const undoBtn = $('#undoBtn'); if (undoBtn) undoBtn.addEventListener('click', undoLastDecision);
+  const dl = $('#decisionLog'); if (dl) dl.addEventListener('click', e => { const b = e.target.closest('[data-undo]'); if (b) undoDecision(b.dataset.undo); });
+  const qseg = $('#qualitySeg'); if (qseg) qseg.addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; $$('#qualitySeg button').forEach(x => x.classList.remove('on')); b.classList.add('on'); showQualityTab(b.dataset.qtab); });
+  const allBody = $('#allTableBody'); if (allBody) allBody.addEventListener('click', e => { const b = e.target.closest('[data-rec-open]'); const tr = e.target.closest('[data-rec]'); const id = b ? b.dataset.recOpen : (tr ? tr.dataset.rec : null); if (id) renderReclass(id); });
+  const recPanel = $('#reclassPanel'); if (recPanel) recPanel.addEventListener('click', e => {
+    const m = e.target.closest('[data-move]'); if (m) { moveLabel(selectedClassified, m.dataset.move); return; }
+    const a = e.target.closest('[data-rec-approve]'); if (a) { toast(a.dataset.recApprove + ' approved — current label kept, decision logged.', 'success'); return; }
+    const u = e.target.closest('[data-rec-undo]'); if (u) undoClassChange(u.dataset.recUndo);
+  });
+  const retrainBtn = $('#retrainBtn'); if (retrainBtn) retrainBtn.addEventListener('click', requestRetraining);
+  renderRetrainQueue();
 
   document.addEventListener('keydown', e => {
     if (e.key !== 'ArrowRight' && e.key !== 'ArrowLeft' && e.key !== 'ArrowDown') return;
