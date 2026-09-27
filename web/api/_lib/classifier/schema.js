@@ -8,8 +8,8 @@
  * If TF_ADMIN_TOKEN is unset the endpoint behaves as if it does not exist
  * (fail closed), so it is safe to ship.
  */
-const { send, method } = require('../_lib/http');
-const sb = require('../_lib/supabase');
+const { send, method } = require('../http');
+const sb = require('../supabase');
 
 module.exports = async (req, res) => {
   if (!method(req, res, ['GET'])) return;

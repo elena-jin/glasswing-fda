@@ -10,10 +10,10 @@
  * Blocker: the worker itself is out of scope for this PR (see
  * docs/classifier-panel.md). Until it exists, requests stay in "requested".
  */
-const { send, method, readJson } = require('../_lib/http');
-const { safeInsert } = require('../_lib/db');
-const sb = require('../_lib/supabase');
-const parts = require('../_lib/partitions');
+const { send, method, readJson } = require('../http');
+const { safeInsert } = require('../db');
+const sb = require('../supabase');
+const parts = require('../partitions');
 
 /* Default training partitions: synthetic train only. Locked eval is never
  * eligible, even if a caller asks for it. */

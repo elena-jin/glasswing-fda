@@ -2,11 +2,12 @@ const test = require('node:test');
 const assert = require('node:assert');
 const { install, invoke } = require('./helpers');
 
-const records = require('../api/classifier/records');
-const review = require('../api/classifier/review');
-const candidates = require('../api/classifier/candidates');
-const retrain = require('../api/classifier/retrain');
-const summary = require('../api/classifier/summary');
+const records = require('../api/_lib/classifier/records');
+const review = require('../api/_lib/classifier/review');
+const candidates = require('../api/_lib/classifier/candidates');
+const retrain = require('../api/_lib/classifier/retrain');
+const summary = require('../api/_lib/classifier/summary');
+const router = require('../api/classifier');
 
 function baseDb(extra) {
   return install({
@@ -131,6 +132,20 @@ test('retrain: blocks locked eval from training and records the gate', async () 
   assert.deepStrictEqual(res.body.gate.train, ['synthetic']);
   assert.strictEqual(db.tables.tf_model_runs[0].metrics.gate.exclude_locked_eval, true);
   assert.strictEqual(db.tables.tf_model_runs[0].status, 'requested');
+});
+
+test('router: unknown resource returns 404 without touching the DB', async () => {
+  baseDb();
+  const res = await invoke(router, { method: 'GET', url: '/api/classifier?resource=bogus' });
+  assert.strictEqual(res.statusCode, 404);
+  assert.strictEqual(res.body.error, 'unknown_classifier_resource');
+});
+
+test('router: dispatches to a resource by query param', async () => {
+  baseDb();
+  const res = await invoke(router, { method: 'GET', url: '/api/classifier?resource=records&limit=5' });
+  assert.strictEqual(res.statusCode, 200);
+  assert.strictEqual(res.body.audience, 'public');
 });
 
 test('summary: a run without predictions is an honest empty state', async () => {

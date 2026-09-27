@@ -5,10 +5,10 @@
  * threshold, route) and the human review history + training-candidate status.
  * Still subject to the server-side partition gate.
  */
-const { send, method, query } = require('../_lib/http');
-const { safeSelect } = require('../_lib/db');
-const sb = require('../_lib/supabase');
-const parts = require('../_lib/partitions');
+const { send, method, query } = require('../http');
+const { safeSelect } = require('../db');
+const sb = require('../supabase');
+const parts = require('../partitions');
 
 module.exports = async (req, res) => {
   if (!method(req, res, ['GET'])) return;

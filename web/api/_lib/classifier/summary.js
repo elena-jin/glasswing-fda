@@ -8,11 +8,11 @@
  * MAUDE-positive partitions are recall-only (no specificity) and are marked so.
  * Partition visibility is enforced server-side via _lib/partitions.
  */
-const { send, method } = require('../_lib/http');
-const { safeSelect, referenceByRecord, latestPredictionByRecord } = require('../_lib/db');
-const sb = require('../_lib/supabase');
-const parts = require('../_lib/partitions');
-const metrics = require('../_lib/metrics');
+const { send, method } = require('../http');
+const { safeSelect, referenceByRecord, latestPredictionByRecord } = require('../db');
+const sb = require('../supabase');
+const parts = require('../partitions');
+const metrics = require('../metrics');
 
 const MAX_RUNS = 10;
 const MAX_ROWS = 2000;

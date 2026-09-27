@@ -9,10 +9,10 @@
  * The filter is applied server-side (never trusted from the client). Asking for
  * a non-visible partition returns 403, not an empty list that hides the gate.
  */
-const { send, method, query } = require('../_lib/http');
-const { safeSelect, referenceByRecord, latestPredictionByRecord } = require('../_lib/db');
-const sb = require('../_lib/supabase');
-const parts = require('../_lib/partitions');
+const { send, method, query } = require('../http');
+const { safeSelect, referenceByRecord, latestPredictionByRecord } = require('../db');
+const sb = require('../supabase');
+const parts = require('../partitions');
 
 const MAX_LIMIT = 100;
 
@@ -62,7 +62,7 @@ module.exports = async (req, res) => {
     ]);
   }
 
-  let data = require('../_lib/db').assemble(recs.data, labels.data, preds.data);
+  let data = require('../db').assemble(recs.data, labels.data, preds.data);
   const label = q.get('label');
   if (label) data = data.filter((r) => (r.reference && r.reference.label) === label);
 

@@ -5,10 +5,10 @@
  * record on a locked eval partition or a non-train split — the hard block that
  * keeps held-out data out of training. Every action writes an audit event.
  */
-const { send, method, readJson, query } = require('../_lib/http');
-const { safeSelect, safeInsert, safeUpdate } = require('../_lib/db');
-const sb = require('../_lib/supabase');
-const parts = require('../_lib/partitions');
+const { send, method, readJson, query } = require('../http');
+const { safeSelect, safeInsert, safeUpdate } = require('../db');
+const sb = require('../supabase');
+const parts = require('../partitions');
 
 const ACTIONS = ['approve', 'revoke'];
 

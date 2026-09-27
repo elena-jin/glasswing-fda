@@ -1,6 +1,9 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "cleanUrls": true,
+  "rewrites": [
+    { "source": "/api/classifier/:resource", "destination": "/api/classifier?resource=:resource" }
+  ],
   "headers": [
     {
       "source": "/assets/(.*)",

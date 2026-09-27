@@ -11,10 +11,10 @@
  *    public demo can only touch synthetic records.
  *  - Nothing here creates a QMS or Jira record, and nothing promotes a model.
  */
-const { send, method, readJson } = require('../_lib/http');
-const { safeSelect, safeInsert } = require('../_lib/db');
-const sb = require('../_lib/supabase');
-const parts = require('../_lib/partitions');
+const { send, method, readJson } = require('../http');
+const { safeSelect, safeInsert } = require('../db');
+const sb = require('../supabase');
+const parts = require('../partitions');
 
 const DECISIONS = ['agree', 'override'];
 
