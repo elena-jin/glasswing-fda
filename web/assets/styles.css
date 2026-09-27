@@ -266,6 +266,8 @@ h3 { font-size: var(--size-md); font-weight: 600; letter-spacing: -.01em; }
   transition: background .18s var(--ease), border-color .18s var(--ease);
 }
 .data-btn:hover { background: var(--sidebar-active); }
+.pulse-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--success); flex: none; }
+.pulse-dot.warn { background: var(--warning); }
 .data-btn .pulse-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--success); flex: none; }
 .data-btn .pulse-dot.warn { background: var(--warning); }
 .data-btn small { display: block; font-size: 10px; color: color-mix(in oklch, var(--sidebar-fg) 55%, transparent); font-family: var(--font-mono); }

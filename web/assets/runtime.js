@@ -43,7 +43,7 @@
 
   /* ---------- sidebar ---------- */
   function renderSidebar() {
-    var btn = $('#dataBtn');
+    var navItem = document.querySelector('.nav-item[data-view="data"]');
     var dot = $('#dataDot');
     var el = $('#dataSyncLabel');
     var h = state.health;
@@ -55,7 +55,7 @@
     } else text = 'Supabase not connected · synthetic scenario';
 
     if (el) el.textContent = text;
-    if (btn) { btn.title = 'Data status — ' + text; btn.setAttribute('aria-label', 'Data status — ' + text); }
+    if (navItem) { navItem.title = 'Data status — ' + text; navItem.setAttribute('aria-label', 'Data status — ' + text); }
     if (dot) dot.className = 'pulse-dot' + (h && h.ok === false ? ' warn' : '');
   }
 
