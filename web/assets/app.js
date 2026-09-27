@@ -520,7 +520,8 @@ function init() {
   $('#sourceIdeas').addEventListener('click', e => { const b = e.target.closest('[data-source-idea]'); if (b) { closeSource(); showIdea(b.dataset.sourceIdea); } });
   document.addEventListener('click', e => { const t = e.target.closest('[data-source]'); if (t && t.dataset.source) { e.preventDefault(); openSource(t.dataset.source); } });
   document.addEventListener('keydown', e => { if (e.key !== 'Enter' && e.key !== ' ') return; const t = e.target.closest && e.target.closest('[data-source]'); if (t && t.dataset.source && t.getAttribute('role') === 'button') { e.preventDefault(); openSource(t.dataset.source); } });
-  $('#assistantBtn').addEventListener('click', () => go('assistant'));
+  const assistantBtn = $('#assistantBtn');
+  if (assistantBtn) assistantBtn.addEventListener('click', () => go('assistant'));
 
   $('#ideaGrid').addEventListener('click', e => { const c = e.target.closest('[data-idea]'); if (c) showIdea(c.dataset.idea); });
   const podGrid = $('#podGrid');
