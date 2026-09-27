@@ -605,18 +605,22 @@ function init() {
   $('#roadmapLanes').addEventListener('click', openJira);
   $('#demandCommit').addEventListener('click', openJira);
   $('#ideasSeg').addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; $$('#ideasSeg button').forEach(x => x.classList.remove('on')); b.classList.add('on'); ideaSort = b.dataset.sort; renderIdeas(); });
-  $('#ideasDate').addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; $$('#ideasDate button').forEach(x => x.classList.remove('on')); b.classList.add('on'); ideaAge = parseInt(b.dataset.age, 10) || 0; ideaFrom = ''; ideaTo = ''; const a = $('#ideaFrom'), c = $('#ideaTo'); if (a) a.value = ''; if (c) c.value = ''; renderIdeas(); });
-  const iStatus = $('#ideasStatus');
-  if (iStatus) iStatus.addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; $$('#ideasStatus button').forEach(x => x.classList.remove('on')); b.classList.add('on'); ideaStatus = b.dataset.status || 'all'; renderIdeas(); });
-  const iKind = $('#ideasKind');
-  if (iKind) iKind.addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; $$('#ideasKind button').forEach(x => x.classList.remove('on')); b.classList.add('on'); ideaKind = b.dataset.kind || 'all'; renderIdeas(); });
-  function useCustomDates() {
-    ideaAge = 0; const any = $('#ideasDate button[data-age="0"]'); if (any) { $$('#ideasDate button').forEach(x => x.classList.remove('on')); any.classList.add('on'); }
-    const a = $('#ideaFrom'), c = $('#ideaTo'); ideaFrom = a ? a.value : ''; ideaTo = c ? c.value : ''; renderIdeas();
-  }
-  const iFrom = $('#ideaFrom'); if (iFrom) iFrom.addEventListener('change', useCustomDates);
-  const iTo = $('#ideaTo'); if (iTo) iTo.addEventListener('change', useCustomDates);
-  const iClear = $('#ideaClearDates'); if (iClear) iClear.addEventListener('click', () => { const a = $('#ideaFrom'), c = $('#ideaTo'); if (a) a.value = ''; if (c) c.value = ''; ideaFrom = ''; ideaTo = ''; renderIdeas(); });
+  const iRange = $('#ideaRange');
+  function showCustomDates(on) { const c = $('#ideaCustomDates'); if (c) c.style.display = on ? 'flex' : 'none'; }
+  if (iRange) iRange.addEventListener('change', () => {
+    if (iRange.value === 'custom') {
+      showCustomDates(true); ideaAge = 0;
+      const a = $('#ideaFrom'), c = $('#ideaTo'); ideaFrom = a ? a.value : ''; ideaTo = c ? c.value : '';
+    } else {
+      showCustomDates(false); ideaAge = parseInt(iRange.value, 10) || 0; ideaFrom = ''; ideaTo = '';
+      const a = $('#ideaFrom'), c = $('#ideaTo'); if (a) a.value = ''; if (c) c.value = '';
+    }
+    renderIdeas();
+  });
+  const iFrom = $('#ideaFrom'); if (iFrom) iFrom.addEventListener('change', () => { ideaFrom = iFrom.value; ideaAge = 0; renderIdeas(); });
+  const iTo = $('#ideaTo'); if (iTo) iTo.addEventListener('change', () => { ideaTo = iTo.value; ideaAge = 0; renderIdeas(); });
+  const iStatus = $('#ideasStatus'); if (iStatus) iStatus.addEventListener('change', () => { ideaStatus = iStatus.value || 'all'; renderIdeas(); });
+  const iKind = $('#ideasKind'); if (iKind) iKind.addEventListener('change', () => { ideaKind = iKind.value || 'all'; renderIdeas(); });
   const ar = $('#analyticsRange');
   if (ar) ar.addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; $$('#analyticsRange button').forEach(x => x.classList.remove('on')); b.classList.add('on'); analyticsDays = parseInt(b.dataset.days, 10) || 7; renderAnalytics(); });
   const pdf = $('#analyticsPdf');
