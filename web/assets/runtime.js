@@ -1,4 +1,4 @@
-/* Test Flight — runtime status renderer.
+/* Test Flight  -  runtime status renderer.
  *
  * At load (and on every app re-render) this fetches real evidence and replaces
  * the hardcoded source-status surfaces:
@@ -18,7 +18,7 @@
 
   function $(s, r) { return (r || document).querySelector(s); }
   function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
-  function clock(ts) { try { return ts ? new Date(ts).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : '—'; } catch (e) { return '—'; } }
+  function clock(ts) { try { return ts ? new Date(ts).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : ' - '; } catch (e) { return ' - '; } }
   function chip(tone, text) { return '<span class="label ' + (B.toneClass ? B.toneClass(tone) : 'label-neutral') + '" style="font-size:10px"><span class="dot"></span>' + esc(text) + '</span>'; }
 
   function api(path, opts) {
@@ -50,12 +50,12 @@
     var text;
     if (h && h.ok === false) text = 'Supabase connection error · ' + clock(h.checked_at);
     else if (h && h.configured) {
-      var n = h.counts && h.counts.public_visible != null ? h.counts.public_visible : '—';
+      var n = h.counts && h.counts.public_visible != null ? h.counts.public_visible : ' - ';
       text = 'Supabase live · checked ' + clock(h.checked_at) + ' · ' + n + ' public rows';
     } else text = 'Supabase not connected · synthetic scenario';
 
     if (el) el.textContent = text;
-    if (navItem) { navItem.title = 'Data status — ' + text; navItem.setAttribute('aria-label', 'Data status — ' + text); }
+    if (navItem) { navItem.title = 'Data status  -  ' + text; navItem.setAttribute('aria-label', 'Data status  -  ' + text); }
     if (dot) dot.className = 'pulse-dot' + (h && h.ok === false ? ' warn' : '');
   }
 
@@ -89,7 +89,7 @@
       var tone = s.state === 'tested_live' ? 'label-success' : s.state === 'configured_untested' ? 'label-warning' : 'label-neutral';
       return '<div class="row-between" style="padding:10px 0;border-bottom:1px solid var(--border-soft)">' +
         '<div><div style="font-size:13px;font-weight:500">' + esc(s.name) + '</div>' +
-        '<div class="meta">' + esc(s.kind || '') + ' · ' + esc(s.synthetic_records || '—') + ' synthetic records</div></div>' +
+        '<div class="meta">' + esc(s.kind || '') + ' · ' + esc(s.synthetic_records || ' - ') + ' synthetic records</div></div>' +
         '<span class="label ' + tone + '" style="font-size:10px"><span class="dot"></span>' + esc(s.label) + (s.tested_at ? ' · ' + esc(clock(s.tested_at)) : '') + '</span></div>';
     }).join('') + '<p class="meta" style="margin-top:8px"><span class="label label-neutral" style="font-size:10px">synthetic scenario</span></p>';
   }
@@ -105,7 +105,7 @@
       return '<div class="glass int-card">' +
         '<div class="ic-top"><span class="logo-tile">' + logo + '</span><div><div class="ic-name">' + esc(s.name) + '</div>' +
         '<span class="label ' + tone + '" style="font-size:10px"><span class="dot"></span>' + esc(s.label) + (s.tested_at ? ' · ' + esc(clock(s.tested_at)) : '') + '</span></div></div>' +
-        '<p class="ic-desc">' + esc(s.kind || 'source') + ' · <span class="label label-neutral" style="font-size:9.5px">synthetic scenario</span> ' + esc(s.synthetic_records || '—') + ' records' +
+        '<p class="ic-desc">' + esc(s.kind || 'source') + ' · <span class="label label-neutral" style="font-size:9.5px">synthetic scenario</span> ' + esc(s.synthetic_records || ' - ') + ' records' +
         (s.requires && s.requires.length ? '<br><span class="meta">needs: ' + esc(s.requires.join(', ')) + '</span>' : '') + '</p>' +
         '<div class="ic-foot"><button type="button" class="src-link" data-test-connector="' + esc(s.id) + '">Test read (internal)</button>' +
         '<span class="meta" style="font-size:10px">credential values never returned</span></div></div>';
@@ -142,10 +142,10 @@
       var h = state.health || {};
       var counts = h.counts;
       var rows = [];
-      rows.push(row('Supabase connection', h.checked_at ? 'checked ' + clock(h.checked_at) : '—', sb.label, h.connection === 'live'));
+      rows.push(row('Supabase connection', h.checked_at ? 'checked ' + clock(h.checked_at) : ' - ', sb.label, h.connection === 'live'));
       if (counts) rows.push(row('Rows by partition', 'total ' + counts.total + ' · public-visible ' + counts.public_visible, Object.keys(counts.by_partition).map(function (k) { return k + ' ' + counts.by_partition[k]; }).join(' · '), true));
       rows.push(row('Classifier model', mb.label, 'no runs recorded' , false));
-      var creds = state.connectors ? 'tested live ' + (state.connectors.tested_live || []).length + ' · configured ' + (state.connectors.configured_untested || []).length + ' · total ' + state.connectors.sources.length : '—';
+      var creds = state.connectors ? 'tested live ' + (state.connectors.tested_live || []).length + ' · configured ' + (state.connectors.configured_untested || []).length + ' · total ' + state.connectors.sources.length : ' - ';
       rows.push(row('Feedback sources', creds, 'synthetic demo unless tested', false));
       stages.innerHTML = rows.join('');
     }
@@ -155,14 +155,14 @@
       list.innerHTML = state.connectors.sources.map(function (s) {
         var tone = s.state === 'tested_live' ? 'label-success' : s.state === 'configured_untested' ? 'label-warning' : 'label-neutral';
         return '<div class="row-between" style="padding:9px 11px;border:1px solid var(--border-soft);border-radius:10px;background:var(--glass-hi)">' +
-          '<div><div style="font-size:12.5px;font-weight:500">' + esc(s.name) + '</div><div class="meta">' + esc(s.kind || '') + ' · needs: ' + esc((s.requires || []).join(', ') || '—') + '</div></div>' +
+          '<div><div style="font-size:12.5px;font-weight:500">' + esc(s.name) + '</div><div class="meta">' + esc(s.kind || '') + ' · needs: ' + esc((s.requires || []).join(', ') || ' - ') + '</div></div>' +
           '<span class="label ' + tone + '" style="font-size:10px"><span class="dot"></span>' + esc(s.label) + '</span></div>';
       }).join('');
     }
 
     var next = $('#nextList');
     if (next && state.connectors && state.connectors.next) {
-      next.innerHTML = state.connectors.next.map(function (n) { return '<span class="label label-neutral" style="font-size:10px">' + esc(n.name) + ' — ' + esc(n.reason) + '</span>'; }).join(' ') || '<span class="meta">—</span>';
+      next.innerHTML = state.connectors.next.map(function (n) { return '<span class="label label-neutral" style="font-size:10px">' + esc(n.name) + '  -  ' + esc(n.reason) + '</span>'; }).join(' ') || '<span class="meta"> - </span>';
     }
   }
 

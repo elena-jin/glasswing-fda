@@ -17,7 +17,7 @@ import re
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 
-QA = "\u2014"  # em dash
+QA = " - "  # em dash
 
 # Canonical, plausible deep links back to where each piece of evidence lives.
 # Points at the fictional Aeris Health tenant so a demo click always resolves to
@@ -147,7 +147,7 @@ IDEAS = [
         "ageDays": 3,
         "sent": "negative",
         "sources": [["gmail", "Email + Gmail"], ["appstore", "App store reviews"], ["zendesk", "Zendesk"]],
-        "quote": "\u201cfalse low-pressure alerts most nights \u2014 I wake up panicked and can\u2019t tell if it is real.\u201d",
+        "quote": "\u201cfalse low-pressure alerts most nights  -  I wake up panicked and can\u2019t tell if it is real.\u201d",
         "jira": "SAFE-1108",
         "jiraTitle": "Reduce false low-pressure alert rate in sleep window",
         "jiraStatus": "In Progress",
@@ -164,7 +164,7 @@ IDEAS = [
         "owner": {"name": "Dr. L. Park", "verified": True, "role": "Clinical algorithms"},
         "crm": "Cross-account \u00b7 no single account concentration",
         "crmVerified": False,
-        "why": "Reports span 11 days and three sources but converge on one threshold band (00:00\u201305:00). Clinical risk without a known harm event, so it is flagged to quality as well as product.",
+        "why": "Reports span 11 days and three sources but converge on one threshold band (00:00-05:00). Clinical risk without a known harm event, so it is flagged to quality as well as product.",
         "evidence": [
             {"text": "\u201cfalse low-pressure alerts most nights [excerpt]\u201d", "src": "Email msg-5043", "when": "Mar 23", "prov": "synthetic"},
             {"text": "\u201cAlarm fired at 2am and there was nothing wrong on the repeat reading.\u201d", "src": "App store \u00b7 iOS", "when": "Mar 19", "prov": "synthetic"},
@@ -295,7 +295,7 @@ IDEAS = [
         "crmVerified": False,
         "why": "One feature request repeated across households. Any change is constrained by the alarm floor, so it is co-owned with Algorithms & Safety.",
         "evidence": [
-            {"text": "\u201cTwo profiles, two people, one alarm volume \u2014 please fix.\u201d", "src": "Zendesk #47701", "when": "Mar 13", "prov": "synthetic"},
+            {"text": "\u201cTwo profiles, two people, one alarm volume  -  please fix.\u201d", "src": "Zendesk #47701", "when": "Mar 13", "prov": "synthetic"},
             {"text": "\u201cAlarm customization is the top request in the beta thread.\u201d", "src": "Slack #beta-feedback", "when": "Mar 14", "prov": "synthetic"},
         ],
     },
@@ -372,7 +372,7 @@ IDEAS = [
         "ageDays": 14,
         "sent": "neutral",
         "sources": [["appstore", "App store reviews"], ["gmail", "Email + Gmail"]],
-        "quote": "\u201cMy parents only read Spanish \u2014 the whole setup screen is English.\u201d",
+        "quote": "\u201cMy parents only read Spanish  -  the whole setup screen is English.\u201d",
         "jira": "PLAT-2087",
         "jiraTitle": "Localize companion app (es, pt-BR)",
         "jiraStatus": "Backlog",
@@ -423,7 +423,7 @@ IDEAS = [
         "crmVerified": False,
         "why": "Notification fatigue, not an alarm complaint. Grouped separately from the alert-precision work so it cannot be read as a safety signal.",
         "evidence": [
-            {"text": "\u201cNotifications for everything \u2014 just send a weekly summary.\u201d", "src": "Zendesk #47620", "when": "Mar 12", "prov": "synthetic"},
+            {"text": "\u201cNotifications for everything  -  just send a weekly summary.\u201d", "src": "Zendesk #47620", "when": "Mar 12", "prov": "synthetic"},
             {"text": "\u201cLet me turn off daily pushes but keep the report.\u201d", "src": "App store \u00b7 iOS", "when": "Mar 13", "prov": "synthetic"},
         ],
     },
@@ -493,7 +493,7 @@ QUALITY = [
         "quote": "The device reported an apnea event during the night and the alarm never sounded. We only found out at the clinic.",
         "source": "Email \u00b7 Gmail", "sourceId": "gmail", "product": "Aeris Air CPAP", "version": "n/a",
         "theme": "false-negative", "confidence": 0.71, "mdr": True, "flags": ["patient_harm_reported"],
-        "reason": "Explicit statement that a missed alarm coincided with a clinical event. This is the clearest MDR candidate in the queue: a reported harm event combined with a device malfunction. Routed to quality with high review priority \u2014 no automatic legal determination is made.",
+        "reason": "Explicit statement that a missed alarm coincided with a clinical event. This is the clearest MDR candidate in the queue: a reported harm event combined with a device malfunction. Routed to quality with high review priority  -  no automatic legal determination is made.",
         "fta": "FTA-2026-0419", "ftaNote": "Fault-tree node: alarm suppression \u2192 missed event.",
         "related": 2, "ageDays": 0.05, "when": "1h ago",
     },
@@ -517,10 +517,10 @@ QUALITY = [
     },
     {
         "id": "CP-2196", "record": "salesforce-2196", "classification": "complaint",
-        "quote": "Field-safety notice mentioned humidifier lot 409-TX on the support call \u2014 is our clinic inventory affected?",
+        "quote": "Field-safety notice mentioned humidifier lot 409-TX on the support call  -  is our clinic inventory affected?",
         "source": "Salesforce", "sourceId": "salesforce", "product": "Aeris Air humidifier", "version": "lot 409-TX",
         "theme": "field-safety", "confidence": 0.66, "mdr": True, "flags": ["field_safety_correction"],
-        "reason": "Mentions a field-safety / recall context by lot number. The model routes it to quality with a potential MDR hint because field-corrective language is present; the actual determination belongs to the quality reviewer and legal.",
+        "reason": "Mentions a field-corrective notice. Routed to Quality with a potential MDR hint; a human decides.",
         "fta": "FTA-2026-0411", "ftaNote": "Fault-tree node: lot traceability \u2192 field action.",
         "related": 4, "ageDays": 0.2, "when": "4h ago",
     },
@@ -578,7 +578,7 @@ ROADMAP = {
         {"title": "False low-pressure alerts during sleep", "jira": "SAFE-1108", "pod": "Algorithms & Safety", "pct": 45},
         {"title": "Humidifier setting resets (fw 3.1.4)", "jira": "HW-3402", "pod": "Hardware & Masks", "pct": 60},
     ],
-    "Next \u00b7 W15\u201316": [
+    "Next \u00b7 W15-16": [
         {"title": "Clinician PDF export", "jira": "CLIN-770", "pod": "Clinical Workflows", "pct": 10},
         {"title": "Mask leak recalibration", "jira": "HW-3391", "pod": "Hardware & Masks", "pct": 30},
         {"title": "HealthKit write-back", "jira": "PLAT-2044", "pod": "Platform & Data", "pct": 5},
@@ -632,6 +632,38 @@ IDEA_KIND = {
 for _idea in IDEAS:
     _idea["kind"] = IDEA_KIND.get(_idea["id"], "feature")
 
+# Evidence / report link per complaint candidate (so the rationale can link out).
+def _quality_url(source_id, record):
+    digits = re.search(r"(\d+)", record or "")
+    did = digits.group(1) if digits else ""
+    if source_id == "appstore":
+        return APPSTORE_URL
+    if source_id == "zendesk":
+        return f"https://aerishealth.zendesk.com/agent/tickets/{did}" if did else "https://aerishealth.zendesk.com/agent/tickets"
+    if source_id == "gmail":
+        return f"https://mail.google.com/mail/u/0/#all/{did}" if did else "https://mail.google.com/mail/u/0/#all"
+    if source_id == "salesforce":
+        return f"https://aerishealth.lightning.force.com/lightning/r/Case/{did}/view" if did else "https://aerishealth.lightning.force.com"
+    if source_id == "zoom":
+        return "https://us06web.zoom.us/rec/share/aeris-air-clinic-onboarding"
+    if source_id == "intercom":
+        return "https://app.intercom.com/a/inbox/aeris-air/"
+    return None
+
+
+for _q in QUALITY:
+    _q["url"] = _quality_url(_q.get("sourceId"), _q.get("record"))
+
+# House style: no em dashes anywhere in the served data.
+def _strip_em(obj):
+    if isinstance(obj, str):
+        return obj.replace(" - ", " - ").replace("-", "-")
+    if isinstance(obj, list):
+        return [_strip_em(x) for x in obj]
+    if isinstance(obj, dict):
+        return {_strip_em(k): _strip_em(v) for k, v in obj.items()}
+    return obj
+
 DATA = {
     "sources": SOURCES,
     "sourceFeed": SOURCE_FEED,
@@ -650,8 +682,10 @@ DATA = {
     "company": {"name": "Aeris Health", "product": "Aeris Air CPAP", "app": "Aeris Air app", "synthetic": True},
 }
 
-DATA_JS = """/* Test Flight \u2014 synthetic dataset (schema v1.1, fictional company Aeris Health).
- * Generated by scripts/gen_dataset.py \u2014 do not edit by hand.
+DATA = _strip_em(DATA)
+
+DATA_JS = """/* Test Flight  -  synthetic dataset (schema v1.1, fictional company Aeris Health).
+ * Generated by scripts/gen_dataset.py  -  do not edit by hand.
  * Embedded so the console runs with zero backend. `TF_DATA.apply(next)` lets
  * assets/backend.js replace any slice with live API data at runtime. */
 (function () {

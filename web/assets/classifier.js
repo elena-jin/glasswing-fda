@@ -1,4 +1,4 @@
-/* Test Flight — classifier panel (Data status popup).
+/* Test Flight  -  classifier panel (Data status popup).
  *
  * Renders into the Classifier section of the Data status modal opened by
  * assets/app.js `renderData()` (which calls `window.renderClassifierPanel`).
@@ -20,9 +20,9 @@
       return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
     });
   }
-  function pct(v) { return v == null ? '—' : (v * 100).toFixed(1) + '%'; }
-  function num(v) { return v == null ? '—' : String(v); }
-  function when(ts) { return ts ? new Date(ts).toLocaleString() : '—'; }
+  function pct(v) { return v == null ? ' - ' : (v * 100).toFixed(1) + '%'; }
+  function num(v) { return v == null ? ' - ' : String(v); }
+  function when(ts) { return ts ? new Date(ts).toLocaleString() : ' - '; }
 
   function partitionBadge(p) {
     var cls = /maude/.test(p) ? 'label-danger' : /real/.test(p) ? 'label-warning' : 'label-success';
@@ -44,7 +44,7 @@
 
     if (run.empty) {
       return '<div class="card" style="background:var(--surface-warm)">' + head +
-        '<p class="meta" style="margin:8px 0 0">No metrics — ' + esc(run.reason || 'empty') + '. Metrics appear only for runs with predictions and labels.</p></div>';
+        '<p class="meta" style="margin:8px 0 0">No metrics  -  ' + esc(run.reason || 'empty') + '. Metrics appear only for runs with predictions and labels.</p></div>';
     }
 
     var cm = run.confusion || {};
@@ -102,12 +102,12 @@
     return '<button type="button" class="card" data-rec="' + esc(r.id) + '" style="text-align:left;background:var(--surface-warm);cursor:pointer">' +
       '<div class="row-between"><span class="mono" style="font-size:11px">' + esc(r.case_id || r.id.slice(0, 8)) + '</span>' +
       '<span class="row" style="gap:6px">' + partitionBadge(r.partition) +
-      '<span class="label label-outline" style="font-size:10px">' + esc(r.split || '—') + '</span></span></div>' +
+      '<span class="label label-outline" style="font-size:10px">' + esc(r.split || ' - ') + '</span></span></div>' +
       '<div style="font-size:12.5px;margin:6px 0">' + esc((r.text || '').slice(0, 160)) + '</div>' +
       '<div class="row wrap" style="gap:8px">' +
-      '<span class="meta">ref <b>' + esc(ref.label || '—') + '</b></span>' +
-      '<span class="meta">pred <b>' + esc(p.predicted_label || '—') + '</b>' + (p.confidence != null ? ' @ ' + Number(p.confidence).toFixed(2) : '') + '</span>' +
-      '<span class="meta">route <b>' + esc(p.route || '—') + '</b></span>' +
+      '<span class="meta">ref <b>' + esc(ref.label || ' - ') + '</b></span>' +
+      '<span class="meta">pred <b>' + esc(p.predicted_label || ' - ') + '</b>' + (p.confidence != null ? ' @ ' + Number(p.confidence).toFixed(2) : '') + '</span>' +
+      '<span class="meta">route <b>' + esc(p.route || ' - ') + '</b></span>' +
       '<span class="meta">human <b>' + esc(status) + '</b></span></div></button>';
   }
 
@@ -135,11 +135,11 @@
       '<div class="row-between"><b class="mono">' + esc(r.id) + '</b><span class="row" style="gap:6px">' + partitionBadge(r.partition) + '<span class="label ' + (r.synthetic ? 'label-success' : 'label-warning') + '" style="font-size:10px">' + (r.synthetic ? 'synthetic' : 'non-synthetic') + '</span></span></div>' +
       '<div style="font-size:12.5px;margin:8px 0">' + esc(r.text || '') + '</div>' +
       '<div class="row wrap" style="gap:8px;margin-bottom:8px">' +
-      '<span class="meta">source <b>' + esc(r.source_type || '—') + '</b></span>' +
-      '<span class="meta">product <b>' + esc(r.product || '—') + '</b></span>' +
-      '<span class="meta">ref <b>' + esc(ref.label || '—') + '</b></span>' +
-      '<span class="meta">pred <b>' + esc(p.predicted_label || '—') + '</b> @ ' + (p.confidence != null ? Number(p.confidence).toFixed(2) : '—') + '</span>' +
-      '<span class="meta">run <b class="mono">' + esc(String(p.run_id || '—')).slice(0, 8) + '</b></span></div>' +
+      '<span class="meta">source <b>' + esc(r.source_type || ' - ') + '</b></span>' +
+      '<span class="meta">product <b>' + esc(r.product || ' - ') + '</b></span>' +
+      '<span class="meta">ref <b>' + esc(ref.label || ' - ') + '</b></span>' +
+      '<span class="meta">pred <b>' + esc(p.predicted_label || ' - ') + '</b> @ ' + (p.confidence != null ? Number(p.confidence).toFixed(2) : ' - ') + '</span>' +
+      '<span class="meta">run <b class="mono">' + esc(String(p.run_id || ' - ')).slice(0, 8) + '</b></span></div>' +
       (canWrite
         ? '<div class="row" style="gap:6px;flex-wrap:wrap">' +
             '<select id="clfDecision" class="input" style="max-width:150px"><option value="agree">Agree with model</option><option value="override">Override</option></select>' +
@@ -153,7 +153,7 @@
       (cand.id && canWrite ? ' · candidate ' + esc(cand.candidate_status || 'pending') + ' <button class="btn btn-ghost btn-sm" data-cand="' + esc(cand.id) + '" data-cand-action="approve">Approve</button> <button class="btn btn-ghost btn-sm" data-cand="' + esc(cand.id) + '" data-cand-action="revoke">Revoke</button>' : '') +
       '</p></div>' +
       (d.reviews && d.reviews.length ? '<div class="stack" style="gap:4px">' + d.reviews.map(function (rv) {
-        return '<p class="meta">' + esc(when(rv.decision_at || rv.created_at)) + ' · ' + esc(rv.reviewer_id || '—') + ' · ' + esc(rv.final_label || '') + ' → ' + esc(rv.final_route || '') + (rv.override_reason ? ' · ' + esc(rv.override_reason) : '') + '</p>';
+        return '<p class="meta">' + esc(when(rv.decision_at || rv.created_at)) + ' · ' + esc(rv.reviewer_id || ' - ') + ' · ' + esc(rv.final_label || '') + ' → ' + esc(rv.final_route || '') + (rv.override_reason ? ' · ' + esc(rv.override_reason) : '') + '</p>';
       }).join('') + '</div>' : '');
   }
 

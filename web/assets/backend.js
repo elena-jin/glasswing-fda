@@ -1,4 +1,4 @@
-/* Test Flight — backend hydration adapter.
+/* Test Flight  -  backend hydration adapter.
  *
  * Loaded after assets/app.js. It does nothing at all unless
  * window.TF_CONFIG.live is true (see assets/tf.config.js).

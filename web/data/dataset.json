@@ -345,7 +345,7 @@
           "Zendesk"
         ]
       ],
-      "quote": "“false low-pressure alerts most nights — I wake up panicked and can’t tell if it is real.”",
+      "quote": "“false low-pressure alerts most nights  -  I wake up panicked and can’t tell if it is real.”",
       "jira": "SAFE-1108",
       "jiraTitle": "Reduce false low-pressure alert rate in sleep window",
       "jiraStatus": "In Progress",
@@ -366,7 +366,7 @@
       },
       "crm": "Cross-account · no single account concentration",
       "crmVerified": false,
-      "why": "Reports span 11 days and three sources but converge on one threshold band (00:00–05:00). Clinical risk without a known harm event, so it is flagged to quality as well as product.",
+      "why": "Reports span 11 days and three sources but converge on one threshold band (00:00-05:00). Clinical risk without a known harm event, so it is flagged to quality as well as product.",
       "evidence": [
         {
           "text": "“false low-pressure alerts most nights [excerpt]”",
@@ -620,7 +620,7 @@
       "why": "One feature request repeated across households. Any change is constrained by the alarm floor, so it is co-owned with Algorithms & Safety.",
       "evidence": [
         {
-          "text": "“Two profiles, two people, one alarm volume — please fix.”",
+          "text": "“Two profiles, two people, one alarm volume  -  please fix.”",
           "src": "Zendesk #47701",
           "when": "Mar 13",
           "prov": "synthetic",
@@ -774,7 +774,7 @@
           "Email + Gmail"
         ]
       ],
-      "quote": "“My parents only read Spanish — the whole setup screen is English.”",
+      "quote": "“My parents only read Spanish  -  the whole setup screen is English.”",
       "jira": "PLAT-2087",
       "jiraTitle": "Localize companion app (es, pt-BR)",
       "jiraStatus": "Backlog",
@@ -856,7 +856,7 @@
       "why": "Notification fatigue, not an alarm complaint. Grouped separately from the alert-precision work so it cannot be read as a safety signal.",
       "evidence": [
         {
-          "text": "“Notifications for everything — just send a weekly summary.”",
+          "text": "“Notifications for everything  -  just send a weekly summary.”",
           "src": "Zendesk #47620",
           "when": "Mar 12",
           "prov": "synthetic",
@@ -1013,7 +1013,8 @@
       "ftaNote": "Fault-tree node: export-path failure → delayed clinical review.",
       "related": 3,
       "ageDays": 0.01,
-      "when": "18 min ago"
+      "when": "18 min ago",
+      "url": "https://apps.apple.com/us/app/aeris-air/id6472108933?see-all=reviews"
     },
     {
       "id": "CP-2213",
@@ -1033,7 +1034,8 @@
       "ftaNote": "Same fault-tree node as CP-2214.",
       "related": 6,
       "ageDays": 0.03,
-      "when": "44 min ago"
+      "when": "44 min ago",
+      "url": "https://aerishealth.zendesk.com/agent/tickets/2213"
     },
     {
       "id": "CP-2208",
@@ -1050,12 +1052,13 @@
       "flags": [
         "patient_harm_reported"
       ],
-      "reason": "Explicit statement that a missed alarm coincided with a clinical event. This is the clearest MDR candidate in the queue: a reported harm event combined with a device malfunction. Routed to quality with high review priority — no automatic legal determination is made.",
+      "reason": "Explicit statement that a missed alarm coincided with a clinical event. This is the clearest MDR candidate in the queue: a reported harm event combined with a device malfunction. Routed to quality with high review priority  -  no automatic legal determination is made.",
       "fta": "FTA-2026-0419",
       "ftaNote": "Fault-tree node: alarm suppression → missed event.",
       "related": 2,
       "ageDays": 0.05,
-      "when": "1h ago"
+      "when": "1h ago",
+      "url": "https://mail.google.com/mail/u/0/#all/2208"
     },
     {
       "id": "CP-2202",
@@ -1077,7 +1080,8 @@
       "ftaNote": "Fault-tree node: threshold mis-tune → nuisance alarm.",
       "related": 11,
       "ageDays": 0.1,
-      "when": "2h ago"
+      "when": "2h ago",
+      "url": "https://mail.google.com/mail/u/0/#all/5043"
     },
     {
       "id": "CP-2199",
@@ -1097,13 +1101,14 @@
       "ftaNote": "Fault-tree node: cushion durability → leak.",
       "related": 5,
       "ageDays": 0.15,
-      "when": "3h ago"
+      "when": "3h ago",
+      "url": "https://apps.apple.com/us/app/aeris-air/id6472108933?see-all=reviews"
     },
     {
       "id": "CP-2196",
       "record": "salesforce-2196",
       "classification": "complaint",
-      "quote": "Field-safety notice mentioned humidifier lot 409-TX on the support call — is our clinic inventory affected?",
+      "quote": "Field-safety notice mentioned humidifier lot 409-TX on the support call  -  is our clinic inventory affected?",
       "source": "Salesforce",
       "sourceId": "salesforce",
       "product": "Aeris Air humidifier",
@@ -1114,12 +1119,13 @@
       "flags": [
         "field_safety_correction"
       ],
-      "reason": "Mentions a field-safety / recall context by lot number. The model routes it to quality with a potential MDR hint because field-corrective language is present; the actual determination belongs to the quality reviewer and legal.",
+      "reason": "Mentions a field-corrective notice. Routed to Quality with a potential MDR hint; a human decides.",
       "fta": "FTA-2026-0411",
       "ftaNote": "Fault-tree node: lot traceability → field action.",
       "related": 4,
       "ageDays": 0.2,
-      "when": "4h ago"
+      "when": "4h ago",
+      "url": "https://aerishealth.lightning.force.com/lightning/r/Case/2196/view"
     },
     {
       "id": "CP-2191",
@@ -1141,7 +1147,8 @@
       "ftaNote": "Fault-tree node: sync gap → stale clinical data.",
       "related": 3,
       "ageDays": 5,
-      "when": "5d ago"
+      "when": "5d ago",
+      "url": "https://us06web.zoom.us/rec/share/aeris-air-clinic-onboarding"
     },
     {
       "id": "CP-2188",
@@ -1161,7 +1168,8 @@
       "ftaNote": "Fault-tree node: session write error → wrong adherence.",
       "related": 2,
       "ageDays": 0.12,
-      "when": "3h ago"
+      "when": "3h ago",
+      "url": "https://app.intercom.com/a/inbox/aeris-air/"
     },
     {
       "id": "CP-2185",
@@ -1183,7 +1191,8 @@
       "ftaNote": "Fault-tree node: power loss → unattended therapy gap.",
       "related": 7,
       "ageDays": 0.3,
-      "when": "7h ago"
+      "when": "7h ago",
+      "url": "https://aerishealth.zendesk.com/agent/tickets/2185"
     }
   ],
   "pipeline": [
@@ -1349,7 +1358,7 @@
         "pct": 60
       }
     ],
-    "Next · W15–16": [
+    "Next · W15-16": [
       {
         "title": "Clinician PDF export",
         "jira": "CLIN-770",

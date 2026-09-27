@@ -1,4 +1,4 @@
-/* Test Flight — frontend runtime configuration.
+/* Test Flight  -  frontend runtime configuration.
  *
  * live:false  → the console renders the embedded synthetic dataset in
  *               assets/data.js. No network calls. This is the default, and it

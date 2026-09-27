@@ -1,4 +1,4 @@
-/* Test Flight — Quality & Product Console
+/* Test Flight  -  Quality & Product Console
  * Application logic. Requires assets/data.js to be loaded first (declares
  * SOURCES, SOURCE_FEED, SPLIT, TREND, IDEAS, PODS, QUALITY, PIPELINE,
  * CONNECTORS, TECH, ROADMAP, SHIPPED, QMS, DESTS on window).
@@ -135,7 +135,7 @@ function renderAnalytics(days) {
   const prov = $('#analyticsProvenance');
   if (prov) {
     const h = (window.TF_RUNTIME && window.TF_RUNTIME.state && window.TF_RUNTIME.state.health) || null;
-    const n = h && h.counts ? h.counts.public_visible : '—';
+    const n = h && h.counts ? h.counts.public_visible : ' - ';
     prov.innerHTML = '<span class="label label-neutral" style="font-size:10px">synthetic scenario</span> Aeris Health demo dataset · ' + IDEAS.length + ' ideas, ' + PODS.length + ' pods. Live Supabase: ' + n + ' public rows.';
   }
 }
@@ -148,7 +148,7 @@ function renderStream() {
     { src: 'gmail', name: 'Email msg-5043', t: 'False low-pressure alerts most nights', label: 'Complaint', cls: 'label-warning', when: '2h ago' },
     { src: 'zoom', name: 'Zoom · clinic call', t: 'Clinician PDF export request', label: 'Product feedback', cls: 'label-accent', when: '3h ago' },
     { src: 'slack', name: 'Slack #design-system', t: 'Therapy chart contrast in dark mode', label: 'Product feedback', cls: 'label-accent', when: '5h ago' },
-    { src: 'salesforce', name: 'Salesforce case', t: 'Field-safety notice — humidifier lot 409-TX', label: 'Potential MDR', cls: 'label-danger', when: '6h ago' }
+    { src: 'salesforce', name: 'Salesforce case', t: 'Field-safety notice  -  humidifier lot 409-TX', label: 'Potential MDR', cls: 'label-danger', when: '6h ago' }
   ];
   $('#triageStream').innerHTML = rows.map(r => '<div class="stream-row src-row" data-source="' + r.src + '" role="button" tabindex="0" aria-label="View ' + r.name + ' feedback" data-search="' + (r.t + ' ' + r.name).toLowerCase() + '">' + badge(r.src, r.name) +
     '<div><div class="stream-title">' + r.t + '</div><div class="stream-meta">' + r.name + ' · ' + r.when + '</div></div>' +
@@ -251,11 +251,11 @@ function renderDeck() {
     c.innerHTML =
       '<div class="sw-flag approve">APPROVE</div><div class="sw-flag deny">DENY</div>' +
       '<div class="sw-edge approve"></div><div class="sw-edge deny"></div>' +
-      '<div class="row-between"><div class="row" style="gap:10px">' + badge(it.sourceId, it.source, 'data-source="' + it.sourceId + '" role="button" tabindex="0" aria-label="View ' + it.source + ' records"') + '<div><div class="mono" style="font-size:11.5px;color:var(--meta)">' + it.id + ' · ' + it.record + '</div><div style="font-size:12.5px">' + it.source + '</div></div></div>' + mdr + '</div>' +
+      '<div class="row-between"><div class="row" style="gap:10px">' + badge(it.sourceId, it.source, 'data-source="' + it.sourceId + '" role="button" tabindex="0" aria-label="View ' + it.source + ' records"') + '<div><div class="mono" style="font-size:11.5px;color:var(--meta)">' + it.id + '</div><div style="font-size:12.5px">' + it.source + '</div></div></div>' + mdr + '</div>' +
       '<div class="q-text">' + it.quote + '</div>' +
-      '<div class="row wrap" style="gap:8px"><span class="label label-neutral">' + it.product + '</span>' + (it.version ? '<span class="label label-outline mono">v' + it.version + '</span>' : '') + '</div>' +
-      '<div class="rationale" style="margin-top:auto">' + it.reason.slice(0, 180) + '…</div>' +
-      '<div class="row-between" style="padding-top:12px;border-top:1px solid var(--border-soft)"><span class="meta">classifier confidence ' + it.confidence.toFixed(2) + ' · ' + it.when + '</span><span class="meta">' + it.related + ' related reports</span></div>';
+      '<div class="row wrap" style="gap:8px"><span class="label label-neutral">' + it.product + '</span>' + ((it.version && /^\d/.test(it.version)) ? '<span class="label label-outline mono">v' + it.version + '</span>' : '') + '</div>' +
+      '<div class="rationale" style="margin-top:auto">' + it.reason.slice(0, 140) + '</div>' +
+      '<div class="row-between" style="padding-top:12px;border-top:1px solid var(--border-soft)"><span class="meta">confidence ' + it.confidence.toFixed(2) + " · " + it.when + '</span>' + (it.url ? '<a class="ev-link" href="' + it.url + '" target="_blank" rel="noopener noreferrer">View source report</a>' : '<span class="meta">' + it.related + ' related</span>') + '</div>';
     const rot = idx * -1.4, sc = 1 - idx * 0.035, ty = idx * 10;
     c.style.transform = 'rotate(' + rot + 'deg) scale(' + sc + ') translateY(' + ty + 'px)';
     c.style.zIndex = 10 - idx; c.style.opacity = idx === 0 ? 1 : 0.75;
@@ -274,15 +274,9 @@ function updateDetail() {
   const it = queue[0]; const host = $('#qualityDetail');
   if (!it) { host.innerHTML = '<div class="panel-head"><div><h3>Classifier rationale</h3></div></div><div class="empty">Advance the deck to inspect an item.</div>'; return; }
   host.innerHTML =
-    '<div class="panel-head"><div><h3>' + it.id + ' · rationale</h3><p class="sub">' + it.classification + ' → ' + (it.mdr ? 'MDR review' : 'quality review') + '</p></div><span class="label ' + (it.mdr ? 'label-danger' : 'label-warning') + '">conf ' + it.confidence.toFixed(2) + '</span></div>' +
-    '<div class="rationale" style="margin-bottom:14px">' + it.reason + '</div>' +
-    '<div class="rat-grid">' +
-    '<div class="rat-item"><div class="rk">FTA report</div><div class="rv num">' + it.fta + '</div></div>' +
-    '<div class="rat-item"><div class="rk">Fault-tree node</div><div class="rv">' + it.ftaNote + '</div></div>' +
-    '<div class="rat-item"><div class="rk">Priority subflags</div><div class="rv">' + (it.flags.length ? it.flags.map(f => '<span class="label label-warning" style="font-size:10px">' + f + '</span>').join(' ') : '—') + '</div></div>' +
-    '<div class="rat-item"><div class="rk">Related reports</div><div class="rv"><span class="num">' + it.related + '</span> linked</div></div>' +
-    '</div>' +
-    '<p class="rat-foot">A complaint is only a candidate for human review. No automatic legal or MDR determination is ever made.</p>';
+    '<div class="panel-head"><div><h3>' + it.id + '</h3><p class="sub">' + it.classification + ' → ' + (it.mdr ? 'MDR review' : 'quality review') + '</p></div><span class="label ' + (it.mdr ? 'label-danger' : 'label-warning') + '">conf ' + it.confidence.toFixed(2) + '</span></div>' +
+    '<div class="rationale" style="margin-bottom:12px">' + it.reason + '</div>' +
+    (it.url ? '<a class="ev-link" href="' + it.url + '" target="_blank" rel="noopener noreferrer">View source report</a>' : '');
 }
 function logDecision(it, action) {
   decisions.unshift({ id: it.id, action, title: it.quote.slice(0, 54) + '…', when: 'just now' });
@@ -361,8 +355,8 @@ function renderQualityTable() {
     '<td><span class="label ' + (r.mdr ? 'label-danger' : 'label-warning') + '">' + (r.mdr ? 'MDR flag' : 'complaint candidate') + '</span></td>' +
     '<td class="cell-evidence"><span class="cell-quote">' + r.quote + '</span></td>' +
     '<td><button type="button" class="src-link" data-source="' + r.sourceId + '">' + r.source + '</button></td>' +
-    '<td>' + (r.mdr ? '<span class="label label-danger">flagged</span>' : '—') + '</td>' +
-    '<td>' + (r.reviewer || '—') + '</td><td class="mono">' + r.when + '</td></tr>').join('');
+    '<td>' + (r.mdr ? '<span class="label label-danger">flagged</span>' : ' - ') + '</td>' +
+    '<td>' + (r.reviewer || ' - ') + '</td><td class="mono">' + r.when + '</td></tr>').join('');
 }
 
 /* ================= quality: undo + all classifications + retraining ================= */
@@ -374,7 +368,7 @@ function undoDecision(id) {
   const it = QUALITY.find(q => q.id === d.id);
   if (it && !queue.some(q => q.id === it.id)) queue.unshift(it);
   persist(); renderDeck(); renderDecisionLog(); renderQms();
-  toast('Undid ' + d.id + ' — back in the review queue', 'info');
+  toast('Undid ' + d.id + '  -  back in the review queue', 'info');
 }
 function undoLastDecision() { if (!decisions.length) { toast('No decisions to undo', 'info'); return; } undoDecision(decisions[0].id); }
 
@@ -460,7 +454,7 @@ function requestRetraining() {
 }
 
 /* ================= team / pods ================= */
-const initials = s => (String(s).replace(/[^A-Za-z ]/g, '').trim().split(/\s+/).filter(Boolean).slice(0, 2).map(w => w[0].toUpperCase()).join('') || '—');
+const initials = s => (String(s).replace(/[^A-Za-z ]/g, '').trim().split(/\s+/).filter(Boolean).slice(0, 2).map(w => w[0].toUpperCase()).join('') || ' - ');
 const podStat = (n, l) => '<div class="pod-stat"><div class="n num">' + n + '</div><div class="l">' + l + '</div></div>';
 function personRow(name, verified, role, showUnverified) {
   return '<div class="pod-person"><span class="ava" aria-hidden="true">' + initials(name) + '</span><span class="grow"><b>' + name + '</b> ' + (verified ? '<span class="label label-success" style="font-size:9.5px">verified lead</span>' : (showUnverified ? '<span class="unverified">UNVERIFIED</span>' : '')) + '</span><span class="role">' + role + '</span></div>';
@@ -510,7 +504,7 @@ function openPod(name) {
 
 /* ================= roadmap ================= */
 function renderRoadmap() {
-  const colors = { 'Now · W14': 'var(--accent)', 'Next · W15–16': 'var(--info)', 'Later · W17+': 'var(--muted)' };
+  const colors = { 'Now · W14': 'var(--accent)', 'Next · W15-16': 'var(--info)', 'Later · W17+': 'var(--muted)' };
   $('#roadmapLanes').innerHTML = Object.entries(ROADMAP).map(([lane, items]) =>
     '<div class="lane"><div class="lane-head"><span class="sw" style="background:' + colors[lane] + '"></span><strong style="font-size:13.5px">' + lane + '</strong><span class="meta" style="margin-left:auto">' + items.length + '</span></div>' +
     items.map(it => { const idea = IDEAS.find(i => i.jira === it.jira); return '<button type="button" class="lane-card"' + (idea ? ' data-jira="' + it.jira + '"' : ' disabled') + '><div class="row-between"><span class="mono" style="font-size:11px;color:var(--meta)">' + it.jira + '</span><span class="label label-outline" style="font-size:10px">' + it.pod + '</span></div><div style="font-size:13px;font-weight:500">' + it.title + '</div>' + (idea ? '<div class="row-between"><span class="si-meta">' + idea.reports + ' reports in cluster</span><span class="si-meta">' + idea.priority + '</span></div>' : '') + '<div class="progress"><i style="width:' + it.pct + '%"></i></div></button>'; }).join('') + '</div>').join('');
@@ -545,7 +539,7 @@ function renderIntegrations() {
   bindSwitches();
 }
 function bindSwitches() {
-  $$('[data-toggle-int]').forEach(s => s.addEventListener('click', () => { toast('Demo toggle — no live effect', 'info'); }));
+  $$('[data-toggle-int]').forEach(s => s.addEventListener('click', () => { toast('Demo toggle  -  no live effect', 'info'); }));
 }
 
 /* ================= data drawer ================= */
@@ -576,7 +570,7 @@ function openSource(id) {
     srcStat(fmt(s.product), 'product feedback') +
     srcStat(String(ideas.length), ideas.length === 1 ? 'linked idea' : 'linked ideas');
   $('#sourceFeed').innerHTML = feed.length ? feed.map(f => '<div class="src-feed-row"><span class="label ' + f.cls + '" style="font-size:10px">' + f.label + '</span><span class="sr-t">' + f.t + '</span><span class="sr-w">' + f.when + '</span></div>').join('') : '<p class="sub" style="font-size:12px">No records in this synthetic slice.</p>';
-  $('#sourceIdeas').innerHTML = ideas.length ? ideas.map(i => '<button type="button" class="src-idea-row" data-source-idea="' + i.id + '"><span class="grow"><span class="si-title">' + i.title + '</span><br><span class="si-meta">' + i.jira + ' · ' + i.reports + ' reports · ' + i.pod + '</span></span><span class="label ' + i.jiraClass + '">' + i.jiraStatus + '</span></button>').join('') : '<p class="sub" style="font-size:12px">No idea clusters yet — reports from this source are still below the clustering threshold.</p>';
+  $('#sourceIdeas').innerHTML = ideas.length ? ideas.map(i => '<button type="button" class="src-idea-row" data-source-idea="' + i.id + '"><span class="grow"><span class="si-title">' + i.title + '</span><br><span class="si-meta">' + i.jira + ' · ' + i.reports + ' reports · ' + i.pod + '</span></span><span class="label ' + i.jiraClass + '">' + i.jiraStatus + '</span></button>').join('') : '<p class="sub" style="font-size:12px">No idea clusters yet  -  reports from this source are still below the clustering threshold.</p>';
   $('#sourceDrawer').classList.add('on'); $('#sourceScrim').classList.add('on');
 }
 function closeSource() { $('#sourceDrawer').classList.remove('on'); $('#sourceScrim').classList.remove('on'); }
@@ -584,7 +578,7 @@ function closeSource() { $('#sourceDrawer').classList.remove('on'); $('#sourceSc
 /* ================= assistant chat ================= */
 let chatScope = 'product';
 const CHAT = [
-  { who: 'bot', text: 'Grounded assistant. Answers come only from retrieved synthetic records, with citation IDs. If the evidence store or the model provider is unavailable, you get an honest unavailable state — never a canned answer.', cites: [] }
+  { who: 'bot', text: 'Grounded assistant. Answers come only from retrieved synthetic records, with citation IDs. If the evidence store or the model provider is unavailable, you get an honest unavailable state  -  never a canned answer.', cites: [] }
 ];
 function renderChat() {
   const t = $('#chatThread');
@@ -718,7 +712,7 @@ function init() {
   const ar = $('#analyticsRange');
   if (ar) ar.addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; $$('#analyticsRange button').forEach(x => x.classList.remove('on')); b.classList.add('on'); analyticsDays = parseInt(b.dataset.days, 10) || 7; renderAnalytics(); });
   const pdf = $('#analyticsPdf');
-  if (pdf) pdf.addEventListener('click', () => { toast('Opening print dialog — choose “Save as PDF”', 'info'); setTimeout(() => window.print(), 200); });
+  if (pdf) pdf.addEventListener('click', () => { toast('Opening print dialog  -  choose “Save as PDF”', 'info'); setTimeout(() => window.print(), 200); });
   $('#qmsDate').addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; $$('#qmsDate button').forEach(x => x.classList.remove('on')); b.classList.add('on'); qualityAge = parseInt(b.dataset.age, 10) || 0; renderQualityTable(); });
 
   $('#approveBtn').addEventListener('click', () => act('approve'));
@@ -726,7 +720,7 @@ function init() {
   $('#skipBtn').addEventListener('click', () => act('skip'));
   $('#resetDeckBtn').addEventListener('click', () => { queue = QUALITY.slice(); decisions = []; persist(); renderDeck(); renderDecisionLog(); renderQms(); toast('Deck reset', 'info'); });
   $('#pushQmsBtn').addEventListener('click', () => { const n = decisions.filter(d => d.action === 'approve').length; toast('Exported ' + n + ' packet' + (n === 1 ? '' : 's') + ' to Veeva Vault Quality (sandbox mock)', 'success'); decisions = decisions.filter(d => d.action !== 'approve'); persist(); renderDecisionLog(); renderQms(); });
-  $('#exportCsvBtn').addEventListener('click', () => toast('CSV export queued — audit-safe snapshot', 'success'));
+  $('#exportCsvBtn').addEventListener('click', () => toast('CSV export queued  -  audit-safe snapshot', 'success'));
 
   const undoBtn = $('#undoBtn'); if (undoBtn) undoBtn.addEventListener('click', undoLastDecision);
   const dl = $('#decisionLog'); if (dl) dl.addEventListener('click', e => { const b = e.target.closest('[data-undo]'); if (b) undoDecision(b.dataset.undo); });
@@ -734,7 +728,7 @@ function init() {
   const allBody = $('#allTableBody'); if (allBody) allBody.addEventListener('click', e => { const b = e.target.closest('[data-rec-open]'); const tr = e.target.closest('[data-rec]'); const id = b ? b.dataset.recOpen : (tr ? tr.dataset.rec : null); if (id) renderReclass(id); });
   const recPanel = $('#reclassPanel'); if (recPanel) recPanel.addEventListener('click', e => {
     const m = e.target.closest('[data-move]'); if (m) { moveLabel(selectedClassified, m.dataset.move); return; }
-    const a = e.target.closest('[data-rec-approve]'); if (a) { toast(a.dataset.recApprove + ' approved — current label kept, decision logged.', 'success'); return; }
+    const a = e.target.closest('[data-rec-approve]'); if (a) { toast(a.dataset.recApprove + ' approved  -  current label kept, decision logged.', 'success'); return; }
     const u = e.target.closest('[data-rec-undo]'); if (u) undoClassChange(u.dataset.recUndo);
   });
   const retrainBtn = $('#retrainBtn'); if (retrainBtn) retrainBtn.addEventListener('click', requestRetraining);
@@ -754,8 +748,8 @@ function init() {
   $('#addIntegrationBtn').addEventListener('click', () => openModal('Veeva Vault Quality', 'VV'));
   $('#closeModal').addEventListener('click', closeModal);
   $('#intModal').addEventListener('click', e => { if (e.target.id === 'intModal') closeModal(); });
-  $('#testConnBtn').addEventListener('click', () => toast('Demo only — no live tenant is contacted', 'info'));
-  $('#saveIntBtn').addEventListener('click', () => { closeModal(); toast('Demo only — no integration was saved', 'info'); });
+  $('#testConnBtn').addEventListener('click', () => toast('Demo only  -  no live tenant is contacted', 'info'));
+  $('#saveIntBtn').addEventListener('click', () => { closeModal(); toast('Demo only  -  no integration was saved', 'info'); });
   $('#modalToggle').addEventListener('click', () => $('#modalToggle').classList.toggle('on'));
   $$('[data-configure]').forEach(b => b.addEventListener('click', () => openModal(b.dataset.name, (QMS.find(q => q.id === b.dataset.configure) || {}).mono || '·')));
 
