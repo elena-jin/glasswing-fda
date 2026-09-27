@@ -42,14 +42,31 @@ Wire-up: `assets/app.js` `renderData()` calls `window.renderClassifierPanel()`;
 - **No auto-actions.** No model promotion, no QMS/Jira record creation, no
   training — those are queued or human-gated.
 
-## Migration review — `0001_classifier_schema.sql`
+## Migration review — `0001_classifier_reconciliation.sql`
 
-- **Additive + idempotent**: `create table if not exists` and only adds indexes,
-  RLS enable and `revoke`s. It never drops or renames.
-- **RLS**: enabled on all 14 tables, **no** `anon`/`authenticated` policies and
-  explicit `revoke` → the publishable key reads nothing. Service role bypasses.
-- **Verify before/after.** Apply with `supabase db push` (or paste into the SQL
-  editor), then diff against the live columns (see below).
+Written **after** reading the live schema (captured to `supabase/live-schema.json`
+via the guarded `/api/classifier/schema` endpoint). The 14 `tf_*` tables already
+existed with a different layout than a green-field design would use, so this
+migration is a **reconciliation**, not a creation:
+
+- **Additive + idempotent**: `add column if not exists` only. It never drops,
+  renames or rewrites data.
+- **What it adds** (the few columns the gate/metrics need that the live tables
+  lack): `tf_normalized_records.data_partition`, `tf_normalized_records.split`,
+  `tf_model_runs.run_type`, `tf_reference_labels.split`; plus supporting indexes.
+- **RLS**: (re)enabled on all 14 tables; `revoke all ... from anon, authenticated`
+  → the publishable key reads nothing. Service role bypasses.
+- **NULL `data_partition` is treated as non-public (fail closed)** until
+  backfilled from the source/provenance shape.
+
+Live column mapping the API is coded against (from `live-schema.json`):
+`tf_normalized_records(screened_text, evidence_text, context, provenance, data_partition*, split*)`,
+`tf_reference_labels(record_id, label, potential_mdr, split*)`,
+`tf_predictions(record_id, run_id, model_version_id, predicted_label, confidence, threshold, route)`,
+`tf_review_decisions(record_id, reviewer_id, final_label, override_reason, decision_at)`,
+`tf_training_candidates(review_id, candidate_status)`,
+`tf_model_runs(model_version_id, dataset_version, data_partition, parameters, metrics, run_type*)`,
+`tf_audit_events(actor_id, event_type, object_type, object_id, detail)`. (*) added here.
 
 ## Setup steps
 
@@ -61,33 +78,45 @@ Wire-up: `assets/app.js` `renderData()` calls `window.renderClassifierPanel()`;
    - `TF_ADMIN_TOKEN` — enables `/api/classifier/schema`. Unset ⇒ endpoint 404s.
 2. **Apply the migration**: `supabase db push` (or run the SQL in the Supabase
    SQL editor). Confirm RLS is on for all `tf_*` tables.
-3. **Local**: copy `.env.example`, fill Supabase vars, run `vercel dev` from the
+3. **Backfill `data_partition`** on existing normalized records (from the
+   source/provenance shape) so the public filter can see synthetic rows.
+4. **Local**: copy `.env.example`, fill Supabase vars, run `vercel dev` from the
    repo root, open **Data status → Classifier**.
-4. **Tests**: `cd web && npm test`.
+5. **Tests**: `cd web && npm test`.
+
+## Verified against the live database
+
+Preview deployment probed against `supabase-teal-ferry` (public audience):
+
+| Call | Result |
+| --- | --- |
+| `GET /api/classifier/summary` | `{ok:true, runs:[], empty:true, reason:"no_runs"}` — honest, no fake numbers |
+| `GET /api/classifier/records` | `{ok:true, data:[], error:"supabase_400"}` — **because `data_partition` does not exist until migration 0001 is applied** |
+| `GET /api/classifier/candidates` | `{ok:true, count:0, empty:true}` — table read fine |
+| `GET /api/classifier/schema` without token | **404** (fail closed) |
+| `GET /api/classifier/record` without id | **400** |
+| `GET /api/classifier?resource=nope` | **404** |
+
+So the layer is wired to the real DB and degrades honestly; the only thing
+standing between it and populated records is applying migration 0001 and
+backfilling `data_partition`.
 
 ## Blockers (explicit)
 
-1. **Live schema not readable from the build environment.** Vercel masks secret
-   values on `vercel env pull`, so the service key was unavailable locally and
-   the 14 tables could not be introspected before writing migrations. The
-   migration is written additively so it is safe either way, but it **must be
-   reconciled**: run
-   `select table_name, column_name, data_type from information_schema.columns where table_name like 'tf_%' order by 1,2`
-   and diff against `0001_classifier_schema.sql`, then patch.
-   (Alternative: set `TF_ADMIN_TOKEN`, deploy a Preview, and
-   `GET /api/classifier/schema` with header `x-tf-admin: <token>`.)
+1. **Migration 0001 not yet applied.** Verified live: `tf_normalized_records`
+   has no `data_partition`/`split`, so `records` returns `supabase_400` until the
+   migration runs and partitions are backfilled. (Pipeline not claimed running.)
 2. **No retraining worker.** `POST /api/classifier/retrain` only writes a
-   `status=requested` row. A server-side job (queue + container, not Vercel
+   `status="requested"` row. A server-side job (queue + container, not Vercel
    functions) must consume it, run ModernBERT/Jev offline, write an immutable
-   `tf_model_runs` artifact, and pass the held-out eval gate. Not in this PR.
+   `tf_model_runs` artifact, and pass the held-out eval gate.
 3. **No real auth/SSO.** `reviewer` / `actor` are self-declared. Review writes
    are partition-gated, but real reviewer identity needs SSO + RBAC.
 4. **Model numbers are not live.** ModernBERT (99.4% recall / 87% specificity)
    and Jev (99.3% / 93%) come from exploratory Drive scripts. They are **not**
    hardcoded anywhere here; the panel shows only metrics computed from
    `tf_predictions` that exist.
-5. **Synthetic data load.** The panel is correct when empty (honest states).
-   Once the synthetic rows are loaded, metrics/predictions will populate.
+5. **Synthetic data load + partition backfill** pending.
 
 ## API contract (added)
 
