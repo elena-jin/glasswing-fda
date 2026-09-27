@@ -43,15 +43,20 @@
 
   /* ---------- sidebar ---------- */
   function renderSidebar() {
-    var el = $('#dataSyncLabel'); if (!el) return;
-    var h = state.health, c = state.connectors;
-    if (h && h.ok === false) { el.textContent = 'Supabase connection error · ' + clock(h.checked_at); return; }
-    if (h && h.configured) {
+    var btn = $('#dataBtn');
+    var dot = $('#dataDot');
+    var el = $('#dataSyncLabel');
+    var h = state.health;
+    var text;
+    if (h && h.ok === false) text = 'Supabase connection error · ' + clock(h.checked_at);
+    else if (h && h.configured) {
       var n = h.counts && h.counts.public_visible != null ? h.counts.public_visible : '—';
-      el.textContent = 'Supabase live · checked ' + clock(h.checked_at) + ' · ' + n + ' public rows';
-      return;
-    }
-    el.textContent = 'Supabase not connected · synthetic scenario';
+      text = 'Supabase live · checked ' + clock(h.checked_at) + ' · ' + n + ' public rows';
+    } else text = 'Supabase not connected · synthetic scenario';
+
+    if (el) el.textContent = text;
+    if (btn) { btn.title = 'Data status — ' + text; btn.setAttribute('aria-label', 'Data status — ' + text); }
+    if (dot) dot.className = 'pulse-dot' + (h && h.ok === false ? ' warn' : '');
   }
 
   /* ---------- overview strip ---------- */
