@@ -214,7 +214,7 @@ h3 { font-size: var(--size-md); font-weight: 600; letter-spacing: -.01em; }
 .card { background: var(--surface); border: 1px solid var(--border-soft); border-radius: var(--radius-card); padding: var(--space-lg); }
 
 /* ---------- app frame ---------- */
-.app { position: relative; z-index: 1; display: grid; grid-template-columns: 264px 1fr; min-height: 100vh; }
+.app { position: relative; z-index: 1; display: grid; grid-template-columns: 224px 1fr; min-height: 100vh; }
 
 /* ---------- sidebar ---------- */
 .sidebar {
@@ -834,3 +834,8 @@ h3 { font-size: var(--size-md); font-weight: 600; letter-spacing: -.01em; }
 
 /* brand logo chip */
 .brand-logo { width: 34px; height: 34px; border-radius: 22%; flex: none; display: block; }
+
+/* tighter sidebar */
+.sidebar { padding: var(--space-md) var(--space-sm); }
+.nav-item { padding: 9px 12px; gap: 10px; }
+.brand { padding: 4px 8px var(--space-sm); }
