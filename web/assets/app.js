@@ -92,6 +92,54 @@ function bindTips(host, tip) {
   });
 }
 
+/* ================= themes + analytics ================= */
+let analyticsDays = 7;
+function themeData(days) {
+  return IDEAS.filter(i => !days || i.ageDays <= days).slice().sort((a, b) => b.reports - a.reports);
+}
+function barRows(list, withJira) {
+  const max = Math.max(1, ...list.map(i => i.reports));
+  return list.map(i => '<div style="margin:9px 0"><div class="row-between" style="font-size:11.5px;margin-bottom:4px"><span>' + i.title + '</span><span class="num">' + i.reports + (withJira ? ' · ' + i.jira : '') + '</span></div><div class="progress"><i style="width:' + Math.round((i.reports / max) * 100) + '%"></i></div></div>').join('');
+}
+function renderThemes() {
+  const host = $('#chartThemes'); if (!host) return;
+  const list = themeData(7).slice(0, 6);
+  host.innerHTML = list.length ? barRows(list, false) : '<p class="meta">No themes in the last 7 days.</p>';
+  const legend = $('#legendThemes'); if (legend) legend.innerHTML = '<span class="legend-item">' + list.length + ' themes · last 7 days</span>';
+}
+function renderAnalytics(days) {
+  days = days || analyticsDays || 7;
+  const weeks = Math.max(1, Math.round(days / 7));
+  const host = $('#chartQp');
+  if (host) {
+    const labels = TREND.labels.slice(-weeks), q = TREND.quality.slice(-weeks), p = TREND.product.slice(-weeks);
+    const W = 560, H = 240, pad = { l: 8, r: 8, t: 16, b: 34 };
+    const max = Math.max(1, ...q, ...p);
+    const gw = (W - pad.l - pad.r) / labels.length, bw = Math.min(26, gw * 0.32);
+    const bars = labels.map((lab, i) => {
+      const x = pad.l + i * gw;
+      const qh = (q[i] / max) * (H - pad.t - pad.b), ph = (p[i] / max) * (H - pad.t - pad.b);
+      return '<rect x="' + (x + gw * 0.16) + '" y="' + (H - pad.b - qh) + '" width="' + bw + '" height="' + qh + '" rx="4" fill="var(--danger)" opacity="0.9"/>' +
+        '<rect x="' + (x + gw * 0.52) + '" y="' + (H - pad.b - ph) + '" width="' + bw + '" height="' + ph + '" rx="4" fill="var(--accent)" opacity="0.9"/>' +
+        '<text class="axis" x="' + (x + gw / 2) + '" y="' + (H - pad.b + 18) + '" text-anchor="middle">' + lab + '</text>';
+    }).join('');
+    host.innerHTML = '<svg viewBox="0 0 ' + W + ' ' + H + '" width="100%" role="img" aria-label="Quality vs product volume">' + bars + '</svg>';
+  }
+  const sub = $('#analyticsQpSub'); if (sub) sub.textContent = 'Last ' + days + ' days';
+  const tag = $('#analyticsQpTag'); if (tag) tag.textContent = weeks + ' week' + (weeks === 1 ? '' : 's');
+  const list = themeData(days).slice(0, 8);
+  const big = $('#chartThemesBig');
+  if (big) big.innerHTML = list.length ? barRows(list, true) : '<p class="meta">No themes in range.</p>';
+  const sbig = $('#analyticsThemesSub'); if (sbig) sbig.textContent = 'Last ' + days + ' days · by report volume';
+  const leg = $('#legendThemesBig'); if (leg) leg.innerHTML = '<span class="legend-item">' + list.length + ' themes</span>';
+  const prov = $('#analyticsProvenance');
+  if (prov) {
+    const h = (window.TF_RUNTIME && window.TF_RUNTIME.state && window.TF_RUNTIME.state.health) || null;
+    const n = h && h.counts ? h.counts.public_visible : '—';
+    prov.innerHTML = '<span class="label label-neutral" style="font-size:10px">synthetic scenario</span> Aeris Health demo dataset · ' + IDEAS.length + ' ideas, ' + PODS.length + ' pods. Live Supabase: ' + n + ' public rows.';
+  }
+}
+
 /* ================= overview lists ================= */
 function renderStream() {
   const rows = [
@@ -322,8 +370,8 @@ function renderPods() {
         personRow(p.pm, true, 'Product mgr', false) +
       '</div>' +
       '<div class="pod-stats">' + podStat(ideas.length, 'ideas') + podStat(reports, 'reports') + podStat(fmt(p.complaints), 'complaint cand.') + '</div>' +
-      '<div class="pod-ideas"><div class="pod-ideas-head"><span class="meta">' + ideas.length + ' idea' + (ideas.length === 1 ? '' : 's') + ' owned by this pod</span><span class="meta">Open pod →</span></div>' +
-      (ideas.length ? ideas.slice(0, 3).map(i => '<span class="pod-idea" data-idea="' + i.id + '"><span class="grow"><span class="pi-title">' + i.title + '</span><br><span class="pi-meta">' + i.jira + ' · ' + i.priority + ' · ' + i.reports + ' reports</span></span><span class="label ' + (i.jiraClass || 'label-neutral') + '">' + i.jiraStatus + '</span></span>').join('') : '<p class="pod-empty">No idea clusters assigned yet — feedback for this pod is still below the clustering threshold.</p>') +
+      '<div class="pod-ideas"><div class="pod-ideas-head"><span class="meta">' + ideas.length + ' idea' + (ideas.length === 1 ? '' : 's') + ' in this pod</span><span class="meta">Open pod →</span></div>' +
+      (ideas.length ? (function () { var top = ideas.slice().sort(function (a, b) { return b.reports - a.reports; })[0]; return '<span class="pod-idea" data-idea="' + top.id + '"><span class="grow"><span class="pi-title">' + top.title + '</span><br><span class="pi-meta">' + top.reports + ' reports · top theme' + (ideas.length > 1 ? ' · +' + (ideas.length - 1) + ' more' : '') + '</span></span><span class="label ' + (top.jiraClass || 'label-neutral') + '">' + top.jiraStatus + '</span></span>'; })() : '<p class="pod-empty">No idea clusters assigned yet.</p>') +
       '</div></div>';
   }).join('');
   const withLead = PODS.filter(p => p.leadVerified).length;
@@ -399,8 +447,8 @@ function renderData() {
   $('#drawerSyncTime').textContent = 'Last sync ' + now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) + ' · next in 11 min';
   if (typeof window.renderClassifierPanel === 'function') { try { window.renderClassifierPanel(); } catch (e) {} }
 }
-function openData() { $('#dataModal').classList.add('on'); renderData(); }
-function closeData() { $('#dataModal').classList.remove('on'); }
+function openData() { go('data'); }
+function closeData() { /* Data status is a full page now. */ }
 
 /* ================= source detail drawer ================= */
 const srcStat = (n, l) => '<div class="src-stat"><div class="n num">' + n + '</div><div class="l">' + l + '</div></div>';
@@ -475,7 +523,7 @@ function ask(text) {
 }
 
 /* ================= nav / routing ================= */
-const VALID = ['overview', 'ideas', 'quality', 'qms', 'roadmap', 'pods', 'pod', 'integrations', 'assistant', 'idea'];
+const VALID = ['overview', 'analytics', 'ideas', 'quality', 'qms', 'roadmap', 'pods', 'pod', 'integrations', 'assistant', 'idea', 'data'];
 function go(view) {
   if (!VALID.includes(view)) view = 'overview';
   $$('.view').forEach(v => v.classList.remove('active'));
@@ -488,6 +536,8 @@ function go(view) {
   if (view === 'quality') renderDeck();
   if (view === 'qms') { renderQms(); renderQualityTable(); }
   if (view === 'pods') renderPods();
+  if (view === 'analytics') renderAnalytics();
+  if (view === 'data') renderData();
 }
 function openSidebar() { $('#sidebar').classList.add('open'); }
 function closeSidebar() { $('#sidebar').classList.remove('open'); }
@@ -502,7 +552,7 @@ function toast(text, kind) {
 /* ================= wiring ================= */
 let qualityAge = 0;
 function init() {
-  renderSources(); renderSplit(); renderTrend(12); renderStream(); renderFreshness();
+  renderSources(); renderThemes(); renderStream(); renderFreshness(); renderAnalytics();
   renderIdeas(); renderRoadmap(); renderPods(); renderIntegrations(); renderData(); renderChat(); restore();
 
   $$('.nav-item').forEach(n => n.addEventListener('click', () => go(n.dataset.view)));
@@ -510,11 +560,11 @@ function init() {
   $$('[data-od-id^="kpi-"] .k-num span[data-count]').forEach(n => { if (!$('#view-overview').classList.contains('active') || true) countUp(n); });
 
   $('#menuBtn').addEventListener('click', openSidebar);
-  $('#dataBtn').addEventListener('click', openData);
-  $('#openDataFromOverview').addEventListener('click', openData);
-  $('#closeData').addEventListener('click', closeData);
-  $('#closeDataFooter').addEventListener('click', closeData);
-  $('#dataModal').addEventListener('click', e => { if (e.target.id === 'dataModal') closeData(); });
+  const dataBtn = $('#dataBtn'); if (dataBtn) dataBtn.addEventListener('click', () => go('data'));
+  const odfo = $('#openDataFromOverview'); if (odfo) odfo.addEventListener('click', () => go('data'));
+  const cd1 = $('#closeData'); if (cd1) cd1.addEventListener('click', closeData);
+  const cd2 = $('#closeDataFooter'); if (cd2) cd2.addEventListener('click', closeData);
+  const dm = $('#dataModal'); if (dm) dm.addEventListener('click', e => { if (e.target.id === 'dataModal') closeData(); });
   $('#closeSource').addEventListener('click', closeSource);
   $('#sourceScrim').addEventListener('click', closeSource);
   $('#sourceIdeas').addEventListener('click', e => { const b = e.target.closest('[data-source-idea]'); if (b) { closeSource(); showIdea(b.dataset.sourceIdea); } });
@@ -540,6 +590,10 @@ function init() {
   $('#demandCommit').addEventListener('click', openJira);
   $('#ideasSeg').addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; $$('#ideasSeg button').forEach(x => x.classList.remove('on')); b.classList.add('on'); ideaSort = b.dataset.sort; renderIdeas(); });
   $('#ideasDate').addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; $$('#ideasDate button').forEach(x => x.classList.remove('on')); b.classList.add('on'); ideaAge = parseInt(b.dataset.age, 10) || 0; renderIdeas(); });
+  const ar = $('#analyticsRange');
+  if (ar) ar.addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; $$('#analyticsRange button').forEach(x => x.classList.remove('on')); b.classList.add('on'); analyticsDays = parseInt(b.dataset.days, 10) || 7; renderAnalytics(); });
+  const pdf = $('#analyticsPdf');
+  if (pdf) pdf.addEventListener('click', () => { toast('Opening print dialog — choose “Save as PDF”', 'info'); setTimeout(() => window.print(), 200); });
   $('#qmsDate').addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; $$('#qmsDate button').forEach(x => x.classList.remove('on')); b.classList.add('on'); qualityAge = parseInt(b.dataset.age, 10) || 0; renderQualityTable(); });
 
   $('#approveBtn').addEventListener('click', () => act('approve'));
@@ -554,7 +608,8 @@ function init() {
     if (!$('#view-quality').classList.contains('active')) return;
     const ae = document.activeElement;
     if (ae && (ae.tagName === 'INPUT' || ae.tagName === 'TEXTAREA' || ae.isContentEditable)) return;
-    if ($('#intModal').classList.contains('on') || $('#dataModal').classList.contains('on') || $('#sourceScrim').classList.contains('on')) return;
+    const dmOpen = $('#dataModal') && $('#dataModal').classList.contains('on');
+    if ($('#intModal').classList.contains('on') || dmOpen || $('#sourceScrim').classList.contains('on')) return;
     e.preventDefault();
     act(e.key === 'ArrowRight' ? 'approve' : e.key === 'ArrowLeft' ? 'deny' : 'skip');
   });

@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Test Flight — Quality &amp; Product Console</title>
 <meta name="description" content="Turn scattered device and companion-app feedback into traceable Quality and Product workflows." />
-<link rel="stylesheet" href="assets/styles.css?v=20260927b" />
+<link rel="stylesheet" href="assets/styles.css?v=20260927c" />
 </head>
 <body>
 
@@ -29,6 +29,10 @@
       <button class="nav-item active" data-view="overview" data-od-id="nav-overview">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 13h6V4H4zM14 20h6v-9h-6zM4 20h6v-3H4zM14 7h6V4h-6z"/></svg>
         Overview
+      </button>
+      <button class="nav-item" data-view="analytics" data-od-id="nav-analytics">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20V4M4 20h16"/><rect x="7" y="12" width="3" height="5"/><rect x="12" y="8" width="3" height="9"/><rect x="17" y="5" width="3" height="12"/></svg>
+        Analytics
       </button>
       <button class="nav-item" data-view="ideas" data-od-id="nav-ideas">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-4 10.5c.6.6 1 1.4 1 2.2h6c0-.8.4-1.6 1-2.2A6 6 0 0 0 12 3Z"/></svg>
@@ -58,6 +62,10 @@
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M10 4v4M14 4v4M7 8h10v4a5 5 0 0 1-10 0V8ZM12 17v3"/></svg>
         Integrations
         <span class="count">3</span>
+      </button>
+      <button class="nav-item" data-view="data" data-od-id="nav-data">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="6" rx="8" ry="3"/><path d="M4 6v12c0 1.7 3.6 3 8 3s8-1.3 8-3V6"/><path d="M4 12c0 1.7 3.6 3 8 3s8-1.3 8-3"/></svg>
+        Data status
       </button>
       <button class="nav-item" data-view="assistant" data-od-id="nav-assistant">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v2m6.4.6-1.4 1.4M21 12h-2M5 12H3m2.6-5.4L7 8"/><rect x="5" y="10" width="14" height="10" rx="3"/><path d="M9 15h.01M15 15h.01"/></svg>
@@ -100,7 +108,6 @@
       <section class="view active" id="view-overview" data-od-id="view-overview">
         <div class="page-head">
           <div>
-            <p class="eyebrow" style="margin-bottom:6px">Cycle W14 · Continuous triage · FDA 21 CFR 803 / MDR post-market surveillance</p>
             <h1>Good morning, Khizar</h1>
             <p class="sub" id="overviewGreeting">1,873 reports normalized across 7 sources. 9 items are waiting on a human quality decision.</p>
           </div>
@@ -116,14 +123,12 @@
           </div>
         </div>
 
-        <p class="eyebrow" id="overviewScenarioTag" style="margin:0 0 10px">Fictional scenario · Aeris Health · synthetic counts (not live data)</p>
-
         <div class="kpi-grid">
           <div class="glass kpi rise" style="--i:0" data-od-id="kpi-feedback">
             <div class="k-top"><span class="k-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H8l-4 4V5a2 2 0 0 1 2-2h13a2 2 0 0 1 2 2Z"/></svg></span><span class="trend up">+12%</span></div>
             <div class="k-num num"><span data-count="1873">0</span></div>
             <div class="k-label">Feedback in cycle</div>
-            <div class="k-sub">1,402 train · 471 held-out eval</div>
+            <div class="k-sub">across 7 sources</div>
           </div>
           <div class="glass kpi rise" style="--i:1" data-od-id="kpi-pending">
             <div class="k-top"><span class="k-ic w"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 8v4l3 2"/></svg></span><span class="trend down">5 MDR</span></div>
@@ -135,13 +140,13 @@
             <div class="k-top"><span class="k-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-4 10.5c.6.6 1 1.4 1 2.2h6c0-.8.4-1.6 1-2.2A6 6 0 0 0 12 3Z"/></svg></span><span class="trend up">+3</span></div>
             <div class="k-num num"><span data-count="11">0</span></div>
             <div class="k-label">Ideas mapped to Jira</div>
-            <div class="k-sub">across 6 pods · 3 unverified owners</div>
+            <div class="k-sub">across 6 pods</div>
           </div>
           <div class="glass kpi rise" style="--i:3" data-od-id="kpi-excluded">
             <div class="k-top"><span class="k-ic s"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M4 12h16M4 17h10"/></svg></span></div>
             <div class="k-num num"><span data-count="265">0</span></div>
             <div class="k-label">Excluded at intake gate</div>
-            <div class="k-sub">14% of raw volume · logged unchanged</div>
+            <div class="k-sub">logged unchanged</div>
           </div>
         </div>
 
@@ -158,49 +163,68 @@
             <div class="chart-legend" id="legendSources"></div>
           </div>
 
-          <div class="glass panel rise" style="--i:2" data-od-id="chart-split">
-            <div class="panel-head"><div><h3>Classifier routing</h3><p class="sub">Eligible records only</p></div></div>
-            <div class="chart-wrap" id="chartSplit">
-              <div class="donut-center"><div class="dc-num num">1,608</div><div class="dc-label">ELIGIBLE</div></div>
+          <div class="glass panel rise" style="--i:2" data-od-id="chart-themes">
+            <div class="panel-head">
+              <div><h3>Top themes this week</h3><p class="sub">Most-discussed feedback in the last 7 days</p></div>
+              <button class="btn btn-secondary btn-sm" data-goto="analytics">Analytics</button>
             </div>
-            <div class="chart-legend" id="legendSplit"></div>
+            <div class="chart-wrap" id="chartThemes"></div>
+            <div class="chart-legend" id="legendThemes"></div>
           </div>
         </div>
 
-        <div class="glass panel rise" style="--i:1" data-od-id="chart-trend">
+        <div class="glass panel rise" style="--i:1;margin-top:var(--space-md)" data-od-id="triage-stream">
           <div class="panel-head">
-            <div>
-              <h3>Quality vs. product volume</h3>
-              <p class="sub">12-week intake trend — complaint candidates against product feedback</p>
-            </div>
-            <div class="seg" role="tablist" aria-label="Trend range">
-              <button class="on" data-range="12">12w</button>
-              <button data-range="6">6w</button>
-            </div>
+            <div><h3>Live triage stream</h3><p class="sub">Most recent items, highest risk first</p></div>
           </div>
-          <div class="chart-wrap" id="chartTrend"></div>
+          <div class="stream" id="triageStream" style="max-height:340px;overflow:auto"></div>
+        </div>
+      </section>
+
+      <!-- ========== ANALYTICS ========== -->
+      <section class="view" id="view-analytics" data-od-id="view-analytics">
+        <div class="page-head">
+          <div>
+            <h1>Analytics</h1>
+            <p class="sub">Quality vs. product volume and the themes customers are talking about, for the range you pick.</p>
+          </div>
+          <div class="row">
+            <div class="seg" id="analyticsRange" role="group" aria-label="Date range">
+              <button class="on" data-days="7">7 days</button>
+              <button data-days="10">10 days</button>
+              <button data-days="30">30 days</button>
+            </div>
+            <button class="btn btn-secondary" id="analyticsPdf" title="Print / save as PDF">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12m0 0 4-4m-4 4-4-4"/><path d="M5 19h14"/></svg>
+              Download PDF
+            </button>
+          </div>
+        </div>
+
+        <div class="glass panel rise" data-od-id="analytics-qp">
+          <div class="panel-head">
+            <div><h3>Quality vs. product volume</h3><p class="sub" id="analyticsQpSub">Last 7 days</p></div>
+            <span class="label label-neutral" id="analyticsQpTag">—</span>
+          </div>
+          <div class="chart-wrap" id="chartQp"></div>
           <div class="chart-legend">
             <span class="legend-item"><span class="sw" style="background:var(--danger)"></span>Complaint candidates</span>
             <span class="legend-item"><span class="sw" style="background:var(--accent)"></span>Product feedback</span>
           </div>
         </div>
 
-        <div class="grid-1-2 section-gap">
-          <div class="glass panel rise" style="--i:1" data-od-id="data-freshness">
-            <div class="panel-head"><div><h3>Data freshness</h3></div></div>
-            <div class="stack" id="freshnessList"></div>
-            <button class="btn btn-secondary btn-sm" id="openDataFromOverview" style="margin-top:16px;width:100%">Open data status</button>
+        <div class="glass panel rise" style="margin-top:var(--space-md)" data-od-id="analytics-themes">
+          <div class="panel-head">
+            <div><h3>Top themes</h3><p class="sub" id="analyticsThemesSub">Last 7 days · by report volume</p></div>
           </div>
-
-          <div class="glass panel rise" style="--i:2" data-od-id="triage-stream">
-            <div class="panel-head">
-              <div><h3>Live triage stream</h3><p class="sub">Synthetic scenario · recall-first ordering · not auto-refreshed</p></div>
-              <span class="label label-success"><span class="dot"></span>Recall-first policy active</span>
-            </div>
-            <div class="stream" id="triageStream"></div>
-          </div>
+          <div class="chart-wrap" id="chartThemesBig"></div>
+          <div class="chart-legend" id="legendThemesBig"></div>
         </div>
-      </section><!-- ========== IDEAS ========== -->
+
+        <p class="meta" id="analyticsProvenance" style="margin-top:var(--space-md)">—</p>
+      </section>
+
+      <!-- ========== IDEAS ========== -->
       <section class="view" id="view-ideas" data-od-id="view-ideas">
         <div class="page-head">
           <div>
@@ -621,68 +645,64 @@
   </div><!-- /main -->
 </div><!-- /app -->
 
-<!-- ================= DATA STATUS MODAL ================= -->
-<div class="modal" id="dataModal" role="dialog" aria-modal="true" aria-labelledby="dataModalTitle">
-  <div class="modal-card modal-wide" data-od-id="data-drawer">
-    <div class="modal-head">
-      <span class="k-ic" style="width:34px;height:34px;border-radius:10px;display:grid;place-items:center;background:var(--accent-subtle);color:var(--accent);flex:none">
-        <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="6" rx="8" ry="3"/><path d="M4 6v12c0 1.7 3.6 3 8 3s8-1.3 8-3V6"/><path d="M4 12c0 1.7 3.6 3 8 3s8-1.3 8-3"/></svg>
-      </span>
-      <div class="grow"><h2 id="dataModalTitle" style="font-size:16px">Data status</h2><p class="meta" id="drawerSyncTime">—</p></div>
-      <button class="icon-btn" id="closeData" aria-label="Close">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6l12 12M18 6 6 18"/></svg>
-      </button>
-    </div>
-    <div class="modal-body">
-      <div class="card" style="background:var(--surface-warm)" data-od-id="pipeline-stages">
-        <div class="row-between" style="margin-bottom:12px"><strong style="font-size:13px">Pipeline</strong><span class="label label-neutral" id="pipelineChip"><span class="dot"></span>checking…</span></div>
-        <div class="stack" id="pipelineStages" style="gap:10px"></div>
-      </div>
-
-      <div data-od-id="connector-health">
-        <h4>Connectors</h4>
-        <div class="stack" id="connectorList" style="gap:8px"></div>
-      </div>
-
-      <div data-od-id="tech-stack">
-        <h4>Tech stack</h4>
-        <div class="row wrap" id="techStack" style="gap:8px"></div>
-      </div>
-
-      <div data-od-id="runtime-next">
-        <h4>Not connected / next</h4>
-        <div class="row wrap" id="nextList" style="gap:8px"><span class="meta">—</span></div>
-      </div>
-
-      <div data-od-id="classifier-panel">
-        <div class="row-between" style="margin-bottom:8px">
-          <h4 style="margin:0">Classifier</h4>
-          <span class="row" style="gap:6px">
-            <span class="label label-neutral" id="clfAudience"><span class="dot"></span>public</span>
-            <button class="btn btn-secondary btn-sm" id="clfRefresh" type="button">Refresh</button>
-          </span>
-        </div>
-        <div class="stack" id="clfMetrics" style="gap:10px"></div>
-        <div style="margin-top:14px">
-          <div class="row-between" style="margin-bottom:6px">
-            <h5 style="margin:0;font-size:12.5px">Records</h5>
-            <span class="meta" id="clfCount">—</span>
+<!-- ========== DATA STATUS (full page) ========== -->
+      <section class="view" id="view-data" data-od-id="view-data">
+        <div class="page-head">
+          <div>
+            <h1>Data status</h1>
+            <p class="sub" id="drawerSyncTime">—</p>
           </div>
-          <div class="stack" id="clfRecords" style="gap:8px"></div>
+          <div class="row">
+            <button class="btn btn-secondary" data-goto="integrations">Integrations</button>
+            <button class="btn btn-primary" id="runSyncBtn">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-3-6.7L21 8"/><path d="M21 3v5h-5"/></svg>
+              Refresh status
+            </button>
+          </div>
         </div>
-        <div class="stack" id="clfDetail" style="gap:10px;margin-top:12px"></div>
-        <p class="meta" id="clfStatus" style="margin-top:10px">—</p>
-      </div>
-    </div>
-    <div class="modal-foot">
-      <button class="btn btn-secondary" id="closeDataFooter">Close</button>
-      <button class="btn btn-primary" id="runSyncBtn">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-3-6.7L21 8"/><path d="M21 3v5h-5"/></svg>
-        Refresh status
-      </button>
-    </div>
-  </div>
-</div>
+
+        <div class="glass panel rise" data-od-id="pipeline-stages">
+          <div class="row-between" style="margin-bottom:12px"><strong style="font-size:13px">Pipeline</strong><span class="label label-neutral" id="pipelineChip"><span class="dot"></span>checking…</span></div>
+          <div class="stack" id="pipelineStages" style="gap:10px"></div>
+        </div>
+
+        <div class="glass panel rise" style="margin-top:var(--space-md)" data-od-id="data-freshness">
+          <div class="panel-head"><div><h3>Source freshness</h3></div></div>
+          <div class="stack" id="freshnessList"></div>
+        </div>
+
+        <div class="glass panel rise" style="margin-top:var(--space-md)" data-od-id="connector-health">
+          <div class="panel-head"><div><h3>Connectors</h3></div></div>
+          <div class="stack" id="connectorList" style="gap:8px"></div>
+        </div>
+
+        <div class="glass panel rise" style="margin-top:var(--space-md)" data-od-id="tech-stack">
+          <div class="panel-head"><div><h3>Tech stack</h3></div></div>
+          <div class="row wrap" id="techStack" style="gap:8px"></div>
+        </div>
+
+        <div class="glass panel rise" style="margin-top:var(--space-md)" data-od-id="runtime-next">
+          <div class="panel-head"><div><h3>Not connected / next</h3></div></div>
+          <div class="row wrap" id="nextList" style="gap:8px"><span class="meta">—</span></div>
+        </div>
+
+        <div class="glass panel rise" style="margin-top:var(--space-md)" data-od-id="classifier-panel">
+          <div class="row-between" style="margin-bottom:8px">
+            <h3 style="margin:0">Classifier</h3>
+            <span class="row" style="gap:6px">
+              <span class="label label-neutral" id="clfAudience"><span class="dot"></span>public</span>
+              <button class="btn btn-secondary btn-sm" id="clfRefresh" type="button">Refresh</button>
+            </span>
+          </div>
+          <div class="stack" id="clfMetrics" style="gap:10px"></div>
+          <div style="margin-top:14px">
+            <div class="row-between" style="margin-bottom:6px"><h5 style="margin:0;font-size:12.5px">Records</h5><span class="meta" id="clfCount">—</span></div>
+            <div class="stack" id="clfRecords" style="gap:8px"></div>
+          </div>
+          <div class="stack" id="clfDetail" style="gap:10px;margin-top:12px"></div>
+          <p class="meta" id="clfStatus" style="margin-top:10px">—</p>
+        </div>
+      </section>
 
 <!-- ================= SOURCE DETAIL DRAWER ================= -->
 <div class="scrim" id="sourceScrim"></div>
@@ -746,12 +766,12 @@
 
 
 <div class="toasts" id="toasts" aria-live="polite"></div>
-<script src="assets/data.js?v=20260927b"></script>
-<script src="assets/app.js?v=20260927b"></script>
-<script src="assets/tf.config.js?v=20260927b"></script>
-<script src="assets/backend.js?v=20260927b"></script>
-<script src="assets/classifier.js?v=20260927b"></script>
-<script src="assets/runtime-badges.js?v=20260927b"></script>
-<script src="assets/runtime.js?v=20260927b"></script>
+<script src="assets/data.js?v=20260927c"></script>
+<script src="assets/app.js?v=20260927c"></script>
+<script src="assets/tf.config.js?v=20260927c"></script>
+<script src="assets/backend.js?v=20260927c"></script>
+<script src="assets/classifier.js?v=20260927c"></script>
+<script src="assets/runtime-badges.js?v=20260927c"></script>
+<script src="assets/runtime.js?v=20260927c"></script>
 </body>
 </html>

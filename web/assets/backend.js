@@ -10,7 +10,7 @@
  */
 (function () {
   var RENDER = [
-    'renderSources', 'renderSplit', 'renderStream', 'renderFreshness',
+    'renderSources', 'renderThemes', 'renderStream', 'renderFreshness',
     'renderIdeas', 'renderRoadmap', 'renderPods', 'renderIntegrations',
     'renderData', 'renderQms', 'renderQualityTable', 'renderDecisionLog'
   ];
@@ -21,7 +21,7 @@
         try { window[name](); } catch (e) { /* keep the rest rendering */ }
       }
     });
-    try { if (typeof window.renderTrend === 'function') window.renderTrend(12); } catch (e) {}
+    try { if (typeof window.renderAnalytics === 'function') window.renderAnalytics(); } catch (e) {}
     var view = 'overview';
     try { view = JSON.parse(localStorage.getItem('tf.view') || '"overview"'); } catch (e) {}
     if (typeof window.go === 'function') window.go(view);
