@@ -378,7 +378,7 @@ function intCard(o, isQms) {
   const tone = o.tone === 'success' ? 'label-success' : 'label-neutral';
   return '<div class="glass int-card" data-od-id="int-' + o.id + '"><div class="ic-top"><span class="logo-tile">' + (o.id === 'jira' || o.id === 'salesforce' || o.id === 'zendesk' ? '<span style="color:' + brand(o.id) + ';width:22px;height:22px">' + LOGOS[o.id] + '</span>' : '<span class="logo-mono">' + o.mono + '</span>') + '</span><div><div class="ic-name">' + o.name + '</div><span class="label ' + tone + '" style="font-size:10px"><span class="dot"></span>' + o.status + '</span></div></div>' +
     '<p class="ic-desc">' + o.desc + '</p>' +
-    '<div class="ic-foot"><span class="meta">' + o.detail + '</span>' + (isQms ? '<button class="btn btn-secondary btn-sm" data-configure="' + o.id + '" data-name="' + o.name + '">Configure</button>' : '<button class="btn btn-ghost btn-sm" data-toggle-int>' + (o.tone === 'success' ? 'Manage' : 'Connect') + '</button>') + '</div></div>';
+    '<div class="ic-foot"><span class="meta">' + o.detail + '</span>' + (isQms ? '<button class="btn btn-secondary btn-sm" data-configure="' + o.id + '" data-name="' + o.name + '">Configure (demo)</button>' : '<span class="label label-neutral" style="font-size:10px">demo only</span>') + '</div></div>';
 }
 function renderIntegrations() {
   $('#qmsGrid').innerHTML = QMS.map(q => intCard(q, true)).join('');
@@ -387,7 +387,7 @@ function renderIntegrations() {
   bindSwitches();
 }
 function bindSwitches() {
-  $$('[data-toggle-int]').forEach(s => s.addEventListener('click', () => { s.classList.toggle('on'); toast(s.classList.contains('on') ? 'Integration enabled' : 'Integration paused', s.classList.contains('on') ? 'success' : 'info'); }));
+  $$('[data-toggle-int]').forEach(s => s.addEventListener('click', () => { toast('Demo toggle — no live effect', 'info'); }));
 }
 
 /* ================= data drawer ================= */
@@ -558,12 +558,12 @@ function init() {
   $('#addIntegrationBtn').addEventListener('click', () => openModal('Veeva Vault Quality', 'VV'));
   $('#closeModal').addEventListener('click', closeModal);
   $('#intModal').addEventListener('click', e => { if (e.target.id === 'intModal') closeModal(); });
-  $('#testConnBtn').addEventListener('click', () => toast('Connection OK · sandbox tenant responded in 142 ms', 'success'));
-  $('#saveIntBtn').addEventListener('click', () => { closeModal(); toast('Integration saved — human approval gate is on', 'success'); });
+  $('#testConnBtn').addEventListener('click', () => toast('Demo only — no live tenant is contacted', 'info'));
+  $('#saveIntBtn').addEventListener('click', () => { closeModal(); toast('Demo only — no integration was saved', 'info'); });
   $('#modalToggle').addEventListener('click', () => $('#modalToggle').classList.toggle('on'));
   $$('[data-configure]').forEach(b => b.addEventListener('click', () => openModal(b.dataset.name, (QMS.find(q => q.id === b.dataset.configure) || {}).mono || '·')));
 
-  $('#runSyncBtn').addEventListener('click', () => { const btn = $('#runSyncBtn'); btn.disabled = true; btn.textContent = 'Syncing…'; setTimeout(() => { btn.disabled = false; btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-3-6.7L21 8"/><path d="M21 3v5h-5"/></svg>Run sync now'; toast('Sync complete · 14 new records ingested', 'success'); $('#dataSyncLabel').textContent = 'Synced just now · 7 sources'; }, 1400); });
+  // `#runSyncBtn` is wired by assets/runtime.js to refresh real status.
 
   $('#chatForm').addEventListener('submit', e => { e.preventDefault(); const v = $('#chatInput').value; $('#chatInput').value = ''; ask(v); });
   $$('.prompt-chip').forEach(c => c.addEventListener('click', () => ask(c.textContent)));
