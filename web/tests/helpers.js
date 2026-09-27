@@ -21,6 +21,8 @@ function jsonResponse(rows, status = 200) {
 
 function matchFilter(value, expr) {
   if (expr == null) return true;
+  if (expr === 'is.true') return value === true;
+  if (expr === 'is.false') return value === false;
   if (expr.startsWith('eq.')) return String(value) === expr.slice(3);
   if (expr.startsWith('in.(')) {
     const list = expr.slice(4, -1).split(',').map((s) => s.trim());

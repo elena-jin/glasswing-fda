@@ -1,9 +1,12 @@
 /* GET /api/classifier/record?id=<record_id>
  *
- * Full detail for one normalized record against the LIVE schema: provenance,
+ * Full detail for one normalized record: provenance (from the source item),
  * partition, evidence text, reference label, predictions (model version/run,
- * confidence, threshold, route), human review history, and training-candidate
- * status (resolved through the review that produced it). Partition-gated.
+ * confidence, threshold, route), review history and candidate status.
+ *
+ * SECURITY: the source item's partition/synthetic gate is applied BEFORE any
+ * text is shaped. A real-source record (locked_eval / maude_stress) returns 403
+ * with no evidence text — the row is never serialized back to the client.
  */
 const { send, method, query } = require('../http');
 const { safeSelect, shapeRecord } = require('../db');
@@ -18,13 +21,17 @@ module.exports = async (req, res) => {
   if (!id) return send(res, 400, { ok: false, error: 'missing_id' });
   if (!sb.configured()) return send(res, 503, { ok: false, error: 'supabase_not_configured' });
 
+  // Source item carries the gate. Fetch it first; refuse before touching text.
+  const src = await safeSelect('tf_source_items', { select: '*', id: `eq.${id}`, limit: 1 });
+  const source = src.data[0];
+  if (src.ok && !source) return send(res, 404, { ok: false, error: 'record_not_found', id });
+  if (source && !parts.isVisibleSource(source, aud)) {
+    return send(res, 403, { ok: false, error: 'partition_forbidden', partition: source.data_partition });
+  }
+
   const recs = await safeSelect('tf_normalized_records', { select: '*', id: `eq.${id}`, limit: 1 });
-  if (!recs.ok) return send(res, 200, { ok: true, data: null, empty: true, error: recs.error });
   const record = recs.data[0];
   if (!record) return send(res, 404, { ok: false, error: 'record_not_found', id });
-  if (!parts.canSee(record.data_partition, aud)) {
-    return send(res, 403, { ok: false, error: 'partition_forbidden', partition: record.data_partition });
-  }
 
   const [labels, preds, reviews] = await Promise.all([
     safeSelect('tf_reference_labels', { select: '*', record_id: `eq.${id}` }),
@@ -32,7 +39,6 @@ module.exports = async (req, res) => {
     safeSelect('tf_review_decisions', { select: '*', record_id: `eq.${id}`, order: 'decision_at.desc' }),
   ]);
 
-  // Training candidates hang off reviews (tf_training_candidates.review_id).
   let candidates = { data: [] };
   const reviewIds = reviews.data.map((r) => r.id).filter(Boolean);
   if (reviewIds.length) {
@@ -41,21 +47,24 @@ module.exports = async (req, res) => {
     candidates.data = candidates.data.map((c) => ({ ...c, record_id: (reviewById.get(c.review_id) || {}).record_id || null }));
   }
 
-  const shaped = shapeRecord(record);
   send(res, 200, {
     ok: true,
     audience: aud,
     data: {
-      record: shaped,
-      source: record.source || null,
-      provenance: record.provenance || null,
+      record: shapeRecord(record, source),
+      source: source ? {
+        id: source.id, source_type: source.source_type, native_id: source.native_id,
+        source_url: source.source_url, occurred_at: source.occurred_at,
+        data_partition: source.data_partition, synthetic: source.synthetic,
+      } : null,
+      provenance: source ? source.provenance : null,
       reference: labels.data[0] || null,
       predictions: preds.data,
       reviews: reviews.data,
       candidates: candidates.data,
       route: preds.data[0] ? preds.data[0].route : null,
       humanStatus: reviews.data[0]
-        ? (reviews.data[0].final_label || reviews.data[0].decision)
+        ? (reviews.data[0].final_label || reviews.data[0].final_route)
         : 'unreviewed',
     },
   });

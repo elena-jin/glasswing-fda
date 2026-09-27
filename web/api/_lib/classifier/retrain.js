@@ -1,55 +1,49 @@
 /* POST /api/classifier/retrain
- *   body: { model_version_id?, eval_split, train_partitions?, dataset_version?, created_by, reason }
+ *   body: { model_version_id?, dataset_version, created_by?, reason? }
+ *
+ * AUTH: internal reviewers only (fail closed without TF_INTERNAL_TOKEN).
  *
  * Enqueues a CONTROLLED retraining request as an immutable tf_model_runs row
- * (status "requested"). No training runs here and never in the browser; a
- * server-side worker consumes the request. Records the held-out evaluation gate
- * and the partitions excluded from training. Never auto-promotes a model.
+ * (status "pending"). Trains nothing here and never in the browser. The row
+ * records the held-out evaluation gate; locked_eval and maude_stress are never
+ * trainable. Model promotion stays manual — there is no auto-promote.
  *
- * Blocker: the worker is out of scope for this PR.
+ * Blockers: a server-side worker and a model API are required to actually run
+ * this. Until they exist, requests stay pending.
  */
 const { send, method, readJson } = require('../http');
 const { safeInsert } = require('../db');
 const sb = require('../supabase');
 const parts = require('../partitions');
 
-function resolveTrainPartitions(requested) {
-  const allowed = ['synthetic', 'synthetic_train', 'real', 'real_train'];
-  const want = Array.isArray(requested) && requested.length ? requested : allowed;
-  const blocked = want.filter((p) => parts.isLockedEval(p));
-  const train = want.filter((p) => !parts.isLockedEval(p) && allowed.includes(p));
-  return { train, blocked };
-}
-
 module.exports = async (req, res) => {
   if (!method(req, res, ['POST'])) return;
   if (!sb.configured()) return send(res, 503, { ok: false, error: 'supabase_not_configured' });
+
+  let auth;
+  try { auth = parts.requireInternal(req); }
+  catch (err) { return send(res, err.status || 401, { ok: false, error: err.code || 'auth_required' }); }
 
   let body;
   try { body = await readJson(req); }
   catch (err) { return send(res, err.statusCode || 400, { ok: false, error: 'invalid_json' }); }
 
-  const { model_version_id, eval_split, train_partitions, dataset_version, created_by, reason } = body;
-  if (!eval_split) return send(res, 400, { ok: false, error: 'eval_split_required', note: 'a held-out evaluation split is mandatory' });
-
-  const gate = resolveTrainPartitions(train_partitions);
-  if (!gate.train.length) return send(res, 400, { ok: false, error: 'no_trainable_partitions', blocked: gate.blocked });
-
+  // The DB enforces data_partition IN (train,validation,locked_eval,maude_stress,demo).
+  // Training only ever draws from 'train'.
   const row = {
-    model_version_id: model_version_id || null,
-    dataset_version: dataset_version || null,
-    data_partition: gate.train.join(','),
-    run_type: 'offline',
-    status: 'requested',
+    model_version_id: body.model_version_id || null,
+    dataset_version: body.dataset_version || 'unspecified',
+    data_partition: 'train',
+    status: 'pending',
     parameters: {
-      requested_by: created_by || 'unknown',
-      reason: reason || null,
-      eval_split,
+      requested_by: auth.reviewer,
+      reason: body.reason || null,
+      eval_split: 'validation',
       gate: {
-        train_partitions: gate.train,
-        blocked_partitions: gate.blocked,
+        train_partitions: ['train'],
+        blocked_partitions: parts.LOCKED_FROM_TRAINING,
         exclude_locked_eval: true,
-        require_held_out_eval: true,
+        require_held_out_eval: 'validation',
         human_promotion_required: true,
       },
     },
@@ -57,21 +51,25 @@ module.exports = async (req, res) => {
   };
 
   const ins = await safeInsert('tf_model_runs', [row]);
-  if (!ins.ok) return send(res, 200, { ok: false, error: ins.error, note: 'request not persisted (check tf_model_runs.status constraint)' });
+  if (!ins.ok) return send(res, 200, { ok: false, error: ins.error, note: 'request not persisted' });
 
   const run = ins.data[0];
   await safeInsert('tf_audit_events', [{
-    actor_id: created_by || 'unknown',
+    actor_id: auth.reviewer,
     event_type: 'retrain.requested',
     object_type: 'tf_model_runs',
     object_id: run && run.id,
-    detail: { eval_split, train_partitions: gate.train, blocked: gate.blocked, reason: reason || null },
+    detail: { data_partition: 'train', blocked: parts.LOCKED_FROM_TRAINING, reason: body.reason || null },
   }]);
 
   send(res, 202, {
     ok: true,
     run,
-    gate,
-    note: 'Retraining request queued server-side as a tf_model_runs row (status "requested"). A worker must consume it; promotion stays manual.',
+    gate: partGate(),
+    note: 'Retraining request queued as a tf_model_runs row (status "pending"). A worker must consume it; promotion stays manual.',
   });
 };
+
+function partGate() {
+  return { train: ['train'], blocked: parts.LOCKED_FROM_TRAINING, eval: 'validation' };
+}

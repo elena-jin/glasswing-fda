@@ -1,10 +1,15 @@
 /* GET /api/classifier/summary
  *
- * Per-run classifier metrics against the LIVE schema. Only runs that EXIST are
- * returned; a run with no predictions is an explicit empty state. Offline runs
- * are labelled `offline: true` (run.run_type added by migration 0001; defaults
- * to offline, which is the honest reading of the current exploratory runs).
- * MAUDE-positive partitions are recall-only.
+ * Per-run classifier metrics from the LIVE schema. Partition/synthetic are read
+ * from the joined source item; the public audience only counts synthetic
+ * train/validation/demo rows, so real-source eval text never influences a number
+ * a public viewer sees.
+ *
+ *  - Only runs that EXIST are returned; a run with no visible labelled pairs is
+ *    an explicit empty state.
+ *  - Runs are offline (there is no run_type column); parameters.run_type can
+ *    override. Labelled `offline: true` by default — the honest reading.
+ *  - MAUDE (maude_stress) is positive-only → recall only, no specificity.
  */
 const { send, method } = require('../http');
 const { safeSelect, referenceByRecord } = require('../db');
@@ -19,44 +24,43 @@ const inFilter = (v) => parts.inFilter(v);
 async function runMetrics(run, aud) {
   const preds = await safeSelect('tf_predictions', { select: '*', run_id: `eq.${run.id}`, limit: MAX_ROWS });
   const scope = parts.visiblePartitions(aud);
-  if (!preds.ok || !preds.data.length) {
-    const empty = metrics.computeRunMetrics(run, [], { partitionScope: scope });
-    empty.recallOnly = false;
-    return empty;
-  }
+  const empty = () => {
+    const b = metrics.computeRunMetrics(run, [], { partitionScope: scope });
+    b.recallOnly = false;
+    return b;
+  };
+  if (!preds.ok || !preds.data.length) return empty();
 
   const ids = [...new Set(preds.data.map((p) => p.record_id))];
-  const [labelsRes, recordsRes, versionRes] = await Promise.all([
+  const [sourcesRes, labelsRes, versionRes] = await Promise.all([
+    safeSelect('tf_source_items', { select: 'id,data_partition,synthetic', id: inFilter(ids), limit: MAX_ROWS }),
     safeSelect('tf_reference_labels', { select: '*', record_id: inFilter(ids), limit: MAX_ROWS }),
-    safeSelect('tf_normalized_records', { select: 'id,data_partition,split', id: inFilter(ids), limit: MAX_ROWS }),
     run.model_version_id
       ? safeSelect('tf_model_versions', { select: '*', id: `eq.${run.model_version_id}`, limit: 1 })
       : Promise.resolve({ ok: true, data: [] }),
   ]);
+  const srcById = new Map(sourcesRes.data.map((s) => [s.id, s]));
   const ref = referenceByRecord(labelsRes.data);
-  const recById = new Map(recordsRes.data.map((r) => [r.id, r]));
 
   const pairs = [];
   for (const p of preds.data) {
-    const rec = recById.get(p.record_id);
-    if (!rec || !parts.canSee(rec.data_partition, aud)) continue;
+    const source = srcById.get(p.record_id);
+    if (!parts.isVisibleSource(source, aud)) continue;
     const label = ref.get(p.record_id);
     if (!label) continue;
     pairs.push({
       reference: label.label,
       predicted: p.predicted_label,
       confidence: p.confidence,
-      partition: rec.data_partition,
-      split: label.split || rec.split,
+      partition: source.data_partition,
+      split: parts.splitOf(source.data_partition),
     });
   }
+  if (!pairs.length) return empty();
 
   const anyMaude = pairs.some((p) => parts.isMaude(p.partition));
   const version = versionRes.data[0] || null;
-  const block = metrics.computeRunMetrics(run, pairs, {
-    recallOnly: anyMaude,
-    partitionScope: scope,
-  });
+  const block = metrics.computeRunMetrics(run, pairs, { recallOnly: anyMaude, partitionScope: scope });
   block.perSplit = metrics.perSplit(pairs);
   block.recallOnly = anyMaude;
   block.modelFamily = version ? version.model_family : null;
@@ -71,9 +75,9 @@ function runMeta(run) {
   const params = run.parameters || {};
   return {
     ...run,
-    run_type: run.run_type || params.run_type || 'offline',
+    run_type: params.run_type || 'offline',
     model_version: run.model_version_id || null,
-    eval_split: run.eval_split || params.eval_split || null,
+    eval_split: run.data_partition === 'validation' || run.data_partition === 'locked_eval' ? 'eval' : null,
     threshold: params.threshold != null ? params.threshold : undefined,
     created_at: run.created_at || run.started_at || null,
   };
@@ -82,10 +86,7 @@ function runMeta(run) {
 module.exports = async (req, res) => {
   if (!method(req, res, ['GET'])) return;
   const aud = parts.audience(req);
-
-  if (!sb.configured()) {
-    return send(res, 503, { ok: false, error: 'supabase_not_configured' });
-  }
+  if (!sb.configured()) return send(res, 503, { ok: false, error: 'supabase_not_configured' });
 
   const runs = await safeSelect('tf_model_runs', { select: '*', order: 'started_at.desc', limit: MAX_RUNS });
   if (!runs.ok) {
@@ -111,13 +112,13 @@ module.exports = async (req, res) => {
     count: out.length,
     empty: out.every((r) => r.empty),
     runs: out,
-    provenance: 'each block is computed from that run\'s tf_predictions joined to tf_reference_labels',
+    provenance: 'each block is computed from that run\'s tf_predictions joined to tf_source_items and tf_reference_labels',
     metricDefinitions: {
       positiveClass: 'complaint (candidate for human Quality review)',
       recall: 'tp / (tp + fn)',
       specificity: 'tn / (tn + fp)',
       precision: 'tp / (tp + fp)',
-      note: 'MAUDE-positive partitions report recall only.',
+      note: 'maude_stress is positive-only: recall only.',
     },
   });
 };

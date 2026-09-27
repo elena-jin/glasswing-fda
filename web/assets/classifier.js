@@ -82,14 +82,16 @@
         esc(s.note || s.error || 'Classifier backend unavailable.') + '</p></div>';
       return;
     }
+    var retrainBtn = state.audience === 'internal'
+      ? '<button class="btn btn-secondary btn-sm" id="clfRetrain" type="button">Request controlled retraining</button>'
+      : '';
     if (s.empty) {
       host.innerHTML = '<div class="card" style="background:var(--surface-warm)"><p class="meta">' +
         esc(s.note || 'No classifier runs exist yet.') + '</p>' +
-        '<button class="btn btn-secondary btn-sm" id="clfRetrain" style="margin-top:8px" type="button">Request controlled retraining</button></div>';
+        (retrainBtn ? '<div style="margin-top:8px">' + retrainBtn + '</div>' : '') + '</div>';
       return;
     }
-    host.innerHTML = s.runs.map(metricCard).join('') +
-      '<button class="btn btn-secondary btn-sm" id="clfRetrain" type="button">Request controlled retraining</button>';
+    host.innerHTML = s.runs.map(metricCard).join('') + retrainBtn;
   }
 
   /* ---------- records ---------- */
@@ -127,28 +129,31 @@
     var p = (d.predictions && d.predictions[0]) || {};
     var ref = d.reference || {};
     var cand = (d.candidates && d.candidates[0]) || {};
+    var canWrite = state.audience === 'internal';
     host.innerHTML =
       '<div class="card" style="background:var(--bg-soft,#f7f9fc)">' +
-      '<div class="row-between"><b class="mono">' + esc(r.case_id || r.id) + '</b><span class="row" style="gap:6px">' + partitionBadge(r.partition) + '<span class="label label-outline" style="font-size:10px">' + esc(r.split) + '</span><span class="label ' + (r.synthetic ? 'label-success' : 'label-warning') + '" style="font-size:10px">' + (r.synthetic ? 'synthetic' : 'non-synthetic') + '</span></span></div>' +
+      '<div class="row-between"><b class="mono">' + esc(r.id) + '</b><span class="row" style="gap:6px">' + partitionBadge(r.partition) + '<span class="label ' + (r.synthetic ? 'label-success' : 'label-warning') + '" style="font-size:10px">' + (r.synthetic ? 'synthetic' : 'non-synthetic') + '</span></span></div>' +
       '<div style="font-size:12.5px;margin:8px 0">' + esc(r.text || '') + '</div>' +
       '<div class="row wrap" style="gap:8px;margin-bottom:8px">' +
+      '<span class="meta">source <b>' + esc(r.source_type || '—') + '</b></span>' +
       '<span class="meta">product <b>' + esc(r.product || '—') + '</b></span>' +
-      '<span class="meta">version <b>' + esc(r.app_version || '—') + '</b></span>' +
       '<span class="meta">ref <b>' + esc(ref.label || '—') + '</b></span>' +
       '<span class="meta">pred <b>' + esc(p.predicted_label || '—') + '</b> @ ' + (p.confidence != null ? Number(p.confidence).toFixed(2) : '—') + '</span>' +
       '<span class="meta">run <b class="mono">' + esc(String(p.run_id || '—')).slice(0, 8) + '</b></span></div>' +
-      '<div class="row" style="gap:6px;flex-wrap:wrap">' +
-      '<select id="clfDecision" class="input" style="max-width:150px"><option value="agree">Agree with model</option><option value="override">Override</option></select>' +
-      '<input id="clfCorrected" class="input" placeholder="corrected label" style="max-width:180px" />' +
-      '<input id="clfReason" class="input" placeholder="reason (audited)" style="flex:1;min-width:160px" />' +
-      '<label class="meta row" style="gap:5px"><input type="checkbox" id="clfMakeCand" /> propose training candidate</label>' +
-      '<button class="btn btn-primary btn-sm" id="clfSaveReview" type="button">Save review</button>' +
-      '</div>' +
+      (canWrite
+        ? '<div class="row" style="gap:6px;flex-wrap:wrap">' +
+            '<select id="clfDecision" class="input" style="max-width:150px"><option value="agree">Agree with model</option><option value="override">Override</option></select>' +
+            '<select id="clfCorrected" class="input" style="max-width:180px"><option value="">(corrected label)</option><option value="complaint">complaint</option><option value="product_feedback">product_feedback</option><option value="excluded">excluded</option></select>' +
+            '<input id="clfReason" class="input" placeholder="reason (audited)" style="flex:1;min-width:160px" />' +
+            '<label class="meta row" style="gap:5px"><input type="checkbox" id="clfMakeCand" /> propose training candidate</label>' +
+            '<button class="btn btn-primary btn-sm" id="clfSaveReview" type="button">Save review</button>' +
+          '</div>'
+        : '<p class="meta">Review actions require an authenticated internal reviewer. Sign in through the internal console to approve, override or propose training candidates.</p>') +
       '<p class="meta" style="margin:8px 0 0">Human status: <b>' + esc(d.humanStatus || 'unreviewed') + '</b>' +
-      (cand.id ? ' · candidate ' + esc(cand.candidate_status || cand.status || 'pending') + ' <button class="btn btn-ghost btn-sm" data-cand="' + esc(cand.id) + '" data-cand-action="approve">Approve</button> <button class="btn btn-ghost btn-sm" data-cand="' + esc(cand.id) + '" data-cand-action="revoke">Revoke</button>' : '') +
+      (cand.id && canWrite ? ' · candidate ' + esc(cand.candidate_status || 'pending') + ' <button class="btn btn-ghost btn-sm" data-cand="' + esc(cand.id) + '" data-cand-action="approve">Approve</button> <button class="btn btn-ghost btn-sm" data-cand="' + esc(cand.id) + '" data-cand-action="revoke">Revoke</button>' : '') +
       '</p></div>' +
       (d.reviews && d.reviews.length ? '<div class="stack" style="gap:4px">' + d.reviews.map(function (rv) {
-        return '<p class="meta">' + esc(when(rv.decision_at || rv.created_at)) + ' · ' + esc(rv.reviewer_id || rv.reviewer) + ' · ' + esc(rv.final_label || rv.decision) + (rv.override_reason ? ' · ' + esc(rv.override_reason) : '') + '</p>';
+        return '<p class="meta">' + esc(when(rv.decision_at || rv.created_at)) + ' · ' + esc(rv.reviewer_id || '—') + ' · ' + esc(rv.final_label || '') + ' → ' + esc(rv.final_route || '') + (rv.override_reason ? ' · ' + esc(rv.override_reason) : '') + '</p>';
       }).join('') + '</div>' : '');
   }
 
@@ -173,9 +178,9 @@
     var makeCand = ($('#clfMakeCand') || {}).checked || false;
     api('/api/classifier/review', {
       method: 'POST', headers: { 'content-type': 'application/json' },
-      body: JSON.stringify({ record_id: id, reviewer: reviewer, decision: decision, corrected_label: corrected, reason: reason, create_candidate: makeCand }),
+      body: JSON.stringify({ record_id: id, decision: decision, corrected_label: corrected, reason: reason, create_candidate: makeCand }),
     }).then(function (r) {
-      setStatus(r.body && r.body.ok ? 'Review saved (audit logged).' : 'Review failed: ' + ((r.body && r.body.error) || r.status));
+      setStatus(r.body && r.body.ok ? 'Review saved (audit logged).' : (r.status === 401 ? 'Review requires an authenticated internal reviewer.' : 'Review failed: ' + ((r.body && r.body.error) || r.status)));
       loadRecord(id, reviewer);
     });
   }
@@ -183,9 +188,9 @@
   function candidateAction(id, action, reviewer) {
     api('/api/classifier/candidates', {
       method: 'POST', headers: { 'content-type': 'application/json' },
-      body: JSON.stringify({ id: id, action: action, actor: reviewer, reason: 'panel action' }),
+      body: JSON.stringify({ id: id, action: action, reason: 'panel action' }),
     }).then(function (r) {
-      setStatus(r.body && r.body.ok ? 'Candidate ' + action + 'd.' : 'Blocked: ' + ((r.body && (r.body.error || r.body.note)) || r.status));
+      setStatus(r.body && r.body.ok ? 'Candidate ' + action + 'd.' : (r.status === 401 ? 'Requires an authenticated internal reviewer.' : 'Blocked: ' + ((r.body && (r.body.error || r.body.note)) || r.status)));
       if (state.selected) loadRecord(state.selected, reviewer);
     });
   }
@@ -194,9 +199,9 @@
     var evalSplit = (state.summary && state.summary.runs && state.summary.runs[0] && state.summary.runs[0].evalSplit) || 'held_out_eval';
     api('/api/classifier/retrain', {
       method: 'POST', headers: { 'content-type': 'application/json' },
-      body: JSON.stringify({ eval_split: evalSplit, created_by: reviewer, reason: 'panel request' }),
+      body: JSON.stringify({ dataset_version: null, reason: 'panel request' }),
     }).then(function (r) {
-      setStatus(r.body && r.body.ok ? ('Retraining request queued (' + evalSplit + '). Server-side worker required.') : 'Retrain request failed: ' + ((r.body && r.body.error) || r.status));
+      setStatus(r.body && r.body.ok ? 'Retraining request queued. A server-side worker is required; promotion stays manual.' : (r.status === 401 ? 'Requires an authenticated internal reviewer.' : 'Retrain request failed: ' + ((r.body && r.body.error) || r.status)));
     });
   }
 

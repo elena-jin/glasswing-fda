@@ -82,7 +82,7 @@ function computeRunMetrics(run, pairs, opts = {}) {
     confusion: cm,
     metrics: binaryMetrics(cm, scope),
     n: list.length,
-    provenance: 'computed_from_tf_predictions joined tf_reference_labels',
+    provenance: 'computed_from_tf_predictions joined tf_source_items and tf_reference_labels',
   };
 }
 
