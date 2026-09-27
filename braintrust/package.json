@@ -1,0 +1,17 @@
+{
+  "name": "test-flight-braintrust-evals",
+  "private": true,
+  "version": "0.1.0",
+  "description": "Braintrust dev evals for the grounded Test Flight assistant. Synthetic-only, sanitized traces, gated behind explicit opt-in.",
+  "type": "module",
+  "scripts": {
+    "eval": "tsx eval.ts"
+  },
+  "dependencies": {
+    "braintrust": "^0.0.181"
+  },
+  "devDependencies": {
+    "tsx": "^4.19.0",
+    "typescript": "^5.6.0"
+  }
+}

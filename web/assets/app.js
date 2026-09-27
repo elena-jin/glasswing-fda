@@ -426,14 +426,8 @@ function closeSource() { $('#sourceDrawer').classList.remove('on'); $('#sourceSc
 /* ================= assistant chat ================= */
 let chatScope = 'product';
 const CHAT = [
-  { who: 'bot', text: 'I’m grounded on the ' + fmt(1873) + ' schema v1.1 records in this cycle. Ask me to pull evidence, cross-check Jira status, or summarise a cluster.', cites: ['schema v1.1', '1,873 records'] }
+  { who: 'bot', text: 'Grounded assistant. Answers come only from retrieved synthetic records, with citation IDs. If the evidence store or the model provider is unavailable, you get an honest unavailable state — never a canned answer.', cites: [] }
 ];
-const REPLIES = {
-  owner: { text: 'Three ideas still have unverified owners: “Clinician PDF export” (proposed: M. Adeyemi), “Home-screen widget for the AHI score” (proposed: J. Ferreira) and “Contrast and type tokens for therapy charts” (Design System pod). Each needs a human confirmation before it counts as owned.', cites: ['CLIN-770', 'APP-2260', 'DS-0442'] },
-  false: { text: 'The false-alarm cluster spans 41 reports across email, App Store and Zendesk over 11 days, all inside the 00:00–05:00 window. It is linked to SAFE-1108 (In Progress) and carries a clinical-risk-without-known-harm flag.', cites: ['email-5043', 'SAFE-1108', 'FTA-2026-0402'] },
-  mdr: { text: 'MDR candidates report actual or potential harm: CP-2208 (missed alarm during an apnea event — patient_harm_reported), CP-2185 (overnight power-off with reported harm) and CP-2196 (field-corrective humidifier lot 409-TX). CP-2214 and CP-2191 are lower-confidence candidates with implied clinical risk only.', cites: ['CP-2208', 'CP-2185', 'CP-2196', 'CP-2214'] },
-  default: { text: 'Here’s what I found across the demo dataset. The strongest signal is the sync-reliability cluster: 68 reports total across APP-2214 and APP-2015, both in the current sprint, with two enterprise clinic accounts ($340k ARR) behind them.', cites: ['APP-2214', 'APP-2015', 'Zendesk #48219'] }
-};
 function renderChat() {
   const t = $('#chatThread');
   t.innerHTML = CHAT.map(m => msgHtml(m)).join('');
@@ -457,18 +451,27 @@ function ask(text) {
   const thread = $('#chatThread'); thread.insertAdjacentHTML('beforeend', msgHtml({ who: 'me', text }));
   thread.insertAdjacentHTML('beforeend', '<div class="msg bot" id="typing"><span class="typing"><i></i><i></i><i></i></span></div>');
   thread.scrollTop = thread.scrollHeight;
-  setTimeout(() => {
+
+  const base = (window.TF_CONFIG && window.TF_CONFIG.apiBase) || '';
+  const finish = (r) => {
     const t = $('#typing'); if (t) t.remove();
-    const low = text.toLowerCase();
-    const qualityTopic = low.includes('mdr') || low.includes('harm') || low.includes('complaint') || low.includes('quality') || low.includes('compliance');
-    let r;
-    if (qualityTopic && chatScope === 'product') {
-      r = { text: 'That lives in the quality &amp; compliance lane, which is outside the current scope. Flip the scope toggle to “+ Quality” and I’ll pull complaint candidates, potential MDR flags and the FTA rationale with citations.', cites: ['scope: product feedback'] };
-    } else {
-      r = low.includes('owner') ? REPLIES.owner : low.includes('false') || low.includes('alarm') ? REPLIES.false : low.includes('mdr') || low.includes('harm') ? REPLIES.mdr : REPLIES.default;
-    }
-    CHAT.push({ who: 'bot', ...r }); thread.insertAdjacentHTML('beforeend', msgHtml({ who: 'bot', ...r })); thread.scrollTop = thread.scrollHeight;
-  }, 850);
+    CHAT.push({ who: 'bot', ...r });
+    thread.insertAdjacentHTML('beforeend', msgHtml({ who: 'bot', ...r }));
+    thread.scrollTop = thread.scrollHeight;
+  };
+
+  fetch(base + '/api/assistant', {
+    method: 'POST', headers: { 'content-type': 'application/json' },
+    body: JSON.stringify({ message: text, scope: chatScope })
+  })
+    .then(res => res.json().then(j => ({ status: res.status, body: j })))
+    .then(({ body }) => {
+      const reply = (body && body.reply) || {};
+      let text2 = reply.text || 'No answer was generated.';
+      if (body && body.unavailable) text2 = text2 + ' (unavailable: ' + (body.reason || 'unknown') + ')';
+      finish({ text: text2, cites: reply.cites || [] });
+    })
+    .catch(() => finish({ text: 'Grounded chat is unavailable: the request failed. No answer was generated.', cites: [] }));
 }
 
 /* ================= nav / routing ================= */
