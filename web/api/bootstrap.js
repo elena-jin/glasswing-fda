@@ -7,8 +7,17 @@
  */
 const { send, method } = require('./_lib/http');
 const { dataset, meta } = require('./_lib/data');
+const connectors = require('./_lib/connectors');
 
 module.exports = (req, res) => {
   if (!method(req, res, ['GET'])) return;
-  send(res, 200, { ok: true, meta, data: dataset });
+  const data = {
+    ...dataset,
+    connectors: dataset.connectors.map((c) => {
+      const m = connectors.credentials(c.id);
+      return { ...c, configured: m.configured, auth: m.auth, env: m.env, mode: m.configured ? 'live' : 'synthetic' };
+    }),
+  };
+  const live = data.connectors.filter((c) => c.mode === 'live').map((c) => c.id);
+  send(res, 200, { ok: true, meta: { ...meta, liveConnectors: live }, data });
 };

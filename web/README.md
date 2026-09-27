@@ -58,7 +58,19 @@ npx vercel dev
 ## Demo mode vs. live mode
 
 Out of the box the console renders the embedded synthetic dataset and makes no
-network calls, so a plain static deploy is fully functional.
+network calls, so a plain static deploy is fully functional. On the Vercel
+deploy `assets/tf.config.js` sets `live: true`, so it hydrates from
+`GET /api/bootstrap` (same origin) and falls back to the embedded data if the
+request fails.
+
+**Synthetic data:** the fictional CPAP company **Aeris Health** (product *Aeris
+Air CPAP* + the *Aeris Air app*). Khizar Kashif is Product Manager of the
+Companion App pod. Regenerate with `python3 scripts/gen_dataset.py`.
+
+**Live connectors:** the intake sources (Zoom, Slack, Gmail, Zendesk, Intercom,
+App Store, Salesforce) become live as soon as their credentials exist as
+environment variables. Until then they are labelled `synthetic`. Setup steps for
+each provider are in [`docs/connectors.md`](docs/connectors.md).
 
 To run against a backend, edit **`assets/tf.config.js`**:
 
@@ -111,5 +123,5 @@ The dataset follows the brief's **schema v1.1** input contract: `source`,
 `evidence`, `context`, `intake`, `provenance`, plus a classifier `label` with
 `classification`, `route`, `theme_id`, `review_required`, `potential_mdr` and
 `priority_subflags`. Reviewer decisions are kept separate from model output, as
-the brief requires. Totals: **1,658 records → 786 product · 624 complaint
-candidates · 248 excluded at intake.**
+the brief requires. Totals: **1,873 records → 904 product · 704 complaint
+candidates · 265 excluded at intake.**

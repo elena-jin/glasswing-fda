@@ -147,6 +147,33 @@ be traceable.
 Everything the Integrations and Data-status surfaces need (QMS, destinations,
 tech stack, connectors, pipeline).
 
+### `GET /api/connectors`
+Per-connector configuration status. A connector is `live` when its required
+environment variables are set, otherwise `synthetic`.
+
+```json
+{ "ok": true, "live": ["zoom"], "data": [ { "id": "zoom", "configured": true, "auth": "s2s_oauth", "env": ["ZOOM_ACCOUNT_ID", "…"], "mode": "live" } ] }
+```
+
+### `POST /api/connectors`
+Read-only live preview from one source. **Never a write.**
+
+```jsonc
+// request
+{ "id": "zoom" }
+
+// response 200 (configured)
+{ "ok": true, "id": "zoom", "mode": "live", "count": 5,
+  "items": [ { "t": "Clinic onboarding — 2 recording file(s)", "when": "2026-09-24", "label": "Transcript", "src": "Zoom", "url": "…" } ] }
+
+// response 409 (not configured)
+{ "ok": false, "error": "not_configured", "missing": ["ZOOM_ACCOUNT_ID", "…"] }
+```
+
+Supported ids: `zoom`, `slack`, `gmail`, `zendesk`, `intercom`, `appstore`,
+`salesforce` (adapter stub). Credentials are read from environment variables
+only and are never sent to the browser. Setup steps: `docs/connectors.md`.
+
 ---
 
 ## Schema v1.1 record (input to the classifier)

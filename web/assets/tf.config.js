@@ -13,7 +13,7 @@
  *          the backend lives elsewhere, e.g. 'https://api.yourco.com'.
  */
 window.TF_CONFIG = {
-  live: false,
+  live: true,
   apiBase: '',
   requestTimeoutMs: 8000
 };

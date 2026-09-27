@@ -3,68 +3,76 @@
     {
       "id": "salesforce",
       "name": "Salesforce",
-      "value": 412,
-      "complaints": 178,
-      "product": 176,
-      "excluded": 58
+      "value": 452,
+      "complaints": 194,
+      "product": 198,
+      "excluded": 60
     },
     {
       "id": "zendesk",
       "name": "Zendesk",
-      "value": 386,
-      "complaints": 165,
-      "product": 166,
-      "excluded": 55
+      "value": 431,
+      "complaints": 185,
+      "product": 189,
+      "excluded": 57
     },
     {
       "id": "gmail",
       "name": "Email + Gmail",
-      "value": 298,
-      "complaints": 121,
-      "product": 130,
+      "value": 322,
+      "complaints": 134,
+      "product": 141,
       "excluded": 47
     },
     {
       "id": "slack",
       "name": "Slack",
-      "value": 254,
-      "complaints": 74,
-      "product": 137,
-      "excluded": 43
+      "value": 268,
+      "complaints": 72,
+      "product": 152,
+      "excluded": 44
     },
     {
       "id": "zoom",
       "name": "Zoom + Granola",
-      "value": 172,
-      "complaints": 41,
-      "product": 105,
-      "excluded": 26
+      "value": 197,
+      "complaints": 48,
+      "product": 118,
+      "excluded": 31
     },
     {
       "id": "appstore",
       "name": "App store reviews",
-      "value": 136,
-      "complaints": 45,
-      "product": 72,
-      "excluded": 19
+      "value": 149,
+      "complaints": 51,
+      "product": 82,
+      "excluded": 16
+    },
+    {
+      "id": "intercom",
+      "name": "Intercom",
+      "value": 54,
+      "complaints": 20,
+      "product": 24,
+      "excluded": 10
     }
   ],
   "sourceFeed": {
     "salesforce": [
       {
-        "t": "Recall notice mentioned lot 409-TX — is our inventory affected?",
+        "t": "Customer asks whether Aeris Air humidifier lot 409-TX is in the field-safety notice.",
         "cls": "label-danger",
         "label": "Potential MDR",
         "when": "6h ago"
       },
       {
-        "t": "Account asks for a batch traceability report on a recent order.",
+        "t": "Account requests a batch traceability export for their clinic fleet.",
         "cls": "label-accent",
         "label": "Product feedback",
         "when": "9h ago"
       },
       {
-        "t": "Case cites a delivery delay on replacement sensors.",
+        "t": "Case reports a delivery delay on replacement mask cushions.",
         "cls": "label-warning",
         "label": "Complaint",
         "when": "1d ago"
@@ -72,19 +80,19 @@
     ],
     "zendesk": [
       {
-        "t": "Stalls at 99% when two profiles are active; local socket hang.",
+        "t": "App stalls at 99% on nightly sync with two therapy profiles active.",
         "cls": "label-warning",
         "label": "Complaint",
         "when": "44 min ago"
       },
       {
-        "t": "Three false alarms this week, each woke the whole household.",
+        "t": "Three false low-pressure alarms this week; each woke the household.",
         "cls": "label-warning",
         "label": "Complaint",
         "when": "2d ago"
       },
       {
-        "t": "Can the app email a clean PDF to my clinic instead of screenshots?",
+        "t": "Can the app email a clean therapy PDF to my sleep clinic instead of screenshots?",
         "cls": "label-accent",
         "label": "Product feedback",
         "when": "6d ago"
@@ -92,19 +100,19 @@
     ],
     "gmail": [
       {
-        "t": "False low alerts most nights [excerpt].",
+        "t": "False low-pressure alerts most nights [excerpt].",
         "cls": "label-warning",
         "label": "Complaint",
         "when": "2h ago"
       },
       {
-        "t": "Device reported a low reading during an episode; the alarm never sounded.",
+        "t": "Device reported an apnea event overnight and the alarm never sounded.",
         "cls": "label-danger",
         "label": "Potential MDR",
         "when": "1d ago"
       },
       {
-        "t": "Request: a weekly summary email instead of per-alert noise.",
+        "t": "Request: a weekly therapy summary email instead of per-event pushes.",
         "cls": "label-accent",
         "label": "Product feedback",
         "when": "8d ago"
@@ -112,19 +120,19 @@
     ],
     "slack": [
       {
-        "t": "Chart contrast in dark mode is nearly invisible against the grid.",
+        "t": "Therapy chart contrast in dark mode is nearly invisible against the grid.",
         "cls": "label-accent",
         "label": "Product feedback",
         "when": "5h ago"
       },
       {
-        "t": "Nightly upload never completes; exporting the reports manually.",
+        "t": "Nightly sync never completes; clinicians are exporting reports by hand.",
         "cls": "label-warning",
         "label": "Complaint",
         "when": "1d ago"
       },
       {
-        "t": "Beta thread: the pairing loop is the worst part of setup.",
+        "t": "Beta thread: BLE pairing is the worst part of onboarding the new sensor tube.",
         "cls": "label-accent",
         "label": "Product feedback",
         "when": "9d ago"
@@ -132,19 +140,19 @@
     ],
     "zoom": [
       {
-        "t": "[transcript] The export step is the most manual part of my morning.",
+        "t": "[transcript] The export step is the most manual part of my morning clinic prep.",
         "cls": "label-accent",
         "label": "Product feedback",
         "when": "6d ago"
       },
       {
-        "t": "[transcript] Clinician asks for a shareable pressure report for the clinic.",
+        "t": "[transcript] Clinician asks for a shareable pressure report the whole sleep lab can open.",
         "cls": "label-accent",
         "label": "Product feedback",
         "when": "12d ago"
       },
       {
-        "t": "[transcript] Onboarding call flagged BLE pairing friction.",
+        "t": "[transcript] Onboarding call flagged Bluetooth pairing friction on the Air Mini.",
         "cls": "label-accent",
         "label": "Product feedback",
         "when": "18d ago"
@@ -152,34 +160,48 @@
     ],
     "appstore": [
       {
-        "t": "App sync hangs repeatedly at 99% after the update.",
+        "t": "App sync hangs repeatedly at 99% after the 4.2.1 update.",
         "cls": "label-warning",
         "label": "Complaint",
         "when": "18 min ago"
       },
       {
-        "t": "Sensor adhesive failed after a shower; the patch fell off overnight.",
+        "t": "Mask cushion seam split after two weeks; leak alarm kept firing.",
         "cls": "label-warning",
         "label": "Complaint",
         "when": "3h ago"
       },
       {
-        "t": "Battery used to last two days, now barely one.",
+        "t": "Battery used to last four nights, now barely two.",
         "cls": "label-accent",
         "label": "Product feedback",
         "when": "7d ago"
+      }
+    ],
+    "intercom": [
+      {
+        "t": "In-app message: tonight's session logged as 0.0 hours; my nurse flagged it.",
+        "cls": "label-warning",
+        "label": "Complaint",
+        "when": "3h ago"
+      },
+      {
+        "t": "Home-screen widget request for the nightly AHI score.",
+        "cls": "label-accent",
+        "label": "Product feedback",
+        "when": "4d ago"
       }
     ]
   },
   "split": [
     {
       "name": "Product feedback",
-      "value": 786,
+      "value": 904,
       "color": "var(--accent)"
     },
     {
       "name": "Complaint candidates",
-      "value": 624,
+      "value": 704,
       "color": "var(--danger)"
     }
   ],
@@ -199,41 +221,41 @@
       "W14"
     ],
     "quality": [
-      38,
       42,
-      40,
       47,
-      44,
-      51,
+      45,
+      52,
       49,
+      57,
       55,
-      53,
-      58,
-      61,
-      64
+      62,
+      60,
+      66,
+      69,
+      73
     ],
     "product": [
-      52,
-      55,
-      60,
       58,
-      63,
-      66,
-      64,
-      70,
+      62,
+      67,
+      65,
+      71,
+      74,
       72,
-      69,
-      75,
-      78
+      79,
+      81,
+      78,
+      85,
+      88
     ]
   },
   "ideas": [
     {
       "id": "idea-sync-stall",
-      "title": "Nightly sync stalls at 99% on iOS",
-      "pod": "Mobile Platform",
-      "priority": "High",
-      "reports": 47,
+      "title": "Nightly therapy sync stalls at 99% on iOS (app 4.2.1)",
+      "pod": "Companion App",
+      "priority": "Critical",
+      "reports": 68,
       "ageDays": 2,
       "sent": "negative",
       "sources": [
@@ -248,10 +270,14 @@
         [
           "slack",
           "Slack"
+        ],
+        [
+          "gmail",
+          "Email + Gmail"
         ]
       ],
       "quote": "“App sync hangs repeatedly at 99%. Patient unable to export nightly pressure reports for clinic follow-up.”",
-      "jira": "CPAP-2214",
+      "jira": "APP-2214",
       "jiraTitle": "Fix sync deadlock on nightly upload (iOS)",
       "jiraStatus": "In Review",
       "jiraClass": "label-accent",
@@ -261,17 +287,17 @@
       "updated": "18 min ago",
       "stage": "In build",
       "roadmapIdx": 2,
-      "roadmapNote": "Scoped for the W14 freeze. Two related reports currently open against the same socket path.",
-      "demand": 47,
+      "roadmapNote": "Scoped for the W14 freeze. Two related reports open against the same socket path.",
+      "demand": 48,
       "effort": 62,
       "owner": {
         "name": "R. Okafor",
         "verified": true,
-        "role": "Mobile Platform lead"
+        "role": "Companion App lead"
       },
-      "crm": "2 enterprise accounts in cluster · combined ARR $340k",
+      "crm": "2 enterprise clinic accounts in cluster · combined ARR $340k",
       "crmVerified": false,
-      "why": "Nine independent sources describe an identical hang at 99% after the 4.2.1 update, all resolving only when the app is force-quit. The similarity and version clustering is what promoted this from isolated reports to one idea.",
+      "why": "Nine independent reports describe an identical hang at 99% after the 4.2.1 update, all resolving only when the app is force-quit. The version clustering is what promoted this from isolated tickets to one idea.",
       "evidence": [
         {
           "text": "“Sync hangs at 99% every time on my iPhone after the update.”",
@@ -280,13 +306,13 @@
           "prov": "synthetic"
         },
         {
-          "text": "“Two profiles active and the socket just hangs; support had no fix.”",
+          "text": "“Two therapy profiles active and the socket just hangs; support had no fix.”",
           "src": "Zendesk #48219",
           "when": "Mar 22",
           "prov": "synthetic"
         },
         {
-          "text": "“Nightly upload never completes, I export manually at the clinic.”",
+          "text": "“Nightly upload never completes, I export manually for the clinic.”",
           "src": "Slack #voice-of-customer",
           "when": "Mar 23",
           "prov": "synthetic"
@@ -295,10 +321,10 @@
     },
     {
       "id": "idea-false-alarm",
-      "title": "False low alerts during sleep",
+      "title": "False low-pressure alerts during sleep",
       "pod": "Algorithms & Safety",
       "priority": "Critical",
-      "reports": 31,
+      "reports": 41,
       "ageDays": 3,
       "sent": "negative",
       "sources": [
@@ -315,9 +341,9 @@
           "Zendesk"
         ]
       ],
-      "quote": "“false low alerts most nights — I wake up panicked and can’t tell if it is real.”",
-      "jira": "CARD-1108",
-      "jiraTitle": "Reduce false-low alert rate in sleep window",
+      "quote": "“false low-pressure alerts most nights — I wake up panicked and can’t tell if it is real.”",
+      "jira": "SAFE-1108",
+      "jiraTitle": "Reduce false low-pressure alert rate in sleep window",
       "jiraStatus": "In Progress",
       "jiraClass": "label-accent",
       "assignee": "Dr. L. Park",
@@ -327,7 +353,7 @@
       "stage": "In build",
       "roadmapIdx": 2,
       "roadmapNote": "Algorithm threshold work with an interim clinician-reviewed suppression rule.",
-      "demand": 31,
+      "demand": 41,
       "effort": 84,
       "owner": {
         "name": "Dr. L. Park",
@@ -339,7 +365,7 @@
       "why": "Reports span 11 days and three sources but converge on one threshold band (00:00–05:00). Clinical risk without a known harm event, so it is flagged to quality as well as product.",
       "evidence": [
         {
-          "text": "“false low alerts most nights [excerpt]”",
+          "text": "“false low-pressure alerts most nights [excerpt]”",
           "src": "Email msg-5043",
           "when": "Mar 23",
           "prov": "synthetic"
@@ -359,11 +385,70 @@
       ]
     },
     {
-      "id": "idea-export-pdf",
-      "title": "Export nightly pressure reports as clinician PDF",
+      "id": "idea-mask-fit",
+      "title": "Mask leak alarms after cushion or headgear changes",
+      "pod": "Hardware & Masks",
+      "priority": "High",
+      "reports": 33,
+      "ageDays": 5,
+      "sent": "mixed",
+      "sources": [
+        [
+          "appstore",
+          "App store reviews"
+        ],
+        [
+          "zendesk",
+          "Zendesk"
+        ],
+        [
+          "gmail",
+          "Email + Gmail"
+        ]
+      ],
+      "quote": "“New cushion and the leak alarm fires all night even though the fit feels fine.”",
+      "jira": "HW-3391",
+      "jiraTitle": "Recalibrate leak detection after mask swap",
+      "jiraStatus": "In Progress",
+      "jiraClass": "label-accent",
+      "assignee": "S. Novak",
+      "sprint": "W14 · Sprint 31",
+      "points": 8,
+      "updated": "5h ago",
+      "stage": "In build",
+      "roadmapIdx": 2,
+      "roadmapNote": "Leak baseline is stored per mask model; needs a re-baseline on swap.",
+      "demand": 33,
+      "effort": 58,
+      "owner": {
+        "name": "S. Novak",
+        "verified": true,
+        "role": "Hardware & masks"
+      },
+      "crm": "Spread across consumer base · no account concentration",
+      "crmVerified": false,
+      "why": "Telemetry correlates the complaints with a leak baseline that is not reset when the mask model changes, so these reports are grouped rather than treated as separate device failures.",
+      "evidence": [
+        {
+          "text": "“Leak alarm fires every night since I switched to the nasal pillows.”",
+          "src": "App store · iOS",
+          "when": "Mar 18",
+          "prov": "synthetic"
+        },
+        {
+          "text": "“Fit is fine but the app says high leak from 2am.”",
+          "src": "Zendesk #47855",
+          "when": "Mar 19",
+          "prov": "synthetic"
+        }
+      ]
+    },
+    {
+      "id": "idea-clinician-pdf",
+      "title": "Export nightly therapy reports as a clinician PDF",
       "pod": "Clinical Workflows",
       "priority": "Medium",
-      "reports": 22,
+      "reports": 27,
       "ageDays": 6,
       "sent": "mixed",
       "sources": [
@@ -378,7 +463,7 @@
       ],
       "quote": "“I still print screenshots for the clinic. A single PDF would replace my whole morning.”",
       "jira": "CLIN-770",
-      "jiraTitle": "Clinician PDF export for pressure reports",
+      "jiraTitle": "Clinician PDF export for therapy reports",
       "jiraStatus": "Planned",
       "jiraClass": "label-info",
       "assignee": "Unassigned",
@@ -388,14 +473,14 @@
       "stage": "Planned",
       "roadmapIdx": 3,
       "roadmapNote": "High-demand, low-effort. Best candidate to pull forward into W15 if capacity opens.",
-      "demand": 22,
+      "demand": 27,
       "effort": 34,
       "owner": {
         "name": "M. Adeyemi (proposed)",
         "verified": false,
         "role": "Clinical workflows"
       },
-      "crm": "3 clinic accounts requested this on calls",
+      "crm": "3 sleep-clinic accounts requested this on calls",
       "crmVerified": false,
       "why": "Recurring request across support tickets and two recorded Zoom calls. Not a safety signal; a workflow gap. Low effort relative to demand.",
       "evidence": [
@@ -414,72 +499,72 @@
       ]
     },
     {
-      "id": "idea-battery",
-      "title": "Battery drain during continuous monitoring",
-      "pod": "Hardware",
-      "priority": "High",
-      "reports": 29,
-      "ageDays": 7,
-      "sent": "negative",
+      "id": "idea-health-integration",
+      "title": "Sync therapy data to Apple Health / HealthKit",
+      "pod": "Platform & Data",
+      "priority": "Medium",
+      "reports": 24,
+      "ageDays": 8,
+      "sent": "neutral",
       "sources": [
         [
           "appstore",
           "App store reviews"
         ],
         [
-          "zendesk",
-          "Zendesk"
+          "intercom",
+          "Intercom"
         ],
         [
-          "gmail",
-          "Email + Gmail"
+          "slack",
+          "Slack"
         ]
       ],
-      "quote": "“Monitor is at 20% by 3pm; I have to charge mid-day to make it through.”",
-      "jira": "HW-3391",
-      "jiraTitle": "Reduce continuous-monitoring power draw",
-      "jiraStatus": "In Progress",
-      "jiraClass": "label-accent",
-      "assignee": "S. Novak",
-      "sprint": "W14 · Sprint 31",
+      "quote": "“I want my sleep and SpO2 from the CPAP to land in Apple Health with everything else.”",
+      "jira": "PLAT-2044",
+      "jiraTitle": "HealthKit write-back for therapy and SpO2",
+      "jiraStatus": "Planned",
+      "jiraClass": "label-info",
+      "assignee": "K. Nakamura",
+      "sprint": "W16 · Backlog",
       "points": 8,
-      "updated": "5h ago",
-      "stage": "In build",
-      "roadmapIdx": 2,
-      "roadmapNote": "Firmware duty-cycle change in bring-up; see the telemetry evidence attached to HW-3391.",
-      "demand": 29,
-      "effort": 58,
+      "updated": "3d ago",
+      "stage": "Planned",
+      "roadmapIdx": 3,
+      "roadmapNote": "Needs a data-sharing consent flow before any HealthKit write.",
+      "demand": 24,
+      "effort": 52,
       "owner": {
-        "name": "S. Novak",
+        "name": "K. Nakamura",
         "verified": true,
-        "role": "Firmware"
+        "role": "Platform & data"
       },
-      "crm": "Spread across consumer base · no account concentration",
+      "crm": "Consumer-driven · no account concentration",
       "crmVerified": false,
-      "why": "Telemetry correlates the complaints with a firmware duty-cycle regression introduced in 4.1.8, which is why these reports are grouped rather than treated as device failures.",
+      "why": "A cross-source integration request: users want Aeris Air data alongside their other health signals. Grouped because it is one integration, not many features.",
       "evidence": [
         {
-          "text": "“Battery used to last two days, now barely one.”",
+          "text": "“Please write the nightly AHI into Apple Health.”",
           "src": "App store · iOS",
-          "when": "Mar 16",
+          "when": "Mar 14",
           "prov": "synthetic"
         },
         {
-          "text": "“Continuous mode drains about 8% per hour.”",
-          "src": "Zendesk #47855",
-          "when": "Mar 17",
+          "text": "“Can I see the CPAP sessions in the Health app?”",
+          "src": "Intercom conversation",
+          "when": "Mar 15",
           "prov": "synthetic"
         }
       ]
     },
     {
-      "id": "idea-pairing",
-      "title": "Sensor pairing takes six or more attempts",
-      "pod": "Mobile Platform",
+      "id": "idea-alarm-customization",
+      "title": "Customize alarm volume and alert types per profile",
+      "pod": "Algorithms & Safety",
       "priority": "Medium",
-      "reports": 25,
+      "reports": 22,
       "ageDays": 9,
-      "sent": "negative",
+      "sent": "mixed",
       "sources": [
         [
           "zendesk",
@@ -494,49 +579,273 @@
           "App store reviews"
         ]
       ],
-      "quote": "“New sensor pairing failed six times before it connected. Almost gave up.”",
-      "jira": "MOB-1980",
-      "jiraTitle": "Improve BLE pairing reliability on first run",
-      "jiraStatus": "Planned",
-      "jiraClass": "label-info",
-      "assignee": "Unassigned",
-      "sprint": "W16 · Backlog",
+      "quote": "“I need a gentle wake alarm for me and a loud one for my father’s profile.”",
+      "jira": "SAFE-1142",
+      "jiraTitle": "Per-profile alarm volume and alert-type settings",
+      "jiraStatus": "In Review",
+      "jiraClass": "label-accent",
+      "assignee": "A. Okonkwo",
+      "sprint": "W14 · Sprint 31",
       "points": 5,
-      "updated": "3d ago",
-      "stage": "Planned",
-      "roadmapIdx": 3,
-      "roadmapNote": "Onboarding friction; pairs with the activation-funnel work in W16.",
-      "demand": 25,
+      "updated": "6h ago",
+      "stage": "In build",
+      "roadmapIdx": 2,
+      "roadmapNote": "Pair with the alarm-precision work so customization cannot silence a safety alarm below the floor.",
+      "demand": 22,
       "effort": 40,
       "owner": {
-        "name": "J. Ferreira (proposed)",
-        "verified": false,
-        "role": "Mobile platform"
+        "name": "A. Okonkwo",
+        "verified": true,
+        "role": "Algorithms & safety"
       },
-      "crm": "Concentrated in new-customer cohort (first 7 days)",
+      "crm": "Multi-user households · no account concentration",
       "crmVerified": false,
-      "why": "Most reports come from first-week users and mention the pairing step specifically. Grouped because the failure mode is consistent, not intermittent hardware.",
+      "why": "One feature request repeated across households. Any change is constrained by the alarm floor, so it is co-owned with Algorithms & Safety.",
       "evidence": [
         {
-          "text": "“Took me 7 tries to pair the new sensor.”",
+          "text": "“Two profiles, two people, one alarm volume — please fix.”",
           "src": "Zendesk #47701",
-          "when": "Mar 15",
+          "when": "Mar 13",
           "prov": "synthetic"
         },
         {
-          "text": "“Pairing loop is the worst part of setup.”",
+          "text": "“Alarm customization is the top request in the beta thread.”",
           "src": "Slack #beta-feedback",
-          "when": "Mar 15",
+          "when": "Mar 14",
           "prov": "synthetic"
         }
       ]
     },
     {
-      "id": "idea-contrast",
-      "title": "Chart color contrast fails in dark mode",
+      "id": "idea-humidifier",
+      "title": "Humidifier level resets after firmware update",
+      "pod": "Hardware & Masks",
+      "priority": "High",
+      "reports": 21,
+      "ageDays": 1,
+      "sent": "negative",
+      "sources": [
+        [
+          "appstore",
+          "App store reviews"
+        ],
+        [
+          "gmail",
+          "Email + Gmail"
+        ],
+        [
+          "salesforce",
+          "Salesforce"
+        ]
+      ],
+      "quote": "“Since the update my humidifier drops back to 1 every night and I wake up dry.”",
+      "jira": "HW-3402",
+      "jiraTitle": "Persist humidifier setting across firmware 3.1.4",
+      "jiraStatus": "In Progress",
+      "jiraClass": "label-accent",
+      "assignee": "S. Novak",
+      "sprint": "W14 · Sprint 31",
+      "points": 3,
+      "updated": "40 min ago",
+      "stage": "In build",
+      "roadmapIdx": 2,
+      "roadmapNote": "Firmware 3.1.4 regression; setting is not written back to the device profile.",
+      "demand": 21,
+      "effort": 30,
+      "owner": {
+        "name": "S. Novak",
+        "verified": true,
+        "role": "Hardware & masks"
+      },
+      "crm": "Enterprise fleet accounts first to report",
+      "crmVerified": false,
+      "why": "Version clustering on firmware 3.1.4 and a single reproducer (humidifier level reverts overnight). Some reports also name a dry-mouth symptom, so the cluster is cross-checked with quality.",
+      "evidence": [
+        {
+          "text": "“Humidifier setting won’t stick after the last update.”",
+          "src": "App store · iOS",
+          "when": "Mar 23",
+          "prov": "synthetic"
+        },
+        {
+          "text": "“Resets to level 1 every night; woke with a dry throat.”",
+          "src": "Salesforce case 0098214",
+          "when": "Mar 23",
+          "prov": "synthetic"
+        }
+      ]
+    },
+    {
+      "id": "idea-widget",
+      "title": "Home-screen widget for the nightly AHI score",
+      "pod": "Companion App",
+      "priority": "Low",
+      "reports": 19,
+      "ageDays": 11,
+      "sent": "positive",
+      "sources": [
+        [
+          "appstore",
+          "App store reviews"
+        ],
+        [
+          "intercom",
+          "Intercom"
+        ]
+      ],
+      "quote": "“A widget with last night’s AHI and mask hours would be perfect.”",
+      "jira": "APP-2260",
+      "jiraTitle": "iOS home-screen widget for nightly results",
+      "jiraStatus": "Backlog",
+      "jiraClass": "label-neutral",
+      "assignee": "J. Ferreira (proposed)",
+      "sprint": "W17 · Unscheduled",
+      "points": 3,
+      "updated": "1w ago",
+      "stage": "Later",
+      "roadmapIdx": 4,
+      "roadmapNote": "Nice-to-have engagement feature; no safety dimension.",
+      "demand": 19,
+      "effort": 20,
+      "owner": {
+        "name": "J. Ferreira (proposed)",
+        "verified": false,
+        "role": "Companion App"
+      },
+      "crm": "Consumer-driven · no account concentration",
+      "crmVerified": false,
+      "why": "Consistent low-frequency request, positive framing, no cluster risk. Kept on the later lane because demand is modest.",
+      "evidence": [
+        {
+          "text": "“Widget with AHI and hours used would be so handy.”",
+          "src": "App store · iOS",
+          "when": "Mar 11",
+          "prov": "synthetic"
+        },
+        {
+          "text": "“Any chance of a home-screen widget?”",
+          "src": "Intercom conversation",
+          "when": "Mar 12",
+          "prov": "synthetic"
+        }
+      ]
+    },
+    {
+      "id": "idea-localization",
+      "title": "Add Spanish and Portuguese to the app",
+      "pod": "Platform & Data",
+      "priority": "Medium",
+      "reports": 17,
+      "ageDays": 14,
+      "sent": "neutral",
+      "sources": [
+        [
+          "appstore",
+          "App store reviews"
+        ],
+        [
+          "gmail",
+          "Email + Gmail"
+        ]
+      ],
+      "quote": "“My parents only read Spanish — the whole setup screen is English.”",
+      "jira": "PLAT-2087",
+      "jiraTitle": "Localize companion app (es, pt-BR)",
+      "jiraStatus": "Backlog",
+      "jiraClass": "label-neutral",
+      "assignee": "L. Rossi",
+      "sprint": "W17 · Unscheduled",
+      "points": 5,
+      "updated": "5d ago",
+      "stage": "Later",
+      "roadmapIdx": 4,
+      "roadmapNote": "Depends on the string-extraction ticket in the platform backlog.",
+      "demand": 17,
+      "effort": 44,
+      "owner": {
+        "name": "L. Rossi",
+        "verified": true,
+        "role": "Platform & data"
+      },
+      "crm": "Washington-state clinic account raised it twice",
+      "crmVerified": false,
+      "why": "A regional demand signal grouped from app reviews and one clinic email. Not a safety issue; a growth and accessibility gap.",
+      "evidence": [
+        {
+          "text": "“Please add Spanish, my father cannot use it.”",
+          "src": "App store · iOS",
+          "when": "Mar 8",
+          "prov": "synthetic"
+        },
+        {
+          "text": "“Our Spanish-speaking patients need the setup screens localized.”",
+          "src": "Email msg-5110",
+          "when": "Mar 9",
+          "prov": "synthetic"
+        }
+      ]
+    },
+    {
+      "id": "idea-notifications",
+      "title": "Weekly summary instead of per-event push notifications",
+      "pod": "Companion App",
+      "priority": "Low",
+      "reports": 15,
+      "ageDays": 10,
+      "sent": "mixed",
+      "sources": [
+        [
+          "zendesk",
+          "Zendesk"
+        ],
+        [
+          "appstore",
+          "App store reviews"
+        ]
+      ],
+      "quote": "“Too many pushes. One weekly digest would be enough.”",
+      "jira": "APP-2271",
+      "jiraTitle": "Notification preferences: weekly digest option",
+      "jiraStatus": "Backlog",
+      "jiraClass": "label-neutral",
+      "assignee": "J. Ferreira",
+      "sprint": "W17 · Unscheduled",
+      "points": 3,
+      "updated": "6d ago",
+      "stage": "Later",
+      "roadmapIdx": 4,
+      "roadmapNote": "Folds into the notification-preferences epic.",
+      "demand": 15,
+      "effort": 22,
+      "owner": {
+        "name": "J. Ferreira",
+        "verified": true,
+        "role": "Companion App"
+      },
+      "crm": "Consumer-driven · no account concentration",
+      "crmVerified": false,
+      "why": "Notification fatigue, not an alarm complaint. Grouped separately from the alert-precision work so it cannot be read as a safety signal.",
+      "evidence": [
+        {
+          "text": "“Notifications for everything — just send a weekly summary.”",
+          "src": "Zendesk #47620",
+          "when": "Mar 12",
+          "prov": "synthetic"
+        },
+        {
+          "text": "“Let me turn off daily pushes but keep the report.”",
+          "src": "App store · iOS",
+          "when": "Mar 13",
+          "prov": "synthetic"
+        }
+      ]
+    },
+    {
+      "id": "idea-readability",
+      "title": "Larger font and higher contrast in therapy charts",
       "pod": "Design System",
       "priority": "Low",
-      "reports": 18,
+      "reports": 13,
       "ageDays": 12,
       "sent": "neutral",
       "sources": [
@@ -551,7 +860,7 @@
       ],
       "quote": "“In dark mode the alert line is nearly invisible against the grid.”",
       "jira": "DS-0442",
-      "jiraTitle": "Contrast tokens for charts in dark theme",
+      "jiraTitle": "Contrast and type tokens for therapy charts",
       "jiraStatus": "Backlog",
       "jiraClass": "label-neutral",
       "assignee": "Unassigned",
@@ -561,7 +870,7 @@
       "stage": "Later",
       "roadmapIdx": 4,
       "roadmapNote": "Accessibility debt. Low demand but blocks the dark-theme release checklist.",
-      "demand": 18,
+      "demand": 13,
       "effort": 22,
       "owner": {
         "name": "Design System pod",
@@ -579,68 +888,19 @@
           "prov": "synthetic"
         }
       ]
-    },
-    {
-      "id": "idea-profiles",
-      "title": "Two active profiles cause a socket hang",
-      "pod": "Mobile Platform",
-      "priority": "Medium",
-      "reports": 19,
-      "ageDays": 4,
-      "sent": "negative",
-      "sources": [
-        [
-          "zendesk",
-          "Zendesk"
-        ],
-        [
-          "gmail",
-          "Email + Gmail"
-        ]
-      ],
-      "quote": "“Switching between two profiles mid-sync freezes the app.”",
-      "jira": "MOB-2015",
-      "jiraTitle": "Handle profile switch during active sync",
-      "jiraStatus": "In Review",
-      "jiraClass": "label-accent",
-      "assignee": "R. Okafor",
-      "sprint": "W14 · Sprint 31",
-      "points": 5,
-      "updated": "44 min ago",
-      "stage": "In build",
-      "roadmapIdx": 2,
-      "roadmapNote": "Same socket subsystem as the 99% stall — reviewed together.",
-      "demand": 19,
-      "effort": 44,
-      "owner": {
-        "name": "R. Okafor",
-        "verified": true,
-        "role": "Mobile Platform lead"
-      },
-      "crm": "Multi-profile clinician accounts only",
-      "crmVerified": false,
-      "why": "Reports share a reproducer (profile switch during sync) and a single crash signature, so they are clustered rather than handled as separate tickets.",
-      "evidence": [
-        {
-          "text": "“Switching profiles while it syncs hangs the app for good.”",
-          "src": "Zendesk #48220",
-          "when": "Mar 22",
-          "prov": "synthetic"
-        }
-      ]
     }
   ],
   "pods": [
     {
-      "id": "mobile-platform",
-      "mono": "MP",
-      "name": "Mobile Platform",
+      "id": "companion-app",
+      "mono": "CA",
+      "name": "Companion App",
       "lead": "R. Okafor",
       "leadVerified": true,
-      "pm": "A. Castillo",
-      "okr": "Activation & sync reliability",
+      "pm": "Khizar Kashif",
+      "okr": "Sync reliability & activation",
       "health": "at-risk",
-      "complaints": 260
+      "complaints": 286
     },
     {
       "id": "algorithms-safety",
@@ -651,7 +911,7 @@
       "pm": "N. Haddad",
       "okr": "Alert precision & clinical safety",
       "health": "critical",
-      "complaints": 96
+      "complaints": 118
     },
     {
       "id": "clinical-workflows",
@@ -662,18 +922,18 @@
       "pm": "S. Iyer",
       "okr": "Clinician handoff & reporting",
       "health": "ok",
-      "complaints": 62
+      "complaints": 71
     },
     {
-      "id": "hardware",
-      "mono": "HW",
-      "name": "Hardware",
+      "id": "hardware-masks",
+      "mono": "HM",
+      "name": "Hardware & Masks",
       "lead": "S. Novak",
       "leadVerified": true,
       "pm": "T. Berg",
-      "okr": "Sensor wearability & power",
+      "okr": "Mask fit, humidification & power",
       "health": "at-risk",
-      "complaints": 104
+      "complaints": 126
     },
     {
       "id": "design-system",
@@ -684,7 +944,7 @@
       "pm": "J. Meyer",
       "okr": "Accessibility & visual tokens",
       "health": "ok",
-      "complaints": 28
+      "complaints": 32
     },
     {
       "id": "platform-data",
@@ -695,7 +955,7 @@
       "pm": "L. Rossi",
       "okr": "Intake pipeline & normalization",
       "health": "ok",
-      "complaints": 74
+      "complaints": 71
     }
   ],
   "quality": [
@@ -706,7 +966,7 @@
       "quote": "App sync hangs repeatedly at 99%. Patient unable to export nightly pressure reports for clinic follow-up.",
       "source": "App store · iOS",
       "sourceId": "appstore",
-      "product": "CardioPatch monitor app",
+      "product": "Aeris Air app",
       "version": "4.2.1",
       "theme": "sync-reliability",
       "confidence": 0.62,
@@ -714,7 +974,7 @@
       "flags": [
         "clinical_risk_without_known_harm"
       ],
-      "reason": "The report links a software failure to a missed clinical follow-up (nightly pressure reports for a clinic). The model cannot rule out that the missed export delayed care, so it raises a potential MDR hint for human judgement. Confidence is deliberately low-uncertainty band 0.62 because harm is implied rather than stated.",
+      "reason": "The report links a software failure to a missed clinical follow-up (nightly pressure reports for a clinic). The model cannot rule out that the missed export delayed care, so it raises a potential MDR hint for human judgement. Confidence sits in the low-uncertainty band at 0.62 because harm is implied rather than stated.",
       "fta": "FTA-2026-0443",
       "ftaNote": "Fault-tree node: export-path failure → delayed clinical review.",
       "related": 3,
@@ -725,11 +985,11 @@
       "id": "CP-2213",
       "record": "zendesk-2213",
       "classification": "complaint",
-      "quote": "Stalls at 99% when two profiles are active; dual-profile switching causes a local socket hang.",
+      "quote": "Stalls at 99% when two therapy profiles are active; dual-profile switching causes a local socket hang.",
       "source": "Support · Zendesk",
       "sourceId": "zendesk",
-      "product": "CardioPatch monitor app",
-      "version": "4.1.8",
+      "product": "Aeris Air app",
+      "version": "4.2.1",
       "theme": "sync-reliability",
       "confidence": 0.31,
       "mdr": false,
@@ -745,10 +1005,10 @@
       "id": "CP-2208",
       "record": "gmail-2208",
       "classification": "complaint",
-      "quote": "The device reported a low reading during an episode and the alarm never sounded. We only found out at the clinic.",
+      "quote": "The device reported an apnea event during the night and the alarm never sounded. We only found out at the clinic.",
       "source": "Email · Gmail",
       "sourceId": "gmail",
-      "product": "CardioPatch sensor",
+      "product": "Aeris Air CPAP",
       "version": "n/a",
       "theme": "false-negative",
       "confidence": 0.71,
@@ -756,7 +1016,7 @@
       "flags": [
         "patient_harm_reported"
       ],
-      "reason": "Explicit statement that a missed alarm coincided with a clinical episode. This is the clearest MDR candidate in the queue: a reported harm event combined with a device malfunction. Routed to quality with high review priority — no automatic legal determination is made.",
+      "reason": "Explicit statement that a missed alarm coincided with a clinical event. This is the clearest MDR candidate in the queue: a reported harm event combined with a device malfunction. Routed to quality with high review priority — no automatic legal determination is made.",
       "fta": "FTA-2026-0419",
       "ftaNote": "Fault-tree node: alarm suppression → missed event.",
       "related": 2,
@@ -767,10 +1027,10 @@
       "id": "CP-2202",
       "record": "email-5043",
       "classification": "complaint",
-      "quote": "false low alerts most nights [excerpt]",
+      "quote": "false low-pressure alerts most nights [excerpt]",
       "source": "Email · Gmail",
       "sourceId": "gmail",
-      "product": "CardioPatch monitor app",
+      "product": "Aeris Air app",
       "version": null,
       "theme": "false-alarm",
       "confidence": 0.44,
@@ -778,7 +1038,7 @@
       "flags": [
         "clinical_risk_without_known_harm"
       ],
-      "reason": "Repeated false alarms firmware-side can cause alarm fatigue, which the rubric treats as a clinical-risk-without-known-harm flag even though no harm is reported. Uncertainty sits in the mid band, so it stays human-reviewed.",
+      "reason": "Repeated false alarms can cause alarm fatigue, which the rubric treats as a clinical-risk-without-known-harm flag even though no harm is reported. Uncertainty sits in the mid band, so it stays human-reviewed.",
       "fta": "FTA-2026-0402",
       "ftaNote": "Fault-tree node: threshold mis-tune → nuisance alarm.",
       "related": 11,
@@ -789,18 +1049,18 @@
       "id": "CP-2199",
       "record": "appstore-2199",
       "classification": "complaint",
-      "quote": "Sensor adhesive failed after a shower and the patch fell off overnight.",
+      "quote": "Mask cushion seam split after two weeks and the leak alarm kept firing all night.",
       "source": "App store · iOS",
       "sourceId": "appstore",
-      "product": "CardioPatch sensor",
+      "product": "Aeris Air mask",
       "version": "n/a",
       "theme": "wearability",
       "confidence": 0.53,
       "mdr": false,
       "flags": [],
-      "reason": "Physical device failure (adhesion) rather than software. Classified as a complaint candidate because it concerns device performance; no MDR hint because the user detected the detachment and re-applied.",
+      "reason": "Physical device failure (cushion seam) rather than software. Classified as a complaint candidate because it concerns device performance; no MDR hint because the user detected the leak and swapped the cushion.",
       "fta": "FTA-2026-0398",
-      "ftaNote": "Fault-tree node: adhesive → sensor loss.",
+      "ftaNote": "Fault-tree node: cushion durability → leak.",
       "related": 5,
       "ageDays": 0.15,
       "when": "3h ago"
@@ -809,10 +1069,10 @@
       "id": "CP-2196",
       "record": "salesforce-2196",
       "classification": "complaint",
-      "quote": "Recall notice mentioned lot 409-TX on the support call — is our inventory affected?",
+      "quote": "Field-safety notice mentioned humidifier lot 409-TX on the support call — is our clinic inventory affected?",
       "source": "Salesforce",
       "sourceId": "salesforce",
-      "product": "CardioPatch sensor",
+      "product": "Aeris Air humidifier",
       "version": "lot 409-TX",
       "theme": "field-safety",
       "confidence": 0.66,
@@ -826,6 +1086,70 @@
       "related": 4,
       "ageDays": 0.2,
       "when": "4h ago"
+    },
+    {
+      "id": "CP-2191",
+      "record": "zoom-2191",
+      "classification": "complaint",
+      "quote": "[transcript] The clinic made titration decisions on stale data because the app stopped syncing for three nights.",
+      "source": "Zoom · clinic call transcript",
+      "sourceId": "zoom",
+      "product": "Aeris Air app",
+      "version": "4.2.1",
+      "theme": "sync-reliability",
+      "confidence": 0.58,
+      "mdr": true,
+      "flags": [
+        "clinical_risk_without_known_harm"
+      ],
+      "reason": "A recorded clinician call describes clinical decisions taken on stale therapy data after a sync gap. It is a candidate, not a determination: the reviewer decides whether the gap affected care and whether an MDR report is warranted.",
+      "fta": "FTA-2026-0443",
+      "ftaNote": "Fault-tree node: sync gap → stale clinical data.",
+      "related": 3,
+      "ageDays": 5,
+      "when": "5d ago"
+    },
+    {
+      "id": "CP-2188",
+      "record": "intercom-2188",
+      "classification": "complaint",
+      "quote": "Tonight's session logged as 0.0 hours; my nurse flagged it as a possible therapy failure.",
+      "source": "Intercom · in-app",
+      "sourceId": "intercom",
+      "product": "Aeris Air app",
+      "version": "4.2.1",
+      "theme": "data-integrity",
+      "confidence": 0.49,
+      "mdr": false,
+      "flags": [],
+      "reason": "A logged session of 0.0 hours is a data-integrity defect, not a stated harm. Flagged as a complaint candidate because it can cause a clinician to misinterpret adherence; no MDR hint on the current evidence.",
+      "fta": "FTA-2026-0450",
+      "ftaNote": "Fault-tree node: session write error → wrong adherence.",
+      "related": 2,
+      "ageDays": 0.12,
+      "when": "3h ago"
+    },
+    {
+      "id": "CP-2185",
+      "record": "zendesk-2185",
+      "classification": "complaint",
+      "quote": "Device powered off in the middle of the night and no alarm or notification was raised.",
+      "source": "Support · Zendesk",
+      "sourceId": "zendesk",
+      "product": "Aeris Air CPAP",
+      "version": "3.1.4",
+      "theme": "power-interruption",
+      "confidence": 0.55,
+      "mdr": true,
+      "flags": [
+        "patient_harm_reported"
+      ],
+      "reason": "An unannounced therapy interruption overnight with the user reporting a headache and daytime sleepiness the next morning. Harm is reported, so the model raises a potential MDR hint; the reviewer decides causality.",
+      "fta": "FTA-2026-0427",
+      "ftaNote": "Fault-tree node: power loss → unattended therapy gap.",
+      "related": 7,
+      "ageDays": 0.3,
+      "when": "7h ago"
     }
   ],
   "pipeline": [
@@ -838,19 +1162,19 @@
     {
       "name": "AI normalization",
       "detail": "Extract into schema v1.1 JSON",
-      "pct": 96,
+      "pct": 97,
       "state": "done"
     },
     {
       "name": "Classifier",
       "detail": "Eligible records only",
-      "pct": 88,
+      "pct": 90,
       "state": "running"
     },
     {
       "name": "Human review",
       "detail": "Quality + product paths diverge",
-      "pct": 64,
+      "pct": 61,
       "state": "running"
     }
   ],
@@ -861,7 +1185,15 @@
       "kind": "CRM · cases + accounts",
       "status": "ok",
       "last": "4m ago",
-      "records": "412"
+      "records": "452",
+      "auth": "oauth2",
+      "env": [
+        "SALESFORCE_INSTANCE_URL",
+        "SALESFORCE_CLIENT_ID",
+        "SALESFORCE_CLIENT_SECRET",
+        "SALESFORCE_REFRESH_TOKEN"
+      ],
+      "mode": "synthetic"
     },
     {
       "id": "zendesk",
@@ -869,7 +1201,14 @@
       "kind": "Support tickets",
       "status": "ok",
       "last": "4m ago",
-      "records": "386"
+      "records": "431",
+      "auth": "api_token",
+      "env": [
+        "ZENDESK_SUBDOMAIN",
+        "ZENDESK_EMAIL",
+        "ZENDESK_API_TOKEN"
+      ],
+      "mode": "synthetic"
     },
     {
       "id": "gmail",
@@ -877,7 +1216,14 @@
       "kind": "feedback_mail",
       "status": "ok",
       "last": "6m ago",
-      "records": "298"
+      "records": "322",
+      "auth": "oauth2",
+      "env": [
+        "GMAIL_CLIENT_ID",
+        "GMAIL_CLIENT_SECRET",
+        "GMAIL_REFRESH_TOKEN"
+      ],
+      "mode": "synthetic"
     },
     {
       "id": "slack",
@@ -885,15 +1231,28 @@
       "kind": "Dev + VoC channels",
       "status": "ok",
       "last": "2m ago",
-      "records": "254"
+      "records": "268",
+      "auth": "bot_token",
+      "env": [
+        "SLACK_BOT_TOKEN",
+        "SLACK_CHANNEL_ID"
+      ],
+      "mode": "synthetic"
     },
     {
       "id": "zoom",
       "name": "Zoom + Granola",
-      "kind": "Transcripts (mock access)",
+      "kind": "Meeting transcripts",
       "status": "warn",
       "last": "38m ago",
-      "records": "172"
+      "records": "197",
+      "auth": "s2s_oauth",
+      "env": [
+        "ZOOM_ACCOUNT_ID",
+        "ZOOM_CLIENT_ID",
+        "ZOOM_CLIENT_SECRET"
+      ],
+      "mode": "synthetic"
     },
     {
       "id": "intercom",
@@ -901,7 +1260,12 @@
       "kind": "In-app conversations",
       "status": "ok",
       "last": "9m ago",
-      "records": "0"
+      "records": "54",
+      "auth": "access_token",
+      "env": [
+        "INTERCOM_ACCESS_TOKEN"
+      ],
+      "mode": "synthetic"
     },
     {
       "id": "appstore",
@@ -909,7 +1273,13 @@
       "kind": "iOS · public",
       "status": "ok",
       "last": "22m ago",
-      "records": "136"
+      "records": "149",
+      "auth": "public",
+      "env": [
+        "APPSTORE_APP_ID",
+        "APPSTORE_COUNTRY"
+      ],
+      "mode": "synthetic"
     }
   ],
   "tech": [
@@ -928,21 +1298,21 @@
     "Now · W14": [
       {
         "title": "Nightly sync stalls at 99%",
-        "jira": "CPAP-2214",
-        "pod": "Mobile Platform",
+        "jira": "APP-2214",
+        "pod": "Companion App",
         "pct": 70
       },
       {
-        "title": "False low alerts during sleep",
-        "jira": "CARD-1108",
+        "title": "False low-pressure alerts during sleep",
+        "jira": "SAFE-1108",
         "pod": "Algorithms & Safety",
         "pct": 45
       },
       {
-        "title": "Battery drain, continuous mode",
-        "jira": "HW-3391",
-        "pod": "Hardware",
-        "pct": 55
+        "title": "Humidifier setting resets (fw 3.1.4)",
+        "jira": "HW-3402",
+        "pod": "Hardware & Masks",
+        "pct": 60
       }
     ],
     "Next · W15–16": [
@@ -953,15 +1323,27 @@
         "pct": 10
       },
       {
-        "title": "BLE pairing reliability",
-        "jira": "MOB-1980",
-        "pod": "Mobile Platform",
+        "title": "Mask leak recalibration",
+        "jira": "HW-3391",
+        "pod": "Hardware & Masks",
+        "pct": 30
+      },
+      {
+        "title": "HealthKit write-back",
+        "jira": "PLAT-2044",
+        "pod": "Platform & Data",
         "pct": 5
       }
     ],
     "Later · W17+": [
       {
-        "title": "Dark-theme chart contrast",
+        "title": "Per-profile alarm customization",
+        "jira": "SAFE-1142",
+        "pod": "Algorithms & Safety",
+        "pct": 15
+      },
+      {
+        "title": "Chart contrast & type tokens",
         "jira": "DS-0442",
         "pod": "Design System",
         "pct": 0
@@ -971,22 +1353,22 @@
   "shipped": [
     {
       "title": "Profile-switch socket hang fixed",
-      "jira": "MOB-2015",
+      "jira": "APP-2015",
       "when": "Shipped W14"
     },
     {
-      "title": "Sensor firmware 4.2.2 duty-cycle patch",
+      "title": "Firmware 3.1.3 leak-baseline patch",
       "jira": "HW-3360",
       "when": "Shipped W13"
     },
     {
       "title": "Duplicated alert dedupe in app",
-      "jira": "MOB-1955",
+      "jira": "APP-1955",
       "when": "Shipped W13"
     },
     {
       "title": "Granola transcript connector",
-      "jira": "PLT-220",
+      "jira": "PLAT-220",
       "when": "Shipped W13"
     }
   ],
@@ -995,7 +1377,7 @@
       "id": "veeva",
       "mono": "VV",
       "name": "Veeva Vault Quality",
-      "desc": "Complaint + nonconformance objects, life sciences QMS.",
+      "desc": "Complaint + nonconformance objects, life-sciences QMS.",
       "status": "connected",
       "tone": "success",
       "detail": "Sandbox · 24 packs pushed"
@@ -1062,5 +1444,11 @@
       "tone": "neutral",
       "detail": "Not connected"
     }
-  ]
+  ],
+  "company": {
+    "name": "Aeris Health",
+    "product": "Aeris Air CPAP",
+    "app": "Aeris Air app",
+    "synthetic": true
+  }
 }

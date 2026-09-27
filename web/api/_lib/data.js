@@ -12,5 +12,5 @@ const dataset = require('../../data/dataset.json');
 
 module.exports = {
   dataset,
-  meta: { schemaVersion: '1.1', synthetic: true, generatedFor: 'test-flight-demo' }
+  meta: { schemaVersion: '1.1', synthetic: true, generatedFor: 'test-flight-demo', company: (dataset.company && dataset.company.name) || null }
 };

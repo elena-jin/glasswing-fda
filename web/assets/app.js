@@ -61,7 +61,7 @@ function renderSplit() {
   }).join('');
   $('#chartSplit').insertAdjacentHTML('afterbegin', '<svg viewBox="0 0 160 160" width="100%" style="max-width:230px;margin:0 auto" role="img" aria-label="Classifier routing">' + segs + '</svg>');
   $('#legendSplit').innerHTML = SPLIT.map(s => '<span class="legend-item"><span class="sw" style="background:' + s.color + '"></span>' + s.name + ' · <b class="num">' + fmt(s.value) + '</b></span>').join('') +
-    '<span class="legend-item"><span class="sw" style="background:var(--surface-alt)"></span>Excluded at intake · <b class="num">248</b></span>';
+    '<span class="legend-item"><span class="sw" style="background:var(--surface-alt)"></span>Excluded at intake · <b class="num">265</b></span>';
 }
 
 function renderTrend(weeks) {
@@ -95,12 +95,12 @@ function bindTips(host, tip) {
 /* ================= overview lists ================= */
 function renderStream() {
   const rows = [
-    { src: 'appstore', name: 'App store · iOS', t: 'CPAP app sync stall after nightly upload', label: 'Potential MDR', cls: 'label-danger', when: '18 min ago' },
-    { src: 'zendesk', name: 'Zendesk #48219', t: 'Stalls at 99% when two profiles are active', label: 'Complaint', cls: 'label-warning', when: '44 min ago' },
-    { src: 'gmail', name: 'Email msg-5043', t: 'False low alerts most nights', label: 'Complaint', cls: 'label-warning', when: '2h ago' },
+    { src: 'appstore', name: 'App store · iOS', t: 'Aeris Air app sync stall after nightly upload', label: 'Potential MDR', cls: 'label-danger', when: '18 min ago' },
+    { src: 'zendesk', name: 'Zendesk #48219', t: 'Stalls at 99% when two therapy profiles are active', label: 'Complaint', cls: 'label-warning', when: '44 min ago' },
+    { src: 'gmail', name: 'Email msg-5043', t: 'False low-pressure alerts most nights', label: 'Complaint', cls: 'label-warning', when: '2h ago' },
     { src: 'zoom', name: 'Zoom · clinic call', t: 'Clinician PDF export request', label: 'Product feedback', cls: 'label-accent', when: '3h ago' },
-    { src: 'slack', name: 'Slack #design-system', t: 'Chart contrast in dark mode', label: 'Product feedback', cls: 'label-accent', when: '5h ago' },
-    { src: 'salesforce', name: 'Salesforce case', t: 'Recall notice — lot 409-TX inventory', label: 'Potential MDR', cls: 'label-danger', when: '6h ago' }
+    { src: 'slack', name: 'Slack #design-system', t: 'Therapy chart contrast in dark mode', label: 'Product feedback', cls: 'label-accent', when: '5h ago' },
+    { src: 'salesforce', name: 'Salesforce case', t: 'Field-safety notice — humidifier lot 409-TX', label: 'Potential MDR', cls: 'label-danger', when: '6h ago' }
   ];
   $('#triageStream').innerHTML = rows.map(r => '<div class="stream-row src-row" data-source="' + r.src + '" role="button" tabindex="0" aria-label="View ' + r.name + ' feedback" data-search="' + (r.t + ' ' + r.name).toLowerCase() + '">' + badge(r.src, r.name) +
     '<div><div class="stream-title">' + r.t + '</div><div class="stream-meta">' + r.name + ' · ' + r.when + '</div></div>' +
@@ -370,7 +370,7 @@ function intCard(o, isQms) {
 }
 function renderIntegrations() {
   $('#qmsGrid').innerHTML = QMS.map(q => intCard(q, true)).join('');
-  $('#sourceGrid').innerHTML = SOURCES.map(s => { const c = CONNECTORS.find(x => x.id === s.id) || {}; return '<div class="glass int-card"><div class="ic-top src-row" data-source="' + s.id + '" role="button" tabindex="0" aria-label="View ' + s.name + ' feedback and ideas"><span class="logo-tile" style="color:' + brand(s.id) + '">' + (LOGOS[s.id] || '<span class="logo-mono">AS</span>') + '</span><div><div class="ic-name">' + s.name + '</div><span class="label ' + (c.status === 'warn' ? 'label-warning' : 'label-success') + '" style="font-size:10px"><span class="dot"></span>' + (c.last || 'live') + '</span></div></div><p class="ic-desc">' + (c.kind || 'Feedback source') + ' · ' + s.value + ' records this cycle</p><div class="ic-foot"><button type="button" class="src-link" data-source="' + s.id + '">View records</button><span class="switch ' + (c.status === 'warn' ? '' : 'on') + '" data-toggle-int role="switch" tabindex="0"></span></div></div>'; }).join('');
+  $('#sourceGrid').innerHTML = SOURCES.map(s => { const c = CONNECTORS.find(x => x.id === s.id) || {}; return '<div class="glass int-card"><div class="ic-top src-row" data-source="' + s.id + '" role="button" tabindex="0" aria-label="View ' + s.name + ' feedback and ideas"><span class="logo-tile" style="color:' + brand(s.id) + '">' + (LOGOS[s.id] || '<span class="logo-mono">AS</span>') + '</span><div><div class="ic-name">' + s.name + '</div><span class="label ' + (c.status === 'warn' ? 'label-warning' : 'label-success') + '" style="font-size:10px"><span class="dot"></span>' + (c.last || 'live') + '</span></div></div><p class="ic-desc">' + (c.kind || 'Feedback source') + ' · ' + s.value + ' records this cycle · ' + (c.mode === 'live' ? 'live' : 'synthetic') + '</p><div class="ic-foot"><button type="button" class="src-link" data-source="' + s.id + '">View records</button><span class="switch ' + (c.status === 'warn' ? '' : 'on') + '" data-toggle-int role="switch" tabindex="0"></span></div></div>'; }).join('');
   $('#destGrid').innerHTML = DESTS.map(d => intCard(d, false)).join('');
   bindSwitches();
 }
@@ -398,7 +398,7 @@ function openSource(id) {
   const ideas = IDEAS.filter(i => i.sources.some(x => x[0] === id));
   $('#sourceLogo').innerHTML = '<span style="color:' + brand(id) + ';width:22px;height:22px;display:block">' + (LOGOS[id] || '<span class="logo-mono">' + s.name.slice(0, 2).toUpperCase() + '</span>') + '</span>';
   $('#sourceName').textContent = s.name;
-  $('#sourceKind').textContent = (c.kind || 'Feedback source') + ' · ' + (c.status === 'warn' ? 'transcript access mocked · ' + (c.last || '') : 'streaming · last sync ' + (c.last || 'live'));
+  $('#sourceKind').textContent = (c.kind || 'Feedback source') + ' · ' + (c.mode === 'live' ? 'live connector · last pull ' + (c.last || 'now') : c.status === 'warn' ? 'transcript access mocked · ' + (c.last || '') : 'synthetic slice · last sync ' + (c.last || 'live'));
   $('#sourceStats').innerHTML =
     srcStat(fmt(s.value), 'records this cycle') +
     srcStat(fmt(s.complaints), 'complaint candidates') +
@@ -413,13 +413,13 @@ function closeSource() { $('#sourceDrawer').classList.remove('on'); $('#sourceSc
 /* ================= assistant chat ================= */
 let chatScope = 'product';
 const CHAT = [
-  { who: 'bot', text: 'I’m grounded on the ' + fmt(1658) + ' schema v1.1 records in this cycle. Ask me to pull evidence, cross-check Jira status, or summarise a cluster.', cites: ['schema v1.1', '1,658 records'] }
+  { who: 'bot', text: 'I’m grounded on the ' + fmt(1873) + ' schema v1.1 records in this cycle. Ask me to pull evidence, cross-check Jira status, or summarise a cluster.', cites: ['schema v1.1', '1,873 records'] }
 ];
 const REPLIES = {
-  owner: { text: 'Two ideas still have unverified owners: “Clinician PDF export as clinician PDF” (proposed: M. Adeyemi) and “BLE pairing reliability” (proposed: J. Ferreira). Both need a human confirmation before they count as owned.', cites: ['CLIN-770', 'MOB-1980'] },
-  false: { text: 'The false-alarm cluster spans 31 reports across email, App Store and Zendesk over 11 days, all inside the 00:00–05:00 window. It is linked to CARD-1108 (In Progress) and carries a clinical-risk-without-known-harm flag.', cites: ['email-5043', 'CARD-1108', 'FTA-2026-0402'] },
-  mdr: { text: 'Two MDR candidates report actual or potential harm: CP-2208 (missed alarm during an episode — patient_harm_reported) and CP-2196 (field-corrective lot 409-TX). CP-2214 is a third, lower-confidence candidate with implied risk only.', cites: ['CP-2208', 'CP-2196', 'CP-2214'] },
-  default: { text: 'Here’s what I found across the demo dataset. The strongest signal is the sync-reliability cluster: 66 reports total across CPAP-2214 and MOB-2015, both in the current sprint, with two enterprise accounts ($340k ARR) behind them.', cites: ['CPAP-2214', 'MOB-2015', 'Zendesk #48219'] }
+  owner: { text: 'Three ideas still have unverified owners: “Clinician PDF export” (proposed: M. Adeyemi), “Home-screen widget for the AHI score” (proposed: J. Ferreira) and “Contrast and type tokens for therapy charts” (Design System pod). Each needs a human confirmation before it counts as owned.', cites: ['CLIN-770', 'APP-2260', 'DS-0442'] },
+  false: { text: 'The false-alarm cluster spans 41 reports across email, App Store and Zendesk over 11 days, all inside the 00:00–05:00 window. It is linked to SAFE-1108 (In Progress) and carries a clinical-risk-without-known-harm flag.', cites: ['email-5043', 'SAFE-1108', 'FTA-2026-0402'] },
+  mdr: { text: 'MDR candidates report actual or potential harm: CP-2208 (missed alarm during an apnea event — patient_harm_reported), CP-2185 (overnight power-off with reported harm) and CP-2196 (field-corrective humidifier lot 409-TX). CP-2214 and CP-2191 are lower-confidence candidates with implied clinical risk only.', cites: ['CP-2208', 'CP-2185', 'CP-2196', 'CP-2214'] },
+  default: { text: 'Here’s what I found across the demo dataset. The strongest signal is the sync-reliability cluster: 68 reports total across APP-2214 and APP-2015, both in the current sprint, with two enterprise clinic accounts ($340k ARR) behind them.', cites: ['APP-2214', 'APP-2015', 'Zendesk #48219'] }
 };
 function renderChat() {
   const t = $('#chatThread');
