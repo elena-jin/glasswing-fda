@@ -55,9 +55,9 @@
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h16M4 12h10M4 18h13"/><circle cx="18" cy="12" r="2"/></svg>
         Roadmap
       </button>
-      <button class="nav-item" data-view="team" data-od-id="nav-team">
+      <button class="nav-item" data-view="pods" data-od-id="nav-pods">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3"/><path d="M3 20a6 6 0 0 1 12 0"/><path d="M16 5.5a3 3 0 0 1 0 5.9M17 14.5a6 6 0 0 1 4 5.5"/></svg>
-        Team
+        Pods
         <span class="count">6</span>
       </button>
       <button class="nav-item" data-view="integrations" data-od-id="nav-integrations">
@@ -216,7 +216,7 @@
           <div>
             <p class="eyebrow" style="margin-bottom:6px">Product path · theme + sentiment → cross-source idea</p>
             <h1>Ideas</h1>
-            <p class="sub">Each idea is a cluster of feedback from one or more sources, owned by a pod and linked to a Jira ticket as evidence.</p>
+            <p class="sub">Each idea is a cluster of feedback from one or more sources, linked to a Jira ticket as evidence. Ownership lives on the Pods page.</p>
           </div>
           <div class="row">
             <button class="btn btn-secondary" data-goto="quality">
@@ -239,13 +239,6 @@
             <button data-age="30">Last 30 days</button>
             <button data-age="90">Last 90 days</button>
           </div>
-          <span style="width:1px;height:24px;background:var(--border-soft)"></span>
-          <button class="filter-pill on" data-filter="pod" data-value="">All pods <span class="n">7</span></button>
-          <button class="filter-pill" data-filter="pod" data-value="Mobile Platform">Mobile Platform <span class="n">3</span></button>
-          <button class="filter-pill" data-filter="pod" data-value="Algorithms &amp; Safety">Algorithms &amp; Safety <span class="n">1</span></button>
-          <button class="filter-pill" data-filter="pod" data-value="Clinical Workflows">Clinical Workflows <span class="n">1</span></button>
-          <button class="filter-pill" data-filter="pod" data-value="Hardware">Hardware <span class="n">1</span></button>
-          <button class="filter-pill" data-filter="pod" data-value="Design System">Design System <span class="n">1</span></button>
         </div>
 
         <div class="idea-grid" id="ideaGrid"></div>
@@ -261,7 +254,7 @@
           </button>
           <div class="row-between" style="align-items:flex-start">
             <div style="max-width:70ch">
-              <p class="eyebrow" id="detailEyebrow" style="margin-bottom:8px">IDEA · POD</p>
+              <p class="eyebrow" id="detailEyebrow" style="margin-bottom:8px">IDEA</p>
               <h1 id="detailTitle">Idea title</h1>
               <div class="detail-meta" id="detailMeta"></div>
             </div>
@@ -487,13 +480,13 @@
         </div>
       </section>
 
-      <!-- ========== TEAM / PODS ========== -->
-      <section class="view" id="view-team" data-od-id="view-team">
+      <!-- ========== PODS ========== -->
+      <section class="view" id="view-pods" data-od-id="view-pods">
         <div class="page-head">
           <div>
             <p class="eyebrow" style="margin-bottom:6px">Ownership · every idea maps to exactly one pod</p>
-            <h1>Team &amp; pods</h1>
-            <p class="sub">Each idea is a cluster of feedback owned by one pod. Pod leaders and PMs see the feedback that maps to their area, and every cluster stays traceable to its Jira ticket.</p>
+            <h1>Pods</h1>
+            <p class="sub">Each pod owns a slice of the feedback. Open a pod to see exactly which ideas map to it, who leads it, and how much complaint volume it carries.</p>
           </div>
           <div class="row">
             <span class="label label-neutral"><span class="dot"></span>6 pods · 2 unverified leads</span>
@@ -511,6 +504,32 @@
         </div>
 
         <div class="pod-grid" id="podGrid"></div>
+      </section>
+
+      <!-- ========== POD DETAIL ========== -->
+      <section class="view" id="view-pod" data-od-id="view-pod">
+        <div class="glass detail-hero">
+          <button class="back" data-goto="pods">
+            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 6-6 6 6 6"/></svg>
+            Back to pods
+          </button>
+          <div class="row-between" style="align-items:flex-start">
+            <div style="max-width:70ch">
+              <p class="eyebrow" id="podDetailEyebrow" style="margin-bottom:8px">POD</p>
+              <h1 id="podDetailTitle">Pod</h1>
+              <p class="sub" id="podDetailOkr">—</p>
+            </div>
+            <span class="label" id="podDetailHealth">—</span>
+          </div>
+          <div class="pod-people" id="podDetailPeople" style="margin-top:16px"></div>
+          <div class="pod-stats" id="podDetailStats" style="margin-top:12px"></div>
+        </div>
+
+        <div class="panel-head" style="margin:var(--space-md) 0 4px">
+          <div><h3>Ideas mapped to this pod</h3><p class="sub">Every cluster here is owned by this pod and traceable to its Jira ticket and source evidence.</p></div>
+          <span class="label label-neutral" id="podDetailIdeaCount">0</span>
+        </div>
+        <div class="idea-grid" id="podDetailIdeas"></div>
       </section>
 
       <!-- ========== INTEGRATIONS ========== -->

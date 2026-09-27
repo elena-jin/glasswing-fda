@@ -308,19 +308,22 @@
           "text": "“Sync hangs at 99% every time on my iPhone after the update.”",
           "src": "App store · iOS",
           "when": "Mar 21",
-          "prov": "synthetic"
+          "prov": "synthetic",
+          "url": "https://apps.apple.com/us/app/aeris-air/id6472108933?see-all=reviews"
         },
         {
           "text": "“Two therapy profiles active and the socket just hangs; support had no fix.”",
           "src": "Zendesk #48219",
           "when": "Mar 22",
-          "prov": "synthetic"
+          "prov": "synthetic",
+          "url": "https://aerishealth.zendesk.com/agent/tickets/48219"
         },
         {
           "text": "“Nightly upload never completes, I export manually for the clinic.”",
           "src": "Slack #voice-of-customer",
           "when": "Mar 23",
-          "prov": "synthetic"
+          "prov": "synthetic",
+          "url": "https://aerishealth.slack.com/archives/C06AERIS01"
         }
       ]
     },
@@ -373,19 +376,22 @@
           "text": "“false low-pressure alerts most nights [excerpt]”",
           "src": "Email msg-5043",
           "when": "Mar 23",
-          "prov": "synthetic"
+          "prov": "synthetic",
+          "url": "https://mail.google.com/mail/u/0/#all/5043"
         },
         {
           "text": "“Alarm fired at 2am and there was nothing wrong on the repeat reading.”",
           "src": "App store · iOS",
           "when": "Mar 19",
-          "prov": "synthetic"
+          "prov": "synthetic",
+          "url": "https://apps.apple.com/us/app/aeris-air/id6472108933?see-all=reviews"
         },
         {
           "text": "“Three false alarms this week, each woke the whole household.”",
           "src": "Zendesk #48107",
           "when": "Mar 20",
-          "prov": "synthetic"
+          "prov": "synthetic",
+          "url": "https://aerishealth.zendesk.com/agent/tickets/48107"
         }
       ]
     },
@@ -438,13 +444,15 @@
           "text": "“Leak alarm fires every night since I switched to the nasal pillows.”",
           "src": "App store · iOS",
           "when": "Mar 18",
-          "prov": "synthetic"
+          "prov": "synthetic",
+          "url": "https://apps.apple.com/us/app/aeris-air/id6472108933?see-all=reviews"
         },
         {
           "text": "“Fit is fine but the app says high leak from 2am.”",
           "src": "Zendesk #47855",
           "when": "Mar 19",
-          "prov": "synthetic"
+          "prov": "synthetic",
+          "url": "https://aerishealth.zendesk.com/agent/tickets/47855"
         }
       ]
     },
@@ -493,13 +501,15 @@
           "text": "“Can the app email a clean PDF to my clinic instead of screenshots?”",
           "src": "Zendesk #47980",
           "when": "Mar 18",
-          "prov": "synthetic"
+          "prov": "synthetic",
+          "url": "https://aerishealth.zendesk.com/agent/tickets/47980"
         },
         {
           "text": "“[transcript] the export step is the most manual part of my morning”",
           "src": "Zoom call · clinic onboarding",
           "when": "Mar 17",
-          "prov": "paraphrased public"
+          "prov": "paraphrased public",
+          "url": "https://us06web.zoom.us/rec/share/aeris-air-clinic-onboarding"
         }
       ]
     },
@@ -552,13 +562,15 @@
           "text": "“Please write the nightly AHI into Apple Health.”",
           "src": "App store · iOS",
           "when": "Mar 14",
-          "prov": "synthetic"
+          "prov": "synthetic",
+          "url": "https://apps.apple.com/us/app/aeris-air/id6472108933?see-all=reviews"
         },
         {
           "text": "“Can I see the CPAP sessions in the Health app?”",
           "src": "Intercom conversation",
           "when": "Mar 15",
-          "prov": "synthetic"
+          "prov": "synthetic",
+          "url": "https://app.intercom.com/a/inbox/aeris-air/"
         }
       ]
     },
@@ -611,13 +623,15 @@
           "text": "“Two profiles, two people, one alarm volume — please fix.”",
           "src": "Zendesk #47701",
           "when": "Mar 13",
-          "prov": "synthetic"
+          "prov": "synthetic",
+          "url": "https://aerishealth.zendesk.com/agent/tickets/47701"
         },
         {
           "text": "“Alarm customization is the top request in the beta thread.”",
           "src": "Slack #beta-feedback",
           "when": "Mar 14",
-          "prov": "synthetic"
+          "prov": "synthetic",
+          "url": "https://aerishealth.slack.com/archives/C06AERIS01"
         }
       ]
     },
@@ -670,13 +684,15 @@
           "text": "“Humidifier setting won’t stick after the last update.”",
           "src": "App store · iOS",
           "when": "Mar 23",
-          "prov": "synthetic"
+          "prov": "synthetic",
+          "url": "https://apps.apple.com/us/app/aeris-air/id6472108933?see-all=reviews"
         },
         {
           "text": "“Resets to level 1 every night; woke with a dry throat.”",
           "src": "Salesforce case 0098214",
           "when": "Mar 23",
-          "prov": "synthetic"
+          "prov": "synthetic",
+          "url": "https://aerishealth.lightning.force.com/lightning/r/Case/0098214/view"
         }
       ]
     },
@@ -725,13 +741,15 @@
           "text": "“Widget with AHI and hours used would be so handy.”",
           "src": "App store · iOS",
           "when": "Mar 11",
-          "prov": "synthetic"
+          "prov": "synthetic",
+          "url": "https://apps.apple.com/us/app/aeris-air/id6472108933?see-all=reviews"
         },
         {
           "text": "“Any chance of a home-screen widget?”",
           "src": "Intercom conversation",
           "when": "Mar 12",
-          "prov": "synthetic"
+          "prov": "synthetic",
+          "url": "https://app.intercom.com/a/inbox/aeris-air/"
         }
       ]
     },
@@ -780,13 +798,15 @@
           "text": "“Please add Spanish, my father cannot use it.”",
           "src": "App store · iOS",
           "when": "Mar 8",
-          "prov": "synthetic"
+          "prov": "synthetic",
+          "url": "https://apps.apple.com/us/app/aeris-air/id6472108933?see-all=reviews"
         },
         {
           "text": "“Our Spanish-speaking patients need the setup screens localized.”",
           "src": "Email msg-5110",
           "when": "Mar 9",
-          "prov": "synthetic"
+          "prov": "synthetic",
+          "url": "https://mail.google.com/mail/u/0/#all/5110"
         }
       ]
     },
@@ -835,13 +855,15 @@
           "text": "“Notifications for everything — just send a weekly summary.”",
           "src": "Zendesk #47620",
           "when": "Mar 12",
-          "prov": "synthetic"
+          "prov": "synthetic",
+          "url": "https://aerishealth.zendesk.com/agent/tickets/47620"
         },
         {
           "text": "“Let me turn off daily pushes but keep the report.”",
           "src": "App store · iOS",
           "when": "Mar 13",
-          "prov": "synthetic"
+          "prov": "synthetic",
+          "url": "https://apps.apple.com/us/app/aeris-air/id6472108933?see-all=reviews"
         }
       ]
     },
@@ -890,7 +912,8 @@
           "text": "“Grid and alert line are almost the same colour in dark mode.”",
           "src": "Slack #design-system",
           "when": "Mar 12",
-          "prov": "synthetic"
+          "prov": "synthetic",
+          "url": "https://aerishealth.slack.com/archives/C06AERIS01"
         }
       ]
     }

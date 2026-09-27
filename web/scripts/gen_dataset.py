@@ -13,10 +13,38 @@ Run:  python3 scripts/gen_dataset.py
 """
 import json
 import pathlib
+import re
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 
 QA = "\u2014"  # em dash
+
+# Canonical, plausible deep links back to where each piece of evidence lives.
+# Points at the fictional Aeris Health tenant so a demo click always resolves to
+# the right kind of source page. Live connectors return real URLs instead.
+APPSTORE_URL = "https://apps.apple.com/us/app/aeris-air/id6472108933?see-all=reviews"
+
+
+def evidence_url(src):
+    s = (src or "").lower()
+    if s.startswith("app store"):
+        return APPSTORE_URL
+    if "zendesk #" in s:
+        m = re.search(r"(\d+)", src)
+        return f"https://aerishealth.zendesk.com/agent/tickets/{m.group(1)}" if m else "https://aerishealth.zendesk.com/agent/tickets"
+    if "email msg-" in s:
+        m = re.search(r"msg-(\w+)", src)
+        return f"https://mail.google.com/mail/u/0/#all/{m.group(1)}" if m else "https://mail.google.com/mail/u/0/#all"
+    if s.startswith("slack"):
+        return "https://aerishealth.slack.com/archives/C06AERIS01"
+    if s.startswith("zoom"):
+        return "https://us06web.zoom.us/rec/share/aeris-air-clinic-onboarding"
+    if s.startswith("salesforce"):
+        m = re.search(r"(\d+)", src)
+        return f"https://aerishealth.lightning.force.com/lightning/r/Case/{m.group(1)}/view" if m else "https://aerishealth.lightning.force.com"
+    if s.startswith("intercom"):
+        return "https://app.intercom.com/a/inbox/aeris-air/"
+    return None
 
 SOURCES = [
     {"id": "salesforce", "name": "Salesforce", "value": 452, "complaints": 194, "product": 198, "excluded": 60},
@@ -581,6 +609,10 @@ DESTS = [
     {"id": "salesforce", "name": "Salesforce CRM", "desc": "Conditional account + ARR context on ideas.", "status": "connected", "tone": "success", "detail": "Read-only"},
     {"id": "zendesk", "name": "Zendesk", "desc": "Write a linked ticket when a complaint is confirmed.", "status": "available", "tone": "neutral", "detail": "Not connected"},
 ]
+
+for _idea in IDEAS:
+    for _ev in _idea["evidence"]:
+        _ev["url"] = evidence_url(_ev["src"])
 
 DATA = {
     "sources": SOURCES,

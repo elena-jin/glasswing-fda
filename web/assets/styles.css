@@ -465,6 +465,9 @@ h3 { font-size: var(--size-md); font-weight: 600; letter-spacing: -.01em; }
 .detail-meta { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
 .evidence-quote { padding: 14px 16px; border-radius: var(--radius-btn); background: var(--surface-warm); border: 1px solid var(--border-soft); font-size: 13px; color: var(--fg); position: relative; }
 .evidence-quote .whisper { display: block; margin-top: 8px; font-family: var(--font-mono); font-size: 11px; color: var(--meta); }
+.ev-link { display: inline-flex; align-items: center; gap: 5px; margin-top: 9px; font-size: 11.5px; font-weight: 600; color: var(--accent); text-decoration: none; }
+.ev-link:hover { color: var(--accent-hover, var(--accent)); text-decoration: underline; }
+.ev-link:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 4px; }
 .rationale { border-left: 3px solid var(--accent); background: var(--accent-subtle); padding: 12px 14px; border-radius: 0 var(--radius-btn) var(--radius-btn) 0; font-size: 12.5px; color: var(--accent-active); }
 .jira-card { border: 1px solid var(--border); border-radius: var(--radius-card); overflow: hidden; }
 .jira-head { display: flex; align-items: center; gap: 10px; padding: 12px 16px; background: var(--surface-warm); border-bottom: 1px solid var(--border-soft); }
@@ -685,6 +688,9 @@ h3 { font-size: var(--size-md); font-weight: 600; letter-spacing: -.01em; }
 /* ---------- team / pods ---------- */
 .pod-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--space-md); }
 .pod-card { padding: var(--space-lg); display: flex; flex-direction: column; gap: var(--space-md); }
+.pod-card[role="button"] { cursor: pointer; transition: transform .18s var(--ease), border-color .18s var(--ease), box-shadow .18s var(--ease); }
+.pod-card[role="button"]:hover { transform: translateY(-2px); border-color: var(--accent); box-shadow: 0 10px 30px rgba(0,0,0,.08); }
+.pod-card[role="button"]:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 .pod-head { display: flex; align-items: center; gap: 12px; }
 .pod-monogram { width: 38px; height: 38px; border-radius: 11px; display: grid; place-items: center; font-family: var(--font-mono); font-size: 12.5px; font-weight: 600; color: var(--accent-active); background: var(--accent-subtle); border: 1px solid color-mix(in oklch, var(--accent) 22%, transparent); flex: none; }
 .pod-name { font-size: 15px; font-weight: 600; font-family: var(--font-heading); }

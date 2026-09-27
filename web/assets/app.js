@@ -112,31 +112,32 @@ function renderFreshness() {
 }
 
 /* ================= ideas ================= */
-let ideaSort = 'demand', ideaPod = '', ideaAge = 0;
+let ideaSort = 'demand', ideaAge = 0;
 function sparkline(seed) {
   const pts = Array.from({ length: 12 }, (_, i) => 8 + Math.abs(Math.sin(i * 1.3 + seed) * 12) + i);
   const max = Math.max(...pts);
   const d = pts.map((v, i) => (i ? 'L' : 'M') + (i * 4) + ' ' + (24 - (v / max) * 20)).join(' ');
   return '<svg class="spark" width="48" height="24" viewBox="0 0 48 24" aria-hidden="true"><path d="' + d + ' L44 24 L0 24 Z" fill="var(--accent)" opacity="0.15"/><path d="' + d + '" fill="none" stroke="var(--accent)" stroke-width="1.6"/></svg>';
 }
+function ideaCard(i, k) {
+  const pcls = i.priority === 'Critical' ? 'label-danger' : i.priority === 'High' ? 'label-warning' : i.priority === 'Medium' ? 'label-info' : 'label-neutral';
+  return '<button class="glass idea-card rise" style="--i:' + k + '" data-idea="' + i.id + '" data-search="' + (i.title + ' ' + i.pod + ' ' + i.jira).toLowerCase() + '" data-od-id="' + i.id + '">' +
+    '<div class="i-top"><span class="label ' + pcls + '">' + i.priority + '</span></div>' +
+    '<h3>' + i.title + '</h3>' +
+    '<p class="i-quote">' + i.quote + '</p>' +
+    '<div class="i-foot"><span class="mini-logos">' + i.sources.slice(0, 3).map(s => badge(s[0], s[1])).join('') + '</span>' +
+    '<span class="meta">' + i.reports + ' reports</span>' + sparkline(i.reports) + '</div>' +
+    '<div class="i-foot" style="border-top:1px solid var(--border-soft);padding-top:12px"><span class="row" style="gap:6px;color:var(--brand-jira)"><span style="width:14px;height:14px">' + LOGOS.jira + '</span><b class="mono" style="font-size:11.5px">' + i.jira + '</b></span>' +
+    '<span class="label ' + i.jiraClass + '" style="margin-left:auto">' + i.jiraStatus + '</span></div></button>';
+}
 function renderIdeas() {
-  let list = IDEAS.filter(i => !ideaPod || i.pod === ideaPod);
+  let list = IDEAS.slice();
   if (ideaAge) list = list.filter(i => i.ageDays <= ideaAge);
   const order = { Critical: 0, High: 1, Medium: 2, Low: 3 };
   if (ideaSort === 'demand') list = list.slice().sort((a, b) => b.reports - a.reports);
   if (ideaSort === 'priority') list = list.slice().sort((a, b) => order[a.priority] - order[b.priority]);
   if (ideaSort === 'recent') list = list.slice().sort((a, b) => a.ageDays - b.ageDays);
-  $('#ideaGrid').innerHTML = list.map((i, k) => {
-    const pcls = i.priority === 'Critical' ? 'label-danger' : i.priority === 'High' ? 'label-warning' : i.priority === 'Medium' ? 'label-info' : 'label-neutral';
-    return '<button class="glass idea-card rise" style="--i:' + k + '" data-idea="' + i.id + '" data-search="' + (i.title + ' ' + i.pod + ' ' + i.jira).toLowerCase() + '" data-od-id="' + i.id + '">' +
-      '<div class="i-top"><span class="label label-outline">' + i.pod + '</span><span class="label ' + pcls + '">' + i.priority + '</span></div>' +
-      '<h3>' + i.title + '</h3>' +
-      '<p class="i-quote">' + i.quote + '</p>' +
-      '<div class="i-foot"><span class="mini-logos">' + i.sources.slice(0, 3).map(s => badge(s[0], s[1])).join('') + '</span>' +
-      '<span class="meta">' + i.reports + ' reports</span>' + sparkline(i.reports) + '</div>' +
-      '<div class="i-foot" style="border-top:1px solid var(--border-soft);padding-top:12px"><span class="row" style="gap:6px;color:var(--brand-jira)"><span style="width:14px;height:14px">' + LOGOS.jira + '</span><b class="mono" style="font-size:11.5px">' + i.jira + '</b></span>' +
-      '<span class="label ' + i.jiraClass + '" style="margin-left:auto">' + i.jiraStatus + '</span></div></button>';
-  }).join('');
+  $('#ideaGrid').innerHTML = list.map((i, k) => ideaCard(i, k)).join('');
   $('#ideaEmpty').classList.toggle('hide', list.length > 0);
 }
 
@@ -144,11 +145,11 @@ function renderIdeas() {
 const STAGES = ['Intake', 'Triage', 'In build', 'In review', 'Shipped'];
 function showIdea(id) {
   const i = IDEAS.find(x => x.id === id); if (!i) return;
-  $('#detailEyebrow').textContent = 'IDEA · ' + i.pod.toUpperCase();
+  $('#detailEyebrow').textContent = 'IDEA';
   $('#detailTitle').textContent = i.title;
-  $('#detailMeta').innerHTML = '<button type="button" class="label label-outline pod-jump" data-pod-jump="' + i.pod + '" title="View ' + i.pod + ' on the team page"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3"/><path d="M3 20a6 6 0 0 1 12 0"/></svg>' + i.pod + '</button><span class="label ' + (i.priority === 'Critical' ? 'label-danger' : 'label-warning') + '">' + i.priority + ' priority</span><span class="label label-neutral"><span class="dot"></span>' + i.reports + ' reports in cluster</span>';
+  $('#detailMeta').innerHTML = '<span class="label ' + (i.priority === 'Critical' ? 'label-danger' : i.priority === 'High' ? 'label-warning' : 'label-info') + '">' + i.priority + ' priority</span><span class="label label-neutral"><span class="dot"></span>' + i.reports + ' reports in cluster</span>';
   $('#detailEvidenceCount').textContent = i.reports + ' reports';
-  $('#detailEvidenceList').innerHTML = i.evidence.map(e => '<div class="evidence-quote">' + e.text + '<span class="whisper">' + e.src + ' · ' + e.when + ' · provenance: ' + e.prov + '</span></div>').join('');
+  $('#detailEvidenceList').innerHTML = i.evidence.map(e => '<div class="evidence-quote">' + e.text + '<span class="whisper">' + e.src + ' · ' + e.when + ' · provenance: ' + e.prov + '</span>' + (e.url ? '<a class="ev-link" href="' + e.url + '" target="_blank" rel="noopener noreferrer" title="Open the source record"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6M21 3l-9 9M10 5H5a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5"/></svg>Open source</a>' : '') + '</div>').join('');
   $('#detailWhy').textContent = i.why;
   $('#detailJiraLogo').innerHTML = LOGOS.jira; $('#detailJiraLogo').style.color = 'var(--brand-jira)';
   $('#detailJiraKey').textContent = i.jira; $('#detailJiraTitle').textContent = i.jiraTitle;
@@ -303,23 +304,26 @@ function renderQualityTable() {
 /* ================= team / pods ================= */
 const initials = s => (String(s).replace(/[^A-Za-z ]/g, '').trim().split(/\s+/).filter(Boolean).slice(0, 2).map(w => w[0].toUpperCase()).join('') || '—');
 const podStat = (n, l) => '<div class="pod-stat"><div class="n num">' + n + '</div><div class="l">' + l + '</div></div>';
+function personRow(name, verified, role, showUnverified) {
+  return '<div class="pod-person"><span class="ava" aria-hidden="true">' + initials(name) + '</span><span class="grow"><b>' + name + '</b> ' + (verified ? '<span class="label label-success" style="font-size:9.5px">verified lead</span>' : (showUnverified ? '<span class="unverified">UNVERIFIED</span>' : '')) + '</span><span class="role">' + role + '</span></div>';
+}
 function renderPods() {
   const tone = { ok: 'label-success', 'at-risk': 'label-warning', critical: 'label-danger' };
   const text = { ok: 'On track', 'at-risk': 'Watch', critical: 'Needs decision' };
   $('#podGrid').innerHTML = PODS.map((p, k) => {
     const ideas = IDEAS.filter(i => i.pod === p.name);
     const reports = ideas.reduce((s, i) => s + i.reports, 0);
-    return '<div class="glass pod-card rise" style="--i:' + k + '" data-od-id="pod-' + p.id + '">' +
+    return '<div class="glass pod-card rise" style="--i:' + k + '" data-od-id="pod-' + p.id + '" data-pod="' + p.name + '" role="button" tabindex="0" aria-label="Open the ' + p.name + ' pod">' +
       '<div class="pod-head"><span class="pod-monogram" aria-hidden="true">' + p.mono + '</span>' +
       '<div class="grow"><div class="pod-name">' + p.name + '</div><div class="pod-role">' + p.okr + '</div></div>' +
       '<span class="label ' + tone[p.health] + '"><span class="dot"></span>' + text[p.health] + '</span></div>' +
       '<div class="pod-people">' +
-        '<div class="pod-person"><span class="ava" aria-hidden="true">' + initials(p.lead) + '</span><span class="grow"><b>' + p.lead + '</b> ' + (p.leadVerified ? '<span class="label label-success" style="font-size:9.5px">verified lead</span>' : '<span class="unverified">UNVERIFIED</span>') + '</span><span class="role">Pod lead</span></div>' +
-        '<div class="pod-person"><span class="ava" aria-hidden="true">' + initials(p.pm) + '</span><span class="grow"><b>' + p.pm + '</b></span><span class="role">Product mgr</span></div>' +
+        personRow(p.lead, p.leadVerified, 'Pod lead', true) +
+        personRow(p.pm, true, 'Product mgr', false) +
       '</div>' +
       '<div class="pod-stats">' + podStat(ideas.length, 'ideas') + podStat(reports, 'reports') + podStat(fmt(p.complaints), 'complaint cand.') + '</div>' +
-      '<div class="pod-ideas"><div class="pod-ideas-head"><span class="meta">Ideas owned by this pod</span><button type="button" class="btn btn-ghost btn-sm" data-pod-jump="' + p.name + '">Filter ideas</button></div>' +
-      (ideas.length ? ideas.map(i => '<button type="button" class="pod-idea" data-idea="' + i.id + '"><span class="grow"><span class="pi-title">' + i.title + '</span><br><span class="pi-meta">' + i.jira + ' · ' + i.priority + ' · ' + i.reports + ' reports</span></span><span class="label ' + (i.jiraClass || 'label-neutral') + '">' + i.jiraStatus + '</span></button>').join('') : '<p class="pod-empty">No idea clusters assigned yet — feedback for this pod is still below the clustering threshold.</p>') +
+      '<div class="pod-ideas"><div class="pod-ideas-head"><span class="meta">' + ideas.length + ' idea' + (ideas.length === 1 ? '' : 's') + ' owned by this pod</span><span class="meta">Open pod →</span></div>' +
+      (ideas.length ? ideas.slice(0, 3).map(i => '<span class="pod-idea" data-idea="' + i.id + '"><span class="grow"><span class="pi-title">' + i.title + '</span><br><span class="pi-meta">' + i.jira + ' · ' + i.priority + ' · ' + i.reports + ' reports</span></span><span class="label ' + (i.jiraClass || 'label-neutral') + '">' + i.jiraStatus + '</span></span>').join('') : '<p class="pod-empty">No idea clusters assigned yet — feedback for this pod is still below the clustering threshold.</p>') +
       '</div></div>';
   }).join('');
   const withLead = PODS.filter(p => p.leadVerified).length;
@@ -329,13 +333,21 @@ function renderPods() {
   $('#podCoveragePct').textContent = pct + '%';
   $('#podCoverageBar').style.width = pct + '%';
 }
-function focusPod(name) {
-  const pill = $$('[data-filter="pod"]').find(p => p.dataset.value === name);
-  $$('[data-filter="pod"]').forEach(x => x.classList.remove('on'));
-  if (pill) { pill.classList.add('on'); ideaPod = name; }
-  else { const all = $('[data-filter="pod"][data-value=""]'); if (all) all.classList.add('on'); ideaPod = ''; }
-  renderIdeas();
-  go('ideas');
+function openPod(name) {
+  const p = PODS.find(x => x.name === name); if (!p) return;
+  const ideas = IDEAS.filter(i => i.pod === p.name);
+  const reports = ideas.reduce((s, i) => s + i.reports, 0);
+  const tone = { ok: 'label-success', 'at-risk': 'label-warning', critical: 'label-danger' };
+  const text = { ok: 'On track', 'at-risk': 'Watch', critical: 'Needs decision' };
+  $('#podDetailEyebrow').textContent = 'POD · ' + p.name.toUpperCase();
+  $('#podDetailTitle').textContent = p.name;
+  $('#podDetailOkr').textContent = p.okr;
+  const h = $('#podDetailHealth'); h.className = 'label ' + tone[p.health]; h.innerHTML = '<span class="dot"></span>' + text[p.health];
+  $('#podDetailPeople').innerHTML = personRow(p.lead, p.leadVerified, 'Pod lead', true) + personRow(p.pm, true, 'Product mgr', false);
+  $('#podDetailStats').innerHTML = podStat(ideas.length, 'ideas') + podStat(reports, 'reports') + podStat(fmt(p.complaints), 'complaint cand.');
+  $('#podDetailIdeaCount').textContent = ideas.length + (ideas.length === 1 ? ' idea' : ' ideas');
+  $('#podDetailIdeas').innerHTML = ideas.length ? ideas.map((i, k) => ideaCard(i, k)).join('') : '<div class="empty">No idea clusters are assigned to this pod yet.</div>';
+  go('pod');
 }
 
 /* ================= roadmap ================= */
@@ -459,18 +471,19 @@ function ask(text) {
 }
 
 /* ================= nav / routing ================= */
-const VALID = ['overview', 'ideas', 'quality', 'qms', 'roadmap', 'team', 'integrations', 'assistant', 'idea'];
+const VALID = ['overview', 'ideas', 'quality', 'qms', 'roadmap', 'pods', 'pod', 'integrations', 'assistant', 'idea'];
 function go(view) {
   if (!VALID.includes(view)) view = 'overview';
   $$('.view').forEach(v => v.classList.remove('active'));
   const host = $('#view-' + view); if (host) host.classList.add('active');
-  $$('.nav-item').forEach(n => n.classList.toggle('active', n.dataset.view === view || (view === 'idea' && n.dataset.view === 'ideas')));
+  $$('.nav-item').forEach(n => n.classList.toggle('active', n.dataset.view === view || (view === 'idea' && n.dataset.view === 'ideas') || (view === 'pod' && n.dataset.view === 'pods')));
   store.set('view', view);
   closeSidebar();
   window.scrollTo({ top: 0, behavior: 'smooth' });
   if (view === 'assistant') setTimeout(() => { const i = $('#chatInput'); if (i) i.focus(); }, 200);
   if (view === 'quality') renderDeck();
   if (view === 'qms') { renderQms(); renderQualityTable(); }
+  if (view === 'pods') renderPods();
 }
 function openSidebar() { $('#sidebar').classList.add('open'); }
 function closeSidebar() { $('#sidebar').classList.remove('open'); }
@@ -506,18 +519,23 @@ function init() {
   $('#assistantBtn').addEventListener('click', () => go('assistant'));
 
   $('#ideaGrid').addEventListener('click', e => { const c = e.target.closest('[data-idea]'); if (c) showIdea(c.dataset.idea); });
-  $('#podGrid').addEventListener('click', e => {
-    const jump = e.target.closest('[data-pod-jump]'); if (jump) { focusPod(jump.dataset.podJump); return; }
-    const card = e.target.closest('[data-idea]'); if (card) showIdea(card.dataset.idea);
+  const podGrid = $('#podGrid');
+  podGrid.addEventListener('click', e => {
+    const idea = e.target.closest('[data-idea]'); if (idea) { showIdea(idea.dataset.idea); return; }
+    const card = e.target.closest('[data-pod]'); if (card) openPod(card.dataset.pod);
   });
-  document.addEventListener('click', e => { const p = e.target.closest('[data-pod-jump]'); if (p && !e.target.closest('#podGrid')) focusPod(p.dataset.podJump); });
+  podGrid.addEventListener('keydown', e => {
+    if (e.key !== 'Enter' && e.key !== ' ') return;
+    const card = e.target.closest('[data-pod]'); if (card && card === e.target) { e.preventDefault(); openPod(card.dataset.pod); }
+  });
+  const podDetailIdeas = $('#podDetailIdeas');
+  if (podDetailIdeas) podDetailIdeas.addEventListener('click', e => { const c = e.target.closest('[data-idea]'); if (c) showIdea(c.dataset.idea); });
   const openJira = e => { const b = e.target.closest('[data-jira]'); if (b) { const idea = IDEAS.find(i => i.jira === b.dataset.jira); if (idea) showIdea(idea.id); } };
   $('#roadmapLanes').addEventListener('click', openJira);
   $('#demandCommit').addEventListener('click', openJira);
   $('#ideasSeg').addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; $$('#ideasSeg button').forEach(x => x.classList.remove('on')); b.classList.add('on'); ideaSort = b.dataset.sort; renderIdeas(); });
   $('#ideasDate').addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; $$('#ideasDate button').forEach(x => x.classList.remove('on')); b.classList.add('on'); ideaAge = parseInt(b.dataset.age, 10) || 0; renderIdeas(); });
   $('#qmsDate').addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; $$('#qmsDate button').forEach(x => x.classList.remove('on')); b.classList.add('on'); qualityAge = parseInt(b.dataset.age, 10) || 0; renderQualityTable(); });
-  $$('[data-filter="pod"]').forEach(p => p.addEventListener('click', () => { $$('[data-filter="pod"]').forEach(x => x.classList.remove('on')); p.classList.add('on'); ideaPod = p.dataset.value; renderIdeas(); }));
 
   $('#approveBtn').addEventListener('click', () => act('approve'));
   $('#denyBtn').addEventListener('click', () => act('deny'));
