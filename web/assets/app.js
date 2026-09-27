@@ -38,13 +38,14 @@ function countUp(node) {
 
 /* ================= charts ================= */
 function renderSources() {
+  var PALETTE = ['#2B4BD8', '#8B7CF6', '#FF6B5B', '#7C8CE8', '#B9B0FA', '#FF9A8F'];
   const W = 640, H = 260, pad = { l: 8, r: 8, t: 20, b: 40 };
   const max = Math.max(...SOURCES.map(s => s.value));
   const bw = (W - pad.l - pad.r) / SOURCES.length;
   const bars = SOURCES.map((s, i) => {
     const h = (s.value / max) * (H - pad.t - pad.b);
     const x = pad.l + i * bw + bw * 0.18, y = H - pad.b - h, w = bw * 0.64;
-    return '<g class="bar" data-source="' + s.id + '" data-tip="' + s.name + ' · ' + fmt(s.value) + ' reports"><rect x="' + x + '" y="' + y + '" width="' + w + '" height="' + h + '" rx="6" fill="var(--accent)" opacity="0.92"/><text class="axis" x="' + (x + w / 2) + '" y="' + (H - pad.b + 20) + '" text-anchor="middle">' + s.name.split(' ')[0] + '</text><text class="axis" x="' + (x + w / 2) + '" y="' + (y - 8) + '" text-anchor="middle" style="fill:var(--fg-2)">' + fmt(s.value) + '</text></g>';
+    return '<g class="bar" data-source="' + s.id + '" data-tip="' + s.name + ' · ' + fmt(s.value) + ' reports"><rect x="' + x + '" y="' + y + '" width="' + w + '" height="' + h + '" rx="6" fill="' + PALETTE[i % PALETTE.length] + '" opacity="0.94"/><text class="axis" x="' + (x + w / 2) + '" y="' + (H - pad.b + 20) + '" text-anchor="middle">' + s.name.split(' ')[0] + '</text><text class="axis" x="' + (x + w / 2) + '" y="' + (y - 8) + '" text-anchor="middle" style="fill:var(--fg-2)">' + fmt(s.value) + '</text></g>';
   }).join('');
   const grid = [0.25, 0.5, 0.75].map(g => '<line x1="0" x2="' + W + '" y1="' + (pad.t + g * (H - pad.t - pad.b)) + '" y2="' + (pad.t + g * (H - pad.t - pad.b)) + '" stroke="var(--border-soft)" stroke-dasharray="3 5"/>').join('');
   $('#chartSources').innerHTML = '<svg viewBox="0 0 ' + W + ' ' + H + '" width="100%" role="img" aria-label="Intake volume by source">' + grid + bars + '</svg><div class="chart-tip" id="tipSources"></div>';
@@ -99,7 +100,7 @@ function themeData(days) {
 }
 function barRows(list, withJira) {
   const max = Math.max(1, ...list.map(i => i.reports));
-  return list.map(i => '<div style="margin:9px 0"><div class="row-between" style="font-size:11.5px;margin-bottom:4px"><span>' + i.title + '</span><span class="num">' + i.reports + (withJira ? ' · ' + i.jira : '') + '</span></div><div class="progress"><i style="width:' + Math.round((i.reports / max) * 100) + '%"></i></div></div>').join('');
+  return list.map((i, idx) => '<div style="margin:9px 0"><div class="row-between" style="font-size:11.5px;margin-bottom:4px"><span>' + i.title + '</span><span class="num">' + i.reports + (withJira ? ' · ' + i.jira : '') + '</span></div><div class="progress"><i style="width:' + Math.round((i.reports / max) * 100) + '%;background:' + (idx === 0 ? 'var(--coral)' : 'var(--accent)') + '"></i></div></div>').join('');
 }
 function renderThemes() {
   const host = $('#chartThemes'); if (!host) return;
@@ -251,8 +252,8 @@ function renderDeck() {
       '<div class="row-between"><div class="row" style="gap:10px">' + badge(it.sourceId, it.source, 'data-source="' + it.sourceId + '" role="button" tabindex="0" aria-label="View ' + it.source + ' records"') + '<div><div class="mono" style="font-size:11.5px;color:var(--meta)">' + it.id + '</div><div style="font-size:12.5px">' + it.source + '</div></div></div>' + mdr + '</div>' +
       '<div class="q-text">' + it.quote + '</div>' +
       '<div class="row wrap" style="gap:8px"><span class="label label-neutral">' + it.product + '</span>' + ((it.version && /^\d/.test(it.version)) ? '<span class="label label-outline mono">v' + it.version + '</span>' : '') + '</div>' +
-      '<div class="rationale" style="margin-top:auto">' + it.reason.slice(0, 140) + '</div>' +
-      '<div class="row-between" style="padding-top:12px;border-top:1px solid var(--border-soft)"><span class="meta">confidence ' + it.confidence.toFixed(2) + " · " + it.when + '</span>' + (it.url ? '<a class="ev-link" href="' + it.url + '" target="_blank" rel="noopener noreferrer">View source report</a>' : '<span class="meta">' + it.related + ' related</span>') + '</div>';
+      '<div class="rationale" style="margin-top:auto">' + it.reason + '</div>' +
+      '<div class="row-between" style="padding-top:12px;border-top:1px solid var(--border-soft)"><span class="meta text-cobalt">confidence ' + it.confidence.toFixed(2) + " · " + it.when + '</span>' + (it.url ? '<a class="ev-link" href="' + it.url + '" target="_blank" rel="noopener noreferrer">View source report</a>' : '<span class="meta">' + it.related + ' related</span>') + '</div>';
     const rot = idx * -1.4, sc = 1 - idx * 0.035, ty = idx * 10;
     c.style.transform = 'rotate(' + rot + 'deg) scale(' + sc + ') translateY(' + ty + 'px)';
     c.style.zIndex = 10 - idx; c.style.opacity = idx === 0 ? 1 : 0.75;

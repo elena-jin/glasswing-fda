@@ -2,38 +2,40 @@
    PatternFly tokens — pasted verbatim from the design system contract.
    ========================================================================== */
 :root {
-  --bg:           #ffffff;
+  --bg:           #FAF7F2;
   --surface:      #ffffff;
-  --surface-warm: #f5f5f7;
-  --surface-alt:  #e8e8ed;
+  --surface-warm: #F5F1EA;
+  --surface-alt:  #EDE7DD;
 
-  --fg:    #1d1d1f;
-  --fg-2:  #424245;
-  --muted: #6e6e73;
-  --meta:  #86868b;
+  --fg:    #1A1A1A;
+  --fg-2:  #3A3733;
+  --muted: #6B6560;
+  --meta:  #6B6560;
 
-  --border:      #d2d2d7;
-  --border-soft: #e8e8ed;
+  --border:      #ECE7DF;
+  --border-soft: #ECE7DF;
 
-  --accent:        #1c3f78;
+  --accent:        #2B4BD8;
   --accent-on:     #ffffff;
-  --accent-hover:  #27549b;
-  --accent-active: #12294d;
-  --accent-subtle: #e9eef7;
+  --accent-hover:  #1F3BB0;
+  --accent-active: #17308F;
+  --accent-subtle: #F0EDFC;
+  --accent-2:      #8B7CF6;
+  --coral:         #FF6B5B;
 
-  --link:        #1f4d94;
-  --link-hover:  #16386a;
-  --link-visited:#3a2f6b;
+  --link:        #2B4BD8;
+  --link-hover:  #1F3BB0;
+  --link-visited:#17308F;
 
-  --danger:        #d70015;
-  --danger-bg:     #fdecec;
-  --warning:       #ffb340;
-  --warning-text:  #8a4b00;
-  --warning-bg:    #fff4e5;
-  --success:       #1d7a37;
-  --success-bg:    #e7f6ec;
-  --info:          #5e5ce6;
-  --info-bg:       #ecebff;
+  --danger:        #FF6B5B;
+  --danger-bg:     #FDECE8;
+  --warning:       #FF6B5B;
+  --warning-text:  #C1402F;
+  --warning-bg:    #FDECE8;
+  --success:       #1D7A37;
+  --success-bg:    #E7F6EC;
+  --info:          #8B7CF6;
+  --info-bg:       #F0EDFC;
 
   --font-heading: "SF Pro Display", "SF Pro Icons", "Helvetica Neue", Helvetica, Arial, sans-serif;
   --font-body:    "SF Pro Text", "SF Pro Icons", "Helvetica Neue", Helvetica, Arial, sans-serif;
@@ -119,12 +121,12 @@
   --glass-line:   color-mix(in oklch, var(--border) 50%, transparent);
   --glass-hi:     color-mix(in oklch, var(--surface) 95%, transparent);
 
-  --sidebar-fg:   var(--accent-on);
-  --sidebar-bg:   #0e1f38;
-  --sidebar-edge: color-mix(in oklch, var(--sidebar-bg) 82%, #000000);
-  --sidebar-line: color-mix(in oklch, var(--accent-on) 14%, transparent);
-  --sidebar-hover:color-mix(in oklch, var(--accent-on) 9%, transparent);
-  --sidebar-active:color-mix(in oklch, var(--accent-on) 14%, transparent);
+  --sidebar-fg:   #1A1A1A;
+  --sidebar-bg:   #FAF7F2;
+  --sidebar-edge: #ECE7DF;
+  --sidebar-line: #ECE7DF;
+  --sidebar-hover:#F0EBE3;
+  --sidebar-active:#F0EDFC;
 
   /* restrained depth — border-led separation, not shadow stacks */
   --shadow-sm: 0 1px 2px color-mix(in oklch, var(--fg) 6%, transparent);
@@ -196,7 +198,7 @@ h3 { font-size: var(--size-md); font-weight: 600; letter-spacing: -.01em; }
    One flat neutral field. No gradient mesh, no drifting colour: in a
    data tool, ambient decoration competes with the data. Separation
    comes from hairline borders, surface levels and whitespace. */
-.mesh { position: fixed; inset: 0; z-index: 0; pointer-events: none; background: var(--surface-warm); }
+.mesh { position: fixed; inset: 0; z-index: 0; pointer-events: none; background: var(--bg); }
 
 /* ---------- surface ----------
    Flat panels separated by a hairline. Blur, sheen and glow are gone;
@@ -803,3 +805,29 @@ h3 { font-size: var(--size-md); font-weight: 600; letter-spacing: -.01em; }
 .ev-src { flex: none; font-size: 11px; font-weight: 600; color: var(--accent); text-decoration: none; white-space: nowrap; }
 .ev-src:hover { text-decoration: underline; }
 .ev-src.muted { color: var(--meta); font-weight: 500; }
+
+/* ================= warm editorial pass (visual only) ================= */
+.sidebar { background: var(--sidebar-bg); border-right: 1px solid #ECE7DF; color: #1A1A1A; }
+.brand-name { color: #1A1A1A; }
+.brand-sub { color: #6B6560; }
+.brand-mark { background: var(--accent-subtle); color: var(--accent); box-shadow: none; }
+.nav-label { color: #6B6560; }
+.nav-item { color: #6B6560; }
+.nav-item:hover { background: var(--sidebar-hover); color: #1A1A1A; }
+.nav-item.active { background: #F0EDFC; color: #1A1A1A; }
+.nav-item.active::before { content: ""; position: absolute; left: -6px; top: 8px; bottom: 8px; width: 3px; border-radius: 3px; background: var(--accent-2); }
+.nav-item .count { margin-left: auto; background: none; padding: 0; font-family: var(--font-mono); font-size: 12px; color: #6B6560; }
+.nav-item[data-view="quality"] .count { color: var(--coral); }
+.user-name { color: #1A1A1A; }
+.user-role { color: #6B6560; }
+
+/* assistant header: no gray explainer box */
+.assistant-head { background: var(--surface); }
+
+/* cobalt helper for confidence / SLA notes */
+.text-cobalt { color: var(--accent) !important; }
+
+/* review deck: let the card grow to fit its rationale (no fixed clip) */
+.deck { height: auto; min-height: 460px; }
+.swipe-card { box-shadow: var(--shadow-sm); }
+.swipe-card:first-child { position: relative; inset: auto; }
