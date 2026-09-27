@@ -209,7 +209,7 @@ function renderIdeas() {
 const STAGES = ['Intake', 'Triage', 'In build', 'In review', 'Shipped'];
 function showIdea(id) {
   const i = IDEAS.find(x => x.id === id); if (!i) return;
-  $('#detailEyebrow').textContent = 'IDEA';
+  const de = $('#detailEyebrow'); if (de) de.textContent = 'IDEA';
   $('#detailTitle').textContent = i.title;
   $('#detailMeta').innerHTML = '<span class="label ' + (i.priority === 'Critical' ? 'label-danger' : i.priority === 'High' ? 'label-warning' : 'label-info') + '">' + i.priority + ' priority</span><span class="label label-neutral"><span class="dot"></span>' + i.reports + ' reports in cluster</span>';
   $('#detailEvidenceCount').textContent = i.reports + ' reports';
@@ -497,7 +497,7 @@ function openPod(name) {
   const reports = ideas.reduce((s, i) => s + i.reports, 0);
   const tone = { ok: 'label-success', 'at-risk': 'label-warning', critical: 'label-danger' };
   const text = { ok: 'On track', 'at-risk': 'Watch', critical: 'Needs decision' };
-  $('#podDetailEyebrow').textContent = 'POD · ' + p.name.toUpperCase();
+  const pde = $('#podDetailEyebrow'); if (pde) pde.textContent = 'POD · ' + p.name.toUpperCase();
   $('#podDetailTitle').textContent = p.name;
   $('#podDetailOkr').textContent = p.okr;
   const h = $('#podDetailHealth'); h.className = 'label ' + tone[p.health]; h.innerHTML = '<span class="dot"></span>' + text[p.health];
